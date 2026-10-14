@@ -98,3 +98,17 @@ def test_draft_connectivity_on_a_tiny_grid(tmp_path):
         assert (tmp_path / 'figs' / f).stat().st_size > 0
     z = np.load(tmp_path / 'draft_connectivity.npz')
     assert list(z['seeds']) == [0, 1] and 'chain|clean|Joint|median_all' in z.files
+
+
+@pytest.mark.slow
+def test_diagnose_breakdown_on_one_seed(tmp_path):
+    s12 = load_script('12_diagnose_breakdown.py')
+    lines = s12.main(results=tmp_path, draft_seeds=(1,), pilot_seeds=(0,))
+    txt = (tmp_path / 'diagnose_breakdown.txt').read_text()
+    assert txt.splitlines()[2].startswith('trustalign')
+    for section in ('1. Per seed', '2. Broken seeds in detail', '3. Summary over seeds', 'Wall time'):
+        assert section in txt
+    # The draft's ring seed 1 is the worst broken case; refitting without its corrupted anchors repairs it.
+    row = next(ln for ln in lines if 'draft ring ε30% seed 1' in ln and 'BROKEN' in ln)
+    joint, oracle = float(row.split()[5]), float(row.split()[9])
+    assert joint > s12.BROKEN > oracle

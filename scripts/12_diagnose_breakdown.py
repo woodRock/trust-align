@@ -116,7 +116,8 @@ def main(results: Path = RESULTS, draft_seeds=tuple(range(10)), pilot_seeds=(0, 
     res = {name: diagnose(*cell) for name, cell in cases}
     L = [__doc__.strip().splitlines()[0], '', *header(), '',
          f'A seed is "broken" if the joint model\'s median map error exceeds {BROKEN} min. Errors in minutes.', '',
-         '=' * 118, '1. Per seed: joint vs composed pairwise, robust-fit rejection, and refits of the same anchors',
+         '=' * 118,
+         '1. Per seed: joint vs composed pairwise, robust-fit rejection, and refits of the same anchors',
          f'   {"case":<30} {"joint":>7} {"pairw":>7} {"recall":>7} {"false":>7} {"oracle":>7} {"huber10":>8} '
          f'{"λ×10":>7}  broken?']
     for name, r in res.items():
