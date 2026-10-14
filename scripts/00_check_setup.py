@@ -2,9 +2,9 @@
 00_check_setup.py — Check the environment before any experiment: versions, data access, and that
 the pinned joint model still reproduces itself.
 
-1. Provenance: trustalign, jointalign and gcmsalign revisions (as every result file records them).
+1. Provenance: trustalign, jointalign and warpalign revisions (as every result file records them).
 2. Data: which fish oil batches are readable and how many samples each has. Nothing is copied: the
-   data stays private in the gcmsalign checkout (gcmsalign.config.Paths().fish_oil).
+   data stays private in the warpalign checkout (warpalign.config.Paths().fish_oil).
 3. Joint model: fit_joint at its defaults on jointalign's synthetic data, against the true drift.
 
 Output: results/setup_check.txt (text only).
@@ -16,10 +16,10 @@ import tempfile
 from pathlib import Path
 
 import numpy as np
-from gcmsalign.config import BIN_MIN, Paths
-from gcmsalign.data import load_batch
 from jointalign import fit_joint, harvest_anchors
 from jointalign import synthetic as syn
+from warpalign.config import BIN_MIN, Paths
+from warpalign.data import load_batch
 
 from trustalign.provenance import display_path, header
 

@@ -58,13 +58,29 @@ def test_parse_paired_refuses_unknown_noise(s20, tmp_path):
         s20.parse_paired(bad)
 
 
+def test_parse_medians_reads_both_tables(s20):
+    all_pairs, indirect = s20.parse_medians(RESULTS / 'draft_connectivity.txt')
+    assert len(all_pairs) == 45 and len(indirect) == 40          # no indirect pairs on the complete graph
+    assert all_pairs[('ring', 'ε 30%')] == {'Joint': 0.834, 'Star': 0.074, 'Composed pairwise': 1.047,
+                                            'Composed PCHIP': 3.033}
+    assert indirect[('chain', 'ε 30%')]['Composed pairwise'] == 1.938
+
+
+def test_parse_medians_refuses_empty_tables(s20, tmp_path):
+    empty = tmp_path / 'empty.txt'
+    empty.write_text('1. Median\n\n2. Pairs\n\n3. Paired\n')
+    with pytest.raises(ValueError):
+        s20.parse_medians(empty)
+
+
 def test_results_figures_and_captions(s20, tmp_path):
     caps = s20.main(results=RESULTS, out=tmp_path, world=False)
-    for name in ('fig_regime', 'fig_breakdown'):
+    for name in ('fig_regime', 'fig_breakdown', 'fig_connectivity'):
         assert (tmp_path / f'{name}.pdf').stat().st_size > 0
     text = (tmp_path / 'captions.md').read_text()
     assert '-1.113 min (chain, ε 30%, 8/10 worlds)' in text
     assert 'ring: 6/10 worlds broken, oracle at most 0.076 min' in text
+    assert 'joint 0.385 min on the chain and 1.140 min on the ring' in text
     assert text == '\n'.join(caps)
 
 

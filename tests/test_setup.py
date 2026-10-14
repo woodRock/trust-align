@@ -26,7 +26,7 @@ def load_script(filename: str):
 
 def test_header_names_all_three_packages():
     lines = provenance.header()
-    assert [ln.split()[0] for ln in lines] == ['trustalign', 'joint-align', 'gcmsalign']
+    assert [ln.split()[0] for ln in lines] == ['trustalign', 'joint-align', 'warpalign']
     assert re.fullmatch(r'trustalign \S+ @ \w+ \(src (clean|dirty)\)', lines[0])
     assert jointalign.__version__ in lines[1]
 

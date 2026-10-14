@@ -11,8 +11,11 @@
                   symmetric-log colour scale
   fig_breakdown   per-world refits from results/diagnose_breakdown.txt, Section 1: joint, oracle (no
                   corrupted anchors), 10 Huber rounds, λ × 10 and composed pairwise, ring and chain
-
-The paper also uses figs/draft/edge_removal.png and figs/draft/loop_closure.png from script 11.
+  fig_connectivity  results/draft_connectivity.txt, Sections 1 and 2, as one full-width figure:
+                  (a, b) median map error over all pairs as edges are removed from the complete graph;
+                  (c, d) median map error on indirect pairs as loops are added to the chain; clean and
+                  ε = 30 %. Same numbers as script 11's edge_removal.png and loop_closure.png, redrawn
+                  to be legible at journal size.
 
 Every number in a caption is computed here from the world or the results files; nothing is typed.
 fig_regime and fig_breakdown read the committed text reports only, so they need neither the data nor
@@ -282,6 +285,81 @@ def fig_breakdown(data: dict[str, np.ndarray], out: Path) -> str:
             f'joint above {BROKEN} min. {"; ".join(notes)}.')
 
 
+# ── Figure: connectivity sweeps from results/draft_connectivity.txt ──────────────────────────
+
+METHODS3 = ('Joint', 'Composed pairwise', 'Composed PCHIP')
+_NUM = r'(\d+\.\d+)'
+
+
+def parse_medians(path: Path) -> tuple[dict, dict]:
+    """Sections 1 and 2 of draft_connectivity.txt: (structure, noise) → {method: median map error}
+    over all ordered pairs (Section 1: Joint, Star, Composed pairwise, Composed PCHIP) and over
+    indirect pairs (Section 2: Joint, Composed pairwise, Composed PCHIP)."""
+    lines = path.read_text().splitlines()
+    noise_re = '|'.join(re.escape(n) for n in NOISES)
+    s1 = re.compile(rf'^\s+(\S+)\s+\d+\s+({noise_re})\s+' + r'\s+'.join([_NUM] * 4) + r'\s+' + _NUM + r'$')
+    s2 = re.compile(rf'^\s+(\S+)\s+({noise_re})\s+' + r'\s+'.join([_NUM] * 3) + r'$')
+    sec = {k: next(i for i, ln in enumerate(lines) if ln.startswith(f'{k}. ')) for k in (1, 2, 3)}
+    all_pairs, indirect = {}, {}
+    for ln in lines[sec[1]:sec[2]]:
+        m = s1.match(ln)
+        if m:
+            v = [float(x) for x in m.groups()[2:6]]
+            all_pairs[(m.group(1), m.group(2))] = dict(zip(('Joint', 'Star', 'Composed pairwise',
+                                                             'Composed PCHIP'), v))
+    for ln in lines[sec[2]:sec[3]]:
+        m = s2.match(ln)
+        if m:
+            indirect[(m.group(1), m.group(2))] = dict(zip(METHODS3, [float(x) for x in m.groups()[2:]]))
+    if not all_pairs or not indirect:
+        raise ValueError(f'no median tables found in {path}')
+    return all_pairs, indirect
+
+
+def fig_connectivity(all_pairs: dict, indirect: dict, out: Path) -> str:
+    plt = _plt()
+    colors = {'Joint': COLORS['Joint'], 'Composed pairwise': COLORS['Composed pairwise'],
+              'Composed PCHIP': '#1baf7a'}
+    markers = {'Joint': 'o', 'Composed pairwise': 's', 'Composed PCHIP': '^'}
+    dens = ['density1.0', 'density0.6', 'density0.4', 'density0.2']
+    loops = ['chain', 'chain+1', 'chain+2', 'ring']
+    frac = [float(d[7:]) for d in dens]
+    fig, axes = plt.subplots(1, 4, figsize=(7.16, 2.15), sharey=True)
+    panels = (('(a) Removing edges, clean', all_pairs, dens, 'clean'),
+              ('(b) Removing edges, ε = 30%', all_pairs, dens, 'ε 30%'),
+              ('(c) Adding loops, clean', indirect, loops, 'clean'),
+              ('(d) Adding loops, ε = 30%', indirect, loops, 'ε 30%'))
+    for i, (ax, (title, table, structs, noise)) in enumerate(zip(axes, panels)):
+        x = frac if i < 2 else list(range(len(structs)))
+        for m in METHODS3:
+            ax.plot(x, [table[(s, noise)][m] for s in structs], marker=markers[m], color=colors[m], lw=1.5,
+                    ms=4, label=m)
+        if i < 2:
+            ax.invert_xaxis()
+            ax.set_xticks(frac, [f'{f:g}' for f in frac])
+            ax.set_xlabel('fraction of pairs linked')
+        else:
+            ax.set_xticks(x, ['chain', '+1', '+2', 'ring'])
+            ax.set_xlabel('structure')
+        ax.set_yscale('log')
+        ax.set_title(title, fontsize=7.5, loc='left')
+    axes[0].set_ylabel('median map error (min)')
+    axes[2].text(0.02, 0.02, 'indirect pairs only', transform=axes[2].transAxes, fontsize=6.5, color='0.4')
+    axes[3].text(0.02, 0.02, 'indirect pairs only', transform=axes[3].transAxes, fontsize=6.5, color='0.4')
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc='upper center', ncol=3, frameon=False, fontsize=7, bbox_to_anchor=(0.5, 1.08))
+    fig.tight_layout()
+    _save(fig, out, 'fig_connectivity')
+    plt.close(fig)
+    j, p = 'Joint', 'Composed pairwise'
+    a, b = all_pairs[('density1.0', 'ε 30%')], all_pairs[('density0.2', 'ε 30%')]
+    c, d = indirect[('chain', 'ε 30%')], indirect[('ring', 'ε 30%')]
+    return (f'**fig_connectivity.** Under ε 30 %, from all pairs to 0.2 linked: joint {a[j]:.3f} → '
+            f'{b[j]:.3f} min, composed pairwise {a[p]:.3f} → {b[p]:.3f} min. Indirect pairs under ε 30 %: '
+            f'joint {c[j]:.3f} min on '
+            f'the chain and {d[j]:.3f} min on the ring; composed pairwise {c[p]:.3f} and {d[p]:.3f} min.')
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────────────────────
 
 def main(results: Path = RESULTS, out: Path = FIGS, world: bool = True, **world_kw) -> list[str]:
@@ -292,7 +370,8 @@ def main(results: Path = RESULTS, out: Path = FIGS, world: bool = True, **world_
         w, structures = draft_world(**world_kw)
         caps += [fig_data(w, out), '', fig_graphs(w, structures, out), '']
     caps += [fig_regime(parse_paired(results / 'draft_connectivity.txt'), out), '',
-             fig_breakdown(parse_breakdown(results / 'diagnose_breakdown.txt'), out), '']
+             fig_breakdown(parse_breakdown(results / 'diagnose_breakdown.txt'), out), '',
+             fig_connectivity(*parse_medians(results / 'draft_connectivity.txt'), out), '']
     (out / 'captions.md').write_text('\n'.join(caps))
     print('\n'.join(caps))
     return caps

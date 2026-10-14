@@ -53,7 +53,7 @@ Each pilot stops for review before its full grid runs.
 
 | Repository | Package | Role |
 |---|---|---|
-| [warp-align](https://github.com/woodRock/warp-align) | `gcmsalign` | data loading, anchors, baselines, metrics, the WarpTransformer |
+| [warp-align](https://github.com/woodRock/warp-align) | `warpalign` | data loading, anchors, baselines, metrics, the WarpTransformer |
 | [joint-align](https://github.com/woodRock/joint-align) | `jointalign` | the joint model (paper one) |
 | trust-align (this) | `trustalign` | paper two's experiments |
 
@@ -67,7 +67,7 @@ bit-identical, and is released under a new tag that this repository then pins.
 ```bash
 git clone https://github.com/woodRock/trust-align.git
 cd trust-align
-pip install -e ".[dev]"            # pulls the pinned joint-align and gcmsalign
+pip install -e ".[dev]"            # pulls the pinned joint-align and warpalign
 python scripts/00_check_setup.py   # versions, data access, joint model sanity check
 make check                         # ruff, mypy, tests + coverage
 ```
@@ -84,13 +84,13 @@ pip install --no-deps -e .
 
 ## Rules this repository follows
 
-- **Data stays private.** The fish oil data is read in place from the gcmsalign checkout
-  (`gcmsalign.config.Paths().fish_oil`). It is never copied, committed or uploaded, and real-data
+- **Data stays private.** The fish oil data is read in place from the warpalign checkout
+  (`warpalign.config.Paths().fish_oil`). It is never copied, committed or uploaded, and real-data
   tests skip without it. Git holds text reports (`results/*.txt`) only, never data, caches or binaries.
 - **No typed numbers.** Every number in a report, caption or this README is computed by a script and
   written to `results/*.txt`.
 - **Provenance.** Every result file starts with `trustalign.provenance.header()`: version, commit and
-  source state of trustalign, jointalign and gcmsalign.
+  source state of trustalign, jointalign and warpalign.
 - **Reproducible.** CPU only, and every random draw comes from an explicitly passed
   `np.random.default_rng(seed)`.
 - **The evaluation metric never chooses anything.** λ, α and calibration quantiles are chosen by

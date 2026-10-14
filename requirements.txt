@@ -1,5 +1,5 @@
 # CI pin list, mirroring pyproject.toml (keep the two in step):
-#   joint-align  github.com/woodRock/joint-align  @ 20d81c8 (main: package merge + make_world)
-#   gcmsalign    github.com/woodRock/warp-align   @ 1ffaa24 (the commit joint-align pins)
-# Local development against editable joint-align and gcmsalign checkouts: make install (--no-deps).
+#   joint-align  github.com/woodRock/joint-align  @ JOINT_ALIGN_SHA_AFTER_PUSH (imports warpalign)
+#   warpalign    github.com/woodRock/warp-align   @ ea404e7 (the commit joint-align pins; the rename of 1ffaa24)
+# Local development against editable joint-align and warpalign checkouts: make install (--no-deps).
 -e .[dev]

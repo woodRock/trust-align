@@ -6,7 +6,7 @@ __pycache__/
 /dist/
 .venv/
 
-# Data (never commit). The fish oil data is private and is read from the gcmsalign checkout.
+# Data (never commit). The fish oil data is private and is read from the warpalign checkout.
 /data/
 *.cdf
 *.mzML

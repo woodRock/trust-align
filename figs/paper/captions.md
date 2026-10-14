@@ -9,3 +9,5 @@ Numbers are computed from the world or from the results files named in each capt
 **fig_regime.** Paired median over worlds of (joint − competitor) median map error (min), with the worlds the joint model wins; symmetric-log colour, linear within ±0.01 min. Largest advantage over composed pairwise: -1.113 min (chain, ε 30%, 8/10 worlds).
 
 **fig_breakdown.** Per-world median map error under ε = 30 %, same anchors refitted; shaded: joint above 0.3 min. ring: 6/10 worlds broken, oracle at most 0.076 min; chain: 2/10 worlds broken, oracle at most 0.097 min.
+
+**fig_connectivity.** Under ε 30 %, from all pairs to 0.2 linked: joint 0.033 → 0.117 min, composed pairwise 0.085 → 0.773 min. Indirect pairs under ε 30 %: joint 0.385 min on the chain and 1.140 min on the ring; composed pairwise 1.938 and 1.459 min.

@@ -1,6 +1,6 @@
 """Which code produced a result: the revision lines every result file in this repo starts with.
 
-Three packages can change a number here: this one, the joint model (jointalign) and gcmsalign
+Three packages can change a number here: this one, the joint model (jointalign) and warpalign
 (data loading, anchors, metrics). Locally the last two are usually editable checkouts, so each line
 records the version, the git commit and whether that checkout's src/ was dirty.
 """
@@ -10,7 +10,7 @@ import subprocess
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from jointalign.provenance import display_path, gcmsalign_revision, jointalign_revision
+from jointalign.provenance import display_path, jointalign_revision, warpalign_revision
 
 __all__ = ['display_path', 'header', 'trustalign_revision']
 
@@ -40,5 +40,5 @@ def trustalign_revision() -> str:
 
 
 def header() -> list[str]:
-    """The provenance lines for the top of a result file: this repo, the joint model, gcmsalign."""
-    return [trustalign_revision(), jointalign_revision(), gcmsalign_revision()]
+    """The provenance lines for the top of a result file: this repo, the joint model, warpalign."""
+    return [trustalign_revision(), jointalign_revision(), warpalign_revision()]
