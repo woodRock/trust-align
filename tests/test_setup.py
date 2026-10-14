@@ -7,6 +7,7 @@ import shutil
 from pathlib import Path
 
 import jointalign
+import numpy as np
 import pytest
 
 import trustalign
@@ -57,3 +58,43 @@ def test_data_summary_counts_samples_without_reading_them(tmp_path):
             (tmp_path / name / 'chroma' / f'{i}.npz').touch()
     lines = s00.data_summary(tmp_path)
     assert lines[1].split() == ['batch_a', '2', 'samples'] and lines[2].split() == ['batch_b', '3', 'samples']
+
+
+@pytest.mark.slow
+def test_pilot_end_to_end_on_a_tiny_grid(tmp_path):
+    s10 = load_script('10_pilot_sparsity.py')
+    cells = s10.main(Ks=(3,), topologies=('complete', 'chain'), budgets=(10, None), epsilons=(0.0, 0.15),
+                     seeds=(0, 1), results=tmp_path, lambdas=(1.0, 100.0),
+                     world_kw=dict(n_compounds=30, mz_bins=300))
+    txt = (tmp_path / 'pilot_sparsity.txt').read_text()
+    assert txt.splitlines()[2].startswith('trustalign')
+    for section in ('1. Map error vs truth', '2. Sensitivity', '3. Sanity check', '4. Robust reweighting',
+                    '5. Cycle inconsistency', '6. Run time', 'Wall time'):
+        assert section in txt
+    assert len(cells) == 16
+    first = cells[(3, 'chain', 10, 0.15, 0)]
+    assert cells[(3, 'chain', 10, 0.15, 1)]['lam'] == first['lam']        # λ chosen once, reused
+    assert first['cv_seconds'] > 0 and cells[(3, 'chain', 10, 0.15, 1)]['cv_seconds'] == 0
+    z = np.load(tmp_path / 'pilot_sparsity.npz')
+    assert len(z['cell_keys']) == 16 and 'Joint|cv|median_all' in z.files
+
+
+@pytest.mark.slow
+def test_draft_connectivity_on_a_tiny_grid(tmp_path):
+    s11 = load_script('11_draft_connectivity.py')
+    noises = (('clean', 0.0, 0.0), ('jitter 1.0', 1.0, 0.0), ('ε 30%', 0.0, 0.30))
+    runs = s11.main(seeds=(0, 1), workers=1, results=tmp_path, figs=tmp_path / 'figs', k=5, budget=10,
+                    structures=('star', 'chain', 'chain+1', 'ring', 'density1.0', 'density0.4'), noises=noises,
+                    world_kw=dict(n_compounds=30, mz_bins=300))
+    txt = (tmp_path / 'draft_connectivity.txt').read_text()
+    assert 'DRAFT' in txt and txt.splitlines()[4].startswith('trustalign')
+    for section in ('1. Median map error', '2. Pairs with no direct anchors', '3. Paired comparisons',
+                    '4. Robust reweighting', '5. Run time'):
+        assert section in txt
+    cell = runs[0][('chain', 'clean')]
+    assert cell['n_edges'] == 4 and 0 < cell['star_coverage'] < 1
+    assert runs[0][('star', 'clean')]['star_coverage'] == 1.0
+    for f in ('regime_map.png', 'loop_closure.png', 'edge_removal.png', 'captions.md'):
+        assert (tmp_path / 'figs' / f).stat().st_size > 0
+    z = np.load(tmp_path / 'draft_connectivity.npz')
+    assert list(z['seeds']) == [0, 1] and 'chain|clean|Joint|median_all' in z.files

@@ -37,9 +37,10 @@ reported, including failures. Negative results count.
 | Step | State |
 |---|---|
 | Repository skeleton, CI, provenance, environment check | done |
-| `make_world` in jointalign (in-memory synthetic worlds) | to propose upstream |
-| `HYPOTHESES.md` committed | draft, for Jesse to commit |
-| Experiment 1 pilot → report → full grid → fish arm | not started |
+| `make_world` in jointalign (in-memory synthetic worlds) | done (joint-align `20d81c8`) |
+| `HYPOTHESES.md` committed | done (pre-registered 2026-10-14) |
+| Experiment 1 pilot (`worlds`, `graphs`, `baselines`, `metrics`, script 10) | pilot run, awaiting review |
+| Experiment 1 full grid → fish arm | not started |
 | `smooth_weights` in jointalign, release → Experiment 2 | not started |
 | Experiment 3 pilot → report → full run | not started |
 | Figures and captions (numbers computed) | not started |
