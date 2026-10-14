@@ -1,0 +1,85 @@
+name: CI
+
+# Every push and pull request: lint, type-check and the test suite against the joint-align and
+# gcmsalign commits pinned in pyproject.toml. The private fish oil data is never available here;
+# tests that need it skip themselves.
+#
+# Upstream canary: the same tests against both upstream main branches (weekly, on demand and on
+# every push). Non-blocking: a failure means bumping the pins will need changes here.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 1'  # Mondays 05:00 UTC: canary against the upstream main branches
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: '3.11'
+  TORCH_VERSION: '2.7.1'  # same as joint-align's and gcmsalign's CI
+  TORCH_INDEX: https://download.pytorch.org/whl/cpu  # CPU wheels: no CUDA download
+  RUFF_VERSION: '0.17.0'
+  MYPY_VERSION: '2.4.0'
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: pip install ruff==$RUFF_VERSION
+      - run: ruff check --output-format=github .
+
+  tests:
+    name: Types and tests
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: pip install torch==$TORCH_VERSION --index-url $TORCH_INDEX
+      - run: pip install -e ".[dev]" mypy==$MYPY_VERSION
+      - name: Record pinned revisions
+        run: python -c "from trustalign.provenance import header; print(*header(), sep='\n')"
+      - run: mypy
+      - name: Tests with coverage (fails under the threshold in pyproject.toml)
+        run: |
+          python -m coverage run -m pytest
+          python -m coverage report
+
+  upstream-main:
+    name: Canary (joint-align and gcmsalign main)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - run: pip install torch==$TORCH_VERSION --index-url $TORCH_INDEX
+      - run: pip install -e ".[dev]"
+      - run: |
+          pip install --force-reinstall --no-deps \
+            "joint-align @ git+https://github.com/woodRock/joint-align.git@main" \
+            "gcmsalign @ git+https://github.com/woodRock/warp-align.git@main"
+      - run: python -c "from trustalign.provenance import header; print(*header(), sep='\n')"
+      - run: python -m pytest

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+.venv/
+
+# Data (never commit). The fish oil data is private and is read from the gcmsalign checkout.
+/data/
+*.cdf
+*.mzML
+*.mzXML
+*.npz
+*.h5
+
+# Outputs: no caches or binaries in git. Text reports and captions are tracked.
+checkpoints/
+*.pt
+*.npy
+*.pkl
+/results/*
+!/results/*.txt
+/figs/**/*.png
+/figs/**/*.pdf
+logs/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Test artefacts
+.coverage
+.pytest_cache/
+junit.xml

@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trustalign"
+version = "0.1.0"
+description = "When can joint alignment be trusted? Sparse, noisy correspondences and calibrated uncertainty in many-batch GC-MS alignment"
+requires-python = ">=3.11"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Jesse Wood" }]
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    # Direct references, pinned to pushed commits (neither is on PyPI). gcmsalign is pinned to the
+    # commit joint-align itself pins; bump both deliberately, since every result file records them.
+    # Local development against editable checkouts: see the README (install with --no-deps).
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@656b3d0049688dc1379f1da603d1560eac7d1e53",
+    "gcmsalign @ git+https://github.com/woodRock/warp-align.git@1ffaa24a44dde64dca41c958fe2fefd0725aec84",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "coverage>=7", "ruff", "mypy", "matplotlib>=3.7"]
+
+[project.urls]
+Repository = "https://github.com/woodRock/trust-align"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "slow: end-to-end runs of the numbered scripts on synthetic data (deselect with -m \"not slow\")",
+]
+filterwarnings = [
+    "ignore:enable_nested_tensor is True:UserWarning",
+]
+
+[tool.coverage.run]
+source = ["trustalign", "scripts"]
+omit = ["scripts/__pycache__/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+exclude_also = [
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+line-length = 115
+target-version = "py311"
+
+[tool.ruff.lint]
+# Same families and exceptions as joint-align and gcmsalign.
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "RUF"]
+ignore = [
+    "E702",     # short `a = …; b = …` statements
+    "E731",     # small named lambdas
+    "E741",     # 'l' as a name in short comprehensions
+    "B905",     # zip() without strict=
+    "C408",     # dict(...) calls
+    "RUF001",   # ×, −, σ, τ etc. in strings and comments are intended
+    "RUF002",
+    "RUF003",
+    "RUF005",   # list concatenation
+    "SIM300",
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["trustalign"]
+known-third-party = ["gcmsalign", "jointalign"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/trustalign"]
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
