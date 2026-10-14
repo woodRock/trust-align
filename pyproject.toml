@@ -17,7 +17,7 @@ dependencies = [
     # Direct references, pinned to pushed commits (neither is on PyPI). gcmsalign is pinned to the
     # commit joint-align itself pins; bump both deliberately, since every result file records them.
     # Local development against editable checkouts: see the README (install with --no-deps).
-    "joint-align @ git+https://github.com/woodRock/joint-align.git@656b3d0049688dc1379f1da603d1560eac7d1e53",
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@20d81c8c620db6e6eb30a1fd262c4fb69187fc2b",
     "gcmsalign @ git+https://github.com/woodRock/warp-align.git@1ffaa24a44dde64dca41c958fe2fefd0725aec84",
 ]
 
