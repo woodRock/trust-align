@@ -76,6 +76,7 @@ ignore = [
 "scripts/11_draft_connectivity.py" = ["E402"]
 "scripts/13_full_sparsity.py" = ["E402"]
 "scripts/14_diagnose_lambda.py" = ["E402"]
+"scripts/15_fish_sparsity.py" = ["E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["trustalign"]

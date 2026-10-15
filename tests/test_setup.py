@@ -197,3 +197,37 @@ def test_diagnose_lambda_on_a_tiny_grid(tmp_path):
     e = s14.rule_errors(sweep, grid[0], (3, 4, 5), 'Joint', 10.0)
     assert np.all(e['per world'] <= e['best λ'] + 1e-12) and np.all(e['per world'] <= e['own CV'] + 1e-12)
     np.testing.assert_array_equal(e['tuned'], e['λ = 10'])
+
+
+@pytest.mark.slow
+def test_fish_sparsity_on_the_synthetic_stand_in(tmp_path):
+    from jointalign.synthetic import make_dataset
+    s15 = load_script('15_fish_sparsity.py')
+    data = tmp_path / 'data'
+    make_dataset(data, n_compounds=30, mz_bins=300, seed=1)          # same five batch names as the fish data
+    settings = [('complete', 100, 0.0), ('weak_star', 10, 0.0), ('chain', 10, 0.15), ('ring', 10, 0.30)]
+    kw = dict(settings=settings, draws=(0, 1, 2), workers=1, results=tmp_path / 'results', data=data,
+              lambdas=(1.0, 10.0, 100.0), n_boot=20)
+    lines = s15.main(**kw)
+    txt = (tmp_path / 'results' / 'fish_sparsity.txt').read_text()
+    assert txt.splitlines()[2].startswith('trustalign')
+    for section in ('1. Data', '2. Held-out anchor error', '3. Pairs without direct anchors', '4. Well-connected',
+                    '5. Weak hub', 'Summary (Holm-significant)', '6. Broken draws', '7. TIC correlation',
+                    '8. Run time'):
+        assert section in txt
+    fish = s15.load_fish(data, tmp_path / 'results' / 'fish_anchors.npz')          # from the cache
+    hubs = s15.hubs_of(fish)
+    assert fish['names'][hubs['Star (weak hub)']] == 'batch_aug2015'
+    assert fish['names'][hubs['Star']] == 'batch_sep2015'                       # most samples, most anchors
+    rng = np.random.default_rng(0)
+    ring = s15.edges_for('ring', fish, rng)
+    chain = s15.edges_for('chain', fish, rng)
+    assert len(ring) == 5 and len(chain) == 4 and ring > chain
+    assert len(s15.edges_for('density0.4', fish, rng)) == 4
+    # Held-out anchors are exactly those the draw did not keep, and none of them is corrupted.
+    cell = s15.run_cell(fish, ('chain', 10, 0.30), 0, (10.0,))
+    assert cell['n_kept'] + cell['n_held'] == len(fish['anchors']) and cell['n_kept'] <= 10 * 4
+    assert np.isfinite(cell['Joint']['median_indirect'])
+    # A rerun reuses every checkpointed task: identical report apart from the run-time line.
+    again = s15.main(**kw)
+    assert again[:-3] == lines[:-3]
