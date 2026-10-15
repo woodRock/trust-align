@@ -90,3 +90,39 @@ def test_world_figures_on_a_small_world(s20, tmp_path):
     for name in ('fig1_data', 'fig2_graphs'):
         assert (tmp_path / f'{name}.png').stat().st_size > 0
     assert any(c.startswith('**fig2_graphs.**') and 'star 9' in c and 'density 1.0 45' in c for c in caps)
+
+
+@pytest.fixture(scope='module')
+def s_tai():
+    return load_script('make_paper_figures.py')
+
+
+def test_make_paper_figures_parsers(s_tai):
+    t1 = s_tai.parse_full_table1(RESULTS / 'full_sparsity.txt')
+    assert (5, 'complete', 10, 0.0) in t1
+    assert t1[(5, 'complete', 10, 0.0)][0] == '0.033'
+    rq = s_tai.parse_full_rq1c(RESULTS / 'full_sparsity.txt')
+    assert ('density0.4', 0.15) in rq
+    assert rq[('density0.4', 0.15)][3] == '-0.0084'
+    lt = s_tai.parse_lambda_totals(RESULTS / 'diagnose_lambda.txt')
+    assert lt['n'] == 960
+    assert lt['Joint']['tuned'] == '175'
+    assert lt['Joint']['λ = 10'] == '160'
+    assert lt['Joint']['per world'] == '80'
+    t2 = s_tai.parse_fish_table2(RESULTS / 'fish_sparsity.txt')
+    assert ('complete', 10, 0.3) in t2
+    assert t2[('complete', 10, 0.3)][0] == '0.133'
+
+
+def test_make_paper_figures_end_to_end(s_tai, tmp_path):
+    res = s_tai.main(out=tmp_path)
+    for name in ('fig1_data', 'fig2_graphs', 'fig3_synthetic_results',
+                 'fig4_breakdown_diagnosis', 'fig5_fish_results'):
+        pdf = tmp_path / f'{name}.pdf'
+        assert pdf.exists()
+        assert pdf.stat().st_size > 1000
+        assert pdf.read_bytes()[:5] == b'%PDF-'
+    assert (tmp_path / 'captions_tai.md').exists()
+    assert len(res['paths']) == 5
+    assert len(res['captions']) == 5
+    assert len(res['table']) > 20
