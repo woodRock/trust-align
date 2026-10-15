@@ -172,3 +172,28 @@ def test_full_sparsity_statistics():
     assert ('ring', 'vs Star, indirect pairs') in labels
     est, lo, hi = s13.slope_ci({0: (np.zeros((5, 1)), np.full(5, np.nan))}, 10, rng)
     assert np.isnan(est[0]) and np.isnan(lo[0])
+
+
+@pytest.mark.slow
+def test_diagnose_lambda_on_a_tiny_grid(tmp_path):
+    s13 = load_script('13_full_sparsity.py')
+    s14 = load_script('14_diagnose_lambda.py')
+    grid = [(4, 'chain', 10, 0.30), (4, 'ring', 10, 0.0)]
+    kw = dict(tune_seeds=(0,), test_seeds=(3, 4, 5), results=tmp_path, lambdas=(1.0, 10.0, 100.0),
+              world_kw=dict(n_compounds=30, mz_bins=300))
+    with pytest.raises(FileNotFoundError):                      # needs script 13's checkpoints first
+        s14.main(grid=grid, workers=1, **kw)
+    s13.main(grid=grid, workers=1, n_boot=20, **kw)
+    lines = s14.main(grid=grid, workers=1, **kw)
+    txt = (tmp_path / 'diagnose_lambda.txt').read_text()
+    assert txt == '\n'.join(lines) + '\n' and txt.splitlines()[2].startswith('trustalign')
+    for section in ('0. Check', '1. Joint model: tuned λ', '2. Median map error', '3. Broken test worlds',
+                    '4. Run time'):
+        assert section in txt
+    check = next(line for line in lines if line.startswith('0. Check'))
+    assert float(check.split('max |difference| ')[1].split()[0]) < 1e-9    # reproduces script 13 exactly
+    sweep = s14.run_sweep(grid, (3, 4, 5), 1, tmp_path / 'diagnose_lambda_cache', (1.0, 10.0, 100.0),
+                          (('mz_bins', 300), ('n_compounds', 30)))       # reused from the checkpoints
+    e = s14.rule_errors(sweep, grid[0], (3, 4, 5), 'Joint', 10.0)
+    assert np.all(e['per world'] <= e['best λ'] + 1e-12) and np.all(e['per world'] <= e['own CV'] + 1e-12)
+    np.testing.assert_array_equal(e['tuned'], e['λ = 10'])
