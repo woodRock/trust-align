@@ -28,9 +28,9 @@ Analyses (the report's sections), in paper one's style: medians over test worlds
 Wilcoxon signed-rank tests with Holm correction, and seed-bootstrap 95 % CIs.
   RQ1a  Well-connected data: complete graph, budget 100 (or every anchor, where a pair has fewer):
         how far is a star through the reference from the joint fit? Median Δ with its CI.
-  RQ1b  Weak hub (complete graph, star through the weak hub), weak_star, chain, ring: joint vs star
-        and composed pairwise, on pairs without direct anchors; how the gap moves with budget and ε
-        (slopes with CIs).
+  RQ1b  Weak hub (complete graph, star through the weak hub), weak_star, chain, ring: joint vs
+        composed pairwise on pairs without direct anchors, and vs the star wherever the two can
+        differ; how the gap moves with budget and ε (slopes with CIs).
   RQ1c  Many batches: joint − composed pairwise against K (5, 10, 20) at budget 30; density0.4
         keeps the edge density fixed across K.
 Also: breakdown rates (median error > 0.3 min) with Wilson intervals, robust-reweighting recall,
@@ -204,6 +204,7 @@ def run_phase(phase, tasks, workers, cache: Path | None, lambdas, lams_by, world
         if f is not None and f.exists():
             r = pickle.loads(f.read_bytes())
             if set(r['cells']) == set(cells):
+                r['reused'] = True
                 done.append(r)
                 continue
         todo.append((K, seed, topo, cells, f))
@@ -323,6 +324,8 @@ def slope_ci(groups: dict, n_boot: int, rng: np.random.Generator) -> tuple[np.nd
     def fit(xs, ys):
         X = np.column_stack([np.ones(len(ys)), np.vstack(xs)])
         ok = np.isfinite(ys)
+        if np.linalg.matrix_rank(X[ok]) < X.shape[1]:
+            return np.full(X.shape[1] - 1, np.nan)          # too few finite values to fit the slopes
         return np.linalg.lstsq(X[ok], ys[ok], rcond=None)[0][1:]
     xs = [g[0] for g in groups.values()]
     ys = [g[1] for g in groups.values()]
@@ -332,7 +335,9 @@ def slope_ci(groups: dict, n_boot: int, rng: np.random.Generator) -> tuple[np.nd
         picks = [rng.integers(0, len(y), len(y)) for y in ys]
         boots.append(fit([x[p] for x, p in zip(xs, picks)], np.concatenate([y[p] for y, p in zip(ys, picks)])))
     b = np.array(boots)
-    return est, np.percentile(b, 2.5, axis=0), np.percentile(b, 97.5, axis=0)
+    if np.all(np.isnan(b)):
+        return est, est, est
+    return est, np.nanpercentile(b, 2.5, axis=0), np.nanpercentile(b, 97.5, axis=0)
 
 
 # ── report ────────────────────────────────────────────────────────────────────
@@ -357,15 +362,17 @@ def fmt_p(p: float) -> str:
 
 
 def h2_rows(grid) -> list[tuple]:
-    """(setting, comparison label, star method or None): RQ1b's comparisons."""
+    """(setting, comparison label, star method or None): RQ1b's comparisons. Only comparisons that
+    can differ: on a weak_star graph the star through the weak hub uses every anchor, so it is the joint
+    model; on a chain the star through batch 0 reaches no pair without direct anchors."""
     rows = []
     for s in grid:
         topo = s[1]
         if topo == 'complete':
             rows.append((s, 'vs Star (weak hub), its pairs', 'Star (weak hub)'))
+        if topo == 'ring':
+            rows.append((s, 'vs Star, indirect pairs', 'Star'))
         if topo in ('weak_star', 'chain', 'ring'):
-            star = 'Star (weak hub)' if topo == 'weak_star' else 'Star'
-            rows.append((s, f'vs {star}, indirect pairs', star))
             rows.append((s, 'vs composed pairwise, indirect', None))
     return rows
 
@@ -451,7 +458,7 @@ def report(cells, grid, seeds, lams_by, tuned, tested, wall, workers, n_boot) ->
     for (s, label, _), d in zip(rows, diffs):
         trend.setdefault((s[0], s[1], label), {})[(s[2], s[3])] = d
     for (K, topo, label), by in trend.items():
-        if len({b for b, _ in by}) < 2 and len({e for _, e in by}) < 2:
+        if len({b for b, _ in by}) < 2 or len({e for _, e in by}) < 2:       # both slopes need ≥ 2 levels
             continue
         groups = {k: (np.tile([np.log10(k[0]), k[1]], (len(v), 1)), v) for k, v in by.items()}
         est, lo, hi = slope_ci(groups, n_boot, rng)
@@ -532,7 +539,12 @@ def report(cells, grid, seeds, lams_by, tuned, tested, wall, workers, n_boot) ->
         L.append(f'   K={K:>2}: world + harvest {np.mean(b):.1f} s; tuning cell {np.mean(tu):.1f} s; test cell '
                  f'{np.mean(te):.1f} s (means)')
     rss = max(r['maxrss_mb'] for r in (*tuned, *tested))
-    L += [f'   {workers} workers; peak worker memory {rss:.0f} MB; wall time {wall:.0f} s', '']
+    runs = (*tuned, *tested)
+    cpu = sum(r['build_seconds'] + sum(c['seconds'] for c in r['cells'].values()) for r in runs)
+    reused = sum(bool(r.get('reused')) for r in runs)
+    L += [f'   {workers} workers; peak worker memory {rss:.0f} MB; compute {cpu / 3600:.2f} CPU h (sum over '
+          f'tasks); wall time of this invocation {wall:.0f} s, {reused} of {len(runs)} tasks reused from '
+          'checkpoints', '']
     return L
 
 

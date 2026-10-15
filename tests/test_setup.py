@@ -166,3 +166,9 @@ def test_full_sparsity_statistics():
     assert lo[0] < 2.0 < hi[0] and abs(est[0] - 2.0) < 0.1
     assert len(s13.full_grid()) == 108 + 6 and len(s13.tasks_for(s13.full_grid(), s13.TEST_SEEDS)) == 20 * (12 + 3)
     assert s13.n_edges_of(10, 'density0.4') == 18 and s13.n_edges_of(5, 'density0.4') == 4
+    labels = {(s[1], label) for s, label, _ in s13.h2_rows(s13.full_grid())}
+    assert ('weak_star', 'vs Star (weak hub), indirect pairs') not in labels       # identical to joint
+    assert not any(t == 'chain' and 'Star' in label for t, label in labels)       # no indirect pairs
+    assert ('ring', 'vs Star, indirect pairs') in labels
+    est, lo, hi = s13.slope_ci({0: (np.zeros((5, 1)), np.full(5, np.nan))}, 10, rng)
+    assert np.isnan(est[0]) and np.isnan(lo[0])
