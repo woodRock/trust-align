@@ -1,6 +1,6 @@
 13_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
 
-trustalign 0.1.0 @ 2952d26 (src clean)
+trustalign 0.1.0 @ 651749e (src clean)
 joint-align 1.1.0 @ 842ca59 (src clean)
 warpalign 2.0.0 @ ea404e7 (src clean) from ~/Desktop/warp-align
 
