@@ -1,0 +1,36 @@
+13_full_sparsity.py --timing — run-time sample for the Experiment 1 full grid
+
+trustalign 0.1.0 @ 608a6e0 (src dirty)
+joint-align 1.1.0 @ 842ca59 (src clean)
+warpalign 2.0.0 @ ea404e7 (src clean) from ~/Desktop/warp-align
+
+One tuning world (seed 0) and one test world (seed 3) per probe, ε = 0.15; 6 workers; wall time 192 s; peak worker memory 608 MB.
+
+1. Measured
+    K topology   budget edges  anchors  min/median per pair   tune s   test s
+    5 complete       10    10      100              10 / 10      3.5      0.5
+    5 chain          10     4       40              10 / 10      2.0      0.4
+    5 complete       30    10      300              30 / 30      3.3      0.6
+    5 chain          30     4      120              30 / 30      2.7      0.4
+    5 complete      100    10      957             57 / 100      4.3      0.6
+    5 chain         100     4      400            100 / 100      2.9      0.4
+   10 complete       10    45      450              10 / 10     15.1      1.7
+   10 chain          10     9       90              10 / 10     27.1      1.6
+   10 complete       30    45     1350              30 / 30     19.4      2.0
+   10 chain          30     9      270              30 / 30     14.1      2.5
+   10 complete      100    45     4102             32 / 100     30.4      2.4
+   10 chain         100     9      802             49 / 100     24.0      1.5
+   20 complete       30   190     5700              30 / 30    134.9     10.9
+   20 chain          30    19      570              30 / 30    116.5     13.4
+   20 density0.4     30    76     2280              30 / 30    124.3      8.1
+
+   World + harvest per world: K=5: 2.0 s (1,933 anchors harvested); K=10: 6.0 s (8,479 anchors harvested); K=20: 18.9 s (36,128 anchors harvested)
+   Interpolation check, K=20 density0.4: measured tune 124 s / test 8 s, interpolated 123 s / 13 s
+
+2. Projection for the full grid (3 tuning + 20 test worlds per setting)
+   part                       settings  tasks   CPU h  longest task s
+   main grid, K = 5                 54    138    0.33              35
+   main grid, K = 10                54    138    1.78             202
+   H3 slice, K = 20                  6     69    1.39             289
+   total 3.5 CPU h → about 0.6 h of wall time on 6 workers (CPU h / workers; the tuning phase must finish before testing starts, so add the tail of its longest task, 5 min at most).
+

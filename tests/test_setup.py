@@ -112,3 +112,57 @@ def test_diagnose_breakdown_on_one_seed(tmp_path):
     row = next(ln for ln in lines if 'draft ring ε30% seed 1' in ln and 'BROKEN' in ln)
     joint, oracle = float(row.split()[5]), float(row.split()[9])
     assert joint > s12.BROKEN > oracle
+
+
+TINY_GRID = [(4, 'complete', 100, 0.0), (4, 'complete', 10, 0.15), (4, 'weak_star', 10, 0.15),
+             (4, 'chain', 10, 0.0), (4, 'chain', 30, 0.15), (4, 'density0.4', 30, 0.0), (5, 'density0.4', 30, 0.0)]
+
+
+@pytest.mark.slow
+def test_full_sparsity_on_a_tiny_grid_and_resumes(tmp_path):
+    s13 = load_script('13_full_sparsity.py')
+    kw = dict(grid=TINY_GRID, tune_seeds=(0,), test_seeds=(3, 4, 5), workers=1, results=tmp_path,
+              lambdas=(1.0, 100.0), world_kw=dict(n_compounds=30, mz_bins=300), n_boot=50)
+    out = s13.main(**kw)
+    txt = (tmp_path / 'full_sparsity.txt').read_text()
+    assert txt.splitlines()[2].startswith('trustalign')
+    for section in ('1. Median map error', '2. Pairs without direct anchors', '3. RQ1a', '4. RQ1b',
+                    'RQ1b trend', '5. RQ1c', '6. Breakdown', '7. Robust reweighting', '8. Cycle inconsistency',
+                    '9. Sanity check', '10. Sensitivity', '11. Run time', 'wall time'):
+        assert section in txt
+    cells = out['cells']
+    assert len(cells) == len(TINY_GRID) * 3
+    for setting in TINY_GRID:                                  # one λ per setting and method, every test world
+        lams = {s: cells[(*setting, s)][('Joint', 'cv')]['lam'] for s in (3, 4, 5)}
+        assert len(set(lams.values())) == 1 and lams[3] == out['lams'][setting]['Joint']
+    c = cells[(4, 'complete', 10, 0.15, 3)]
+    assert c['coverage'] == {'Star': 1.0, 'Star (weak hub)': 1.0}
+    assert 0 < cells[(4, 'chain', 10, 0.0, 3)]['coverage']['Star'] < 1
+    # On a weak-hub star, the star through that hub uses every anchor: at one λ it is the joint model.
+    w = cells[(4, 'weak_star', 10, 0.15, 3)]
+    star, joint = w[('Star (weak hub)', 'fixed')], w[('Joint on weak-hub pairs', 'fixed')]
+    assert star['median_all'] == pytest.approx(joint['median_all'])
+    z = np.load(tmp_path / 'full_sparsity.npz')
+    assert len(z['cell_keys']) == len(cells) and 'Joint|cv|median_all' in z.files
+    # A rerun reuses every checkpointed task and gives the same numbers.
+    again = s13.main(**kw)
+    key = (4, 'chain', 30, 0.15, 4)
+    assert again['cells'][key]['seconds'] == cells[key]['seconds']          # reused, not refitted
+    assert again['cells'][key][('Joint', 'cv')]['median_all'] == cells[key][('Joint', 'cv')]['median_all']
+
+
+def test_full_sparsity_statistics():
+    s13 = load_script('13_full_sparsity.py')
+    assert s13.holm([0.01, 0.04, np.nan, 0.03]) == pytest.approx([0.03, 0.06, np.nan, 0.06], nan_ok=True)
+    lo, hi = s13.wilson(0, 20)
+    assert lo == 0.0 and 0.1 < hi < 0.2
+    rng = np.random.default_rng(0)
+    med, lo, hi = s13.median_ci(rng.normal(0.5, 0.1, 200), 500, rng)
+    assert lo < 0.5 < hi and lo < med < hi and hi - lo < 0.1
+    assert np.isnan(s13.median_ci(np.array([np.nan]), 10, rng)[0])
+    assert s13.signed_rank(np.linspace(0.1, 1.0, 20)) < 0.001 and np.isnan(s13.signed_rank(np.zeros(5)))
+    groups = {k: (np.full((30, 1), float(k)), 2.0 * k + rng.normal(0, 0.1, 30)) for k in (1, 2, 3)}
+    est, lo, hi = s13.slope_ci(groups, 200, rng)
+    assert lo[0] < 2.0 < hi[0] and abs(est[0] - 2.0) < 0.1
+    assert len(s13.full_grid()) == 108 + 6 and len(s13.tasks_for(s13.full_grid(), s13.TEST_SEEDS)) == 20 * (12 + 3)
+    assert s13.n_edges_of(10, 'density0.4') == 18 and s13.n_edges_of(5, 'density0.4') == 4

@@ -2,7 +2,7 @@
 11_draft_connectivity.py — DRAFT run: in which connectivity and noise regimes does joint alignment
 beat independent (composed pairwise) and reference-based (star) alignment?
 
-DRAFT, for preliminary paper content only; superseded by the pre-registered Experiment 1 grid.
+DRAFT, for preliminary paper content only; superseded by the Experiment 1 full grid (script 13).
 Deviations from that protocol, chosen to run in about 20 minutes: fixed λ = 10 for every method
 (no cross-validation), K = 10 only, one anchor budget (20 per batch pair), drift family (i).
 
@@ -174,7 +174,7 @@ def paired(a: np.ndarray, b: np.ndarray) -> tuple[float, int, float]:
 def report(runs, seeds, structures, noises, wall, workers) -> list[str]:
     n = len(seeds)
     L = [__doc__.strip().splitlines()[0], '',
-         'DRAFT — fixed λ = 10, not the pre-registered Experiment 1 protocol.', '', *header(), '',
+         'DRAFT — fixed λ = 10, not the Experiment 1 full-grid protocol (script 13).', '', *header(), '',
          f'K = {K}; {BUDGET} anchors per kept batch pair; λ = {LAM:g} for every method; seeds {seeds}; drift '
          f'family (i) (shift ±{worlds.FAMILY_I["shift"]} min, ramp ±{worlds.FAMILY_I["ramp"]} min, wiggle '
          f'{worlds.FAMILY_I["wiggle"][0]}–{worlds.FAMILY_I["wiggle"][1]} min).',
@@ -235,7 +235,7 @@ def figures(runs, seeds, structures, noises, out: Path) -> None:
     colors = {'Joint': '#2a78d6', 'Star': '#eda100', 'Composed pairwise': '#eb6834', 'Composed PCHIP': '#1baf7a'}
     caps = ['# Draft figures (scripts/11_draft_connectivity.py)', '',
             'DRAFT: fixed λ = 10, K = 10, 20 anchors per kept pair, drift family (i), '
-            f'{len(seeds)} seeds. Superseded by the pre-registered Experiment 1 grid. Numbers are computed.', '']
+            f'{len(seeds)} seeds. Superseded by the Experiment 1 full grid (script 13). Numbers are computed.', '']
 
     # Regime map: joint − composed pairwise and joint − star, per structure × noise.
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), sharey=True)

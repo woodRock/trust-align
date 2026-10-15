@@ -25,12 +25,14 @@ Calibrated Uncertainty in Many-Batch GC–MS Alignment.*
 
 | | Question | Where |
 |---|---|---|
-| **1. Sparsity and corruption** | When does the joint model beat a star fit through one hub, and pairwise fits composed along paths? Synthetic worlds with exact truth, over topology × anchor budget × corruption × K, plus a thinned fish arm. | `worlds.py`, `graphs.py`, `baselines.py`, scripts 10 (pilot), 11 (draft connectivity run), 12 (breakdown diagnosis) |
+| **1. Sparsity and corruption** | When does the joint model beat a star fit through one hub, and pairwise fits composed along paths? Synthetic worlds with exact truth, over topology × anchor budget × corruption × K, plus a thinned fish arm. | `worlds.py`, `graphs.py`, `baselines.py`, scripts 10 (pilot), 11 (draft connectivity run), 12 (breakdown diagnosis), 13 (full grid) |
 | **2. Adaptive smoothness** | Can smoothness weights that follow anchor density close the local-accuracy gap without losing the joint model's gains? | `adaptive.py` (+ `smooth_weights` upstream), script 30 |
 | **3. Calibrated uncertainty** | Can conformal intervals, using local evidence such as disagreement between pairwise paths, reach 90 % coverage in every stratum? | `calibrate.py`, script 40 |
 
-The hypotheses are pre-registered in `HYPOTHESES.md` before any full grid runs, and every outcome is
-reported, including failures. Negative results count.
+As in paper one, the experiments are framed as questions rather than formal hypotheses. Each
+experiment's grid, metrics and analyses are committed before its full run, and every outcome is
+reported, including failures. Negative results count. (`HYPOTHESES.md` holds the hypotheses written
+before the experiments' feasibility was known; they are superseded.)
 
 ## Status
 
@@ -38,10 +40,12 @@ reported, including failures. Negative results count.
 |---|---|
 | Repository skeleton, CI, provenance, environment check | done |
 | `make_world` in jointalign (in-memory synthetic worlds) | done (joint-align `20d81c8`) |
-| `HYPOTHESES.md` committed | done (pre-registered 2026-10-14) |
+| Questions and analysis plan (hypotheses in `HYPOTHESES.md` superseded 2026-10-15) | done |
 | Experiment 1 pilot (`worlds`, `graphs`, `baselines`, `metrics`, script 10) | pilot run, awaiting review |
 | Experiment 1 draft connectivity run and breakdown diagnosis (scripts 11, 12) | done (draft protocol) |
-| Experiment 1 full grid → fish arm | not started |
+| `solver='active_set'` in jointalign (joint-align `v1.1.0`) | done |
+| Experiment 1 full grid (script 13) | running |
+| Experiment 1 fish arm | not started |
 | `smooth_weights` in jointalign, release → Experiment 2 | not started |
 | Experiment 3 pilot → report → full run | not started |
 | Paper figures for the draft (script 20; captions in `figs/paper/captions.md`) | done |

@@ -17,7 +17,7 @@ dependencies = [
     # Direct references, pinned to pushed commits (neither is on PyPI). warpalign is pinned to the
     # commit joint-align itself pins; bump both deliberately, since every result file records them.
     # Local development against editable checkouts: see the README (install with --no-deps).
-    "joint-align @ git+https://github.com/woodRock/joint-align.git@55a2e5f5701b992067ce30d0e54c7e6bb505f96f",
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@842ca59535f5d18a3d9031aeb35c73ca34fc20f3",
     "warpalign @ git+https://github.com/woodRock/warp-align.git@ea404e753a0ac02c45918fbfe1fc58b8f0b25cd9",
 ]
 
@@ -74,6 +74,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # Sets BLAS thread limits before NumPy is imported.
 "scripts/11_draft_connectivity.py" = ["E402"]
+"scripts/13_full_sparsity.py" = ["E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["trustalign"]

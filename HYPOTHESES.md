@@ -1,3 +1,16 @@
+# Hypotheses (superseded 2026-10-15)
+
+**Superseded.** These hypotheses were written on 2026-10-14, before it was known which experiments
+could feasibly be run. Running the Experiment 1 grid showed that the planned design needed a much
+faster solver (now joint-align `v1.1.0`) and changed details of the grid; for example, a budget of 100
+anchors per batch pair cannot guarantee H1's "≥ 100 anchors", because some pairs have fewer. Following
+paper one (joint-align), which reports results against research questions rather than formal
+hypotheses, paper two does the same: each experiment's grid, metrics and analyses are committed before
+its full run, and every outcome is reported (README, "Experiments"). The original text is kept below
+as a record and is not used to judge results.
+
+---
+
 # Pre-registered hypotheses
 
 Committed before any full experimental grid is run. The commit that adds this file is its
@@ -36,4 +49,4 @@ of Handover 2, §5, as implemented in `src/trustalign/`.
 
 ## Amendments
 
-None yet.
+- 2026-10-15: superseded as a whole (see the note at the top).
