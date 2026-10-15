@@ -42,7 +42,10 @@ filterwarnings = [
 
 [tool.coverage.run]
 source = ["trustalign", "scripts"]
-omit = ["scripts/__pycache__/*"]
+omit = [
+    "scripts/__pycache__/*",
+    "scripts/make_paper_figures.py",
+]
 
 [tool.coverage.report]
 show_missing = true

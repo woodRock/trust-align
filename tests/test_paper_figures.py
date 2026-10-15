@@ -114,6 +114,24 @@ def test_make_paper_figures_parsers(s_tai):
     assert t2[('complete', 10, 0.3)][0] == '0.133'
 
 
+def _has_paper_figure_inputs() -> bool:
+    if not (
+        (RESULTS / 'full_sparsity_cache').is_dir()
+        and (RESULTS / 'diagnose_lambda_cache').is_dir()
+        and (RESULTS / 'fish_sparsity_cache').is_dir()
+    ):
+        return False
+    try:
+        from warpalign.config import Paths
+        return Paths().fish_oil.is_dir()
+    except Exception:
+        return False
+
+
+@pytest.mark.skipif(
+    not _has_paper_figure_inputs(),
+    reason='Requires experiment caches and private fish oil data (offline figure generation only)',
+)
 def test_make_paper_figures_end_to_end(s_tai, tmp_path):
     res = s_tai.main(out=tmp_path)
     for name in ('fig1_data', 'fig2_graphs', 'fig3_synthetic_results',
