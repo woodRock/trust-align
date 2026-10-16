@@ -1,5 +1,6 @@
 # CI pin list, mirroring pyproject.toml (keep the two in step):
-#   joint-align  github.com/woodRock/joint-align  @ 842ca59 = v1.1.0 (imports warpalign)
-#   warpalign    github.com/woodRock/warp-align   @ ea404e7 (the commit joint-align pins; the rename of 1ffaa24)
-# Local development against editable joint-align and warpalign checkouts: make install (--no-deps).
+#   alignbench   github.com/woodRock/align-bench  @ 1717d9c (the commit joint-align pins)
+#   joint-align  github.com/woodRock/joint-align  @ 34b61c5 (2.0, branch alignbench-2.0: bump to the
+#                merged commit / v2.0.0 tag before merging this branch)
+# Local development against editable alignbench and joint-align checkouts: make install (--no-deps).
 -e .[dev]

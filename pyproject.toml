@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trustalign"
-version = "0.1.0"
+version = "0.2.0"
 description = "When can joint alignment be trusted? Sparse, noisy correspondences and calibrated uncertainty in many-batch GC-MS alignment"
 requires-python = ">=3.11"
 readme = "README.md"
@@ -14,11 +14,11 @@ authors = [{ name = "Jesse Wood" }]
 dependencies = [
     "numpy>=1.26",
     "scipy>=1.11",
-    # Direct references, pinned to pushed commits (neither is on PyPI). warpalign is pinned to the
+    # Direct references, pinned to pushed commits (neither is on PyPI). alignbench is pinned to the
     # commit joint-align itself pins; bump both deliberately, since every result file records them.
     # Local development against editable checkouts: see the README (install with --no-deps).
-    "joint-align @ git+https://github.com/woodRock/joint-align.git@842ca59535f5d18a3d9031aeb35c73ca34fc20f3",
-    "warpalign @ git+https://github.com/woodRock/warp-align.git@ea404e753a0ac02c45918fbfe1fc58b8f0b25cd9",
+    "alignbench @ git+https://github.com/woodRock/align-bench.git@1717d9cabc29e6f130fb412a56e22ae1277380d5",
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@34b61c5bb40a708471b45dfe39cd28e0da02e4ac",
 ]
 
 [project.optional-dependencies]
@@ -84,7 +84,7 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["trustalign"]
-known-third-party = ["warpalign", "jointalign"]
+known-third-party = ["alignbench", "jointalign"]
 
 [tool.mypy]
 python_version = "3.11"

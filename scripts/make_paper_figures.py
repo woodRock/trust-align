@@ -27,7 +27,7 @@ Sources (never the superseded pilot or draft runs):
   results/diagnose_lambda_cache/ script 14 (results/diagnose_lambda.txt): refits of script 13's exact
                                  test cells; its Section 0 checks them against script 13
   results/fish_sparsity_cache/   script 15 at trustalign f320eae (results/fish_sparsity.txt), 20 draws
-  results/fish_anchors.npz, and the fish oil data read in place from the warpalign checkout (fig1 a)
+  results/fish_anchors.npz, and the fish oil data read in place from data/fish_oil (fig1 a)
 
 Every plotted number is computed from those checkpoints (or from a refit that is checked against
 them); the script stops if any recomputed median differs from the committed reports. The per-world
@@ -358,8 +358,9 @@ def parse_fish_table2(path: Path) -> dict:
 
 def fish_sample(data: Path):
     """The FISH_BATCH sample with the largest TIC inside FISH_WINDOW: its chroma, TIC and name."""
-    from warpalign.config import TIME_AXIS
-    from warpalign.data import load_batch
+    from alignbench.axis import FISH_OIL_AXIS
+    from alignbench.datasets.fish_oil import load_batch
+    TIME_AXIS = FISH_OIL_AXIS.times
     b = load_batch(FISH_BATCH, data)
     win = (TIME_AXIS >= FISH_WINDOW[0]) & (TIME_AXIS <= FISH_WINDOW[1])
     i = int(np.argmax(b.tic_raw[:, win].sum(axis=1)))
@@ -376,7 +377,8 @@ def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
 
     # (a) fish oil: TIC over the 2-D matrix, spectrum at the apex
     chroma, tic, sid = fish
-    from warpalign.config import TIME_AXIS as FT
+    from alignbench.axis import FISH_OIL_AXIS
+    FT = FISH_OIL_AXIS.times
     sub = gs[0].subgridspec(2, 1, height_ratios=[1, 2.3], hspace=0.06)
     ax_t, ax_h = fig.add_subplot(sub[0]), fig.add_subplot(sub[1])
     win = (FT >= FISH_WINDOW[0]) & (FT <= FISH_WINDOW[1])
