@@ -1,7 +1,7 @@
 name: CI
 
-# Every push and pull request: lint, type-check and the test suite against the joint-align and
-# warpalign commits pinned in pyproject.toml. The private fish oil data is never available here;
+# Every push and pull request: lint, type-check and the test suite against the alignbench and
+# joint-align commits pinned in pyproject.toml. The private fish oil data is never available here;
 # tests that need it skip themselves.
 #
 # Upstream canary: the same tests against both upstream main branches (weekly, on demand and on
@@ -23,7 +23,7 @@ permissions:
 
 env:
   PYTHON_VERSION: '3.11'
-  TORCH_VERSION: '2.7.1'  # same as joint-align's and warpalign's CI
+  TORCH_VERSION: '2.7.1'  # same as joint-align's CI
   TORCH_INDEX: https://download.pytorch.org/whl/cpu  # CPU wheels: no CUDA download
   RUFF_VERSION: '0.17.0'
   MYPY_VERSION: '2.4.0'
@@ -64,7 +64,7 @@ jobs:
           python -m coverage report
 
   upstream-main:
-    name: Canary (joint-align and warpalign main)
+    name: Canary (alignbench and joint-align main)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     continue-on-error: true
@@ -79,7 +79,7 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: |
           pip install --force-reinstall --no-deps \
-            "joint-align @ git+https://github.com/woodRock/joint-align.git@main" \
-            "warpalign @ git+https://github.com/woodRock/warp-align.git@main"
+            "alignbench @ git+https://github.com/woodRock/align-bench.git@main" \
+            "joint-align @ git+https://github.com/woodRock/joint-align.git@main"
       - run: python -c "from trustalign.provenance import header; print(*header(), sep='\n')"
       - run: python -m pytest

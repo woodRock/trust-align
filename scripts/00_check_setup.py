@@ -2,9 +2,9 @@
 00_check_setup.py — Check the environment before any experiment: versions, data access, and that
 the pinned joint model still reproduces itself.
 
-1. Provenance: trustalign, jointalign and warpalign revisions (as every result file records them).
+1. Provenance: trustalign, alignbench and jointalign revisions (as every result file records them).
 2. Data: which fish oil batches are readable and how many samples each has. Nothing is copied: the
-   data stays private in the warpalign checkout (warpalign.config.Paths().fish_oil).
+   data stays private: data/fish_oil (a git-ignored symlink) or --data.
 3. Joint model: fit_joint at its defaults on jointalign's synthetic data, against the true drift.
 
 Output: results/setup_check.txt (text only).
@@ -16,15 +16,16 @@ import tempfile
 from pathlib import Path
 
 import numpy as np
+from alignbench.axis import FISH_OIL_AXIS
+from alignbench.datasets.fish_oil import load_batch
 from jointalign import fit_joint, harvest_anchors
 from jointalign import synthetic as syn
-from warpalign.config import BIN_MIN, Paths
-from warpalign.data import load_batch
 
 from trustalign.provenance import display_path, header
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA = Paths().fish_oil
+BIN_MIN = FISH_OIL_AXIS.bin_min
+DATA = ROOT / 'data' / 'fish_oil'   # a symlink to the private data
 RESULTS = ROOT / 'results'
 
 

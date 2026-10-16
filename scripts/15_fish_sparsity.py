@@ -23,9 +23,9 @@ Settings (K = 5 batches):
 λ: paper one's rule on each draw's own kept anchors (RT-blocked CV; script 14 found it slightly better
 than a shared tuned λ). Methods, fitters and statistics are script 13's (solver='active_set').
 
-Data stays private: read in place from the warpalign checkout. The harvested anchors and TICs are
-cached locally (results/fish_anchors.npz, never committed: *.npz is git-ignored); tasks are
-checkpointed under results/fish_sparsity_cache/.
+Data stays private: read in place from data/fish_oil (a git-ignored symlink) or --data. The
+harvested anchors and TICs are cached locally (results/fish_anchors.npz, never committed: *.npz is
+git-ignored); tasks are checkpointed under results/fish_sparsity_cache/.
 
 Output: results/fish_sparsity.txt
 """
@@ -45,10 +45,10 @@ from itertools import combinations, pairwise, permutations, product
 from pathlib import Path
 
 import numpy as np
+from alignbench.axis import FISH_OIL_AXIS
+from alignbench.metrics.tic import pearson_rows
+from alignbench.warps import warp_rows
 from jointalign import Anchors, harvest_anchors
-from warpalign.config import BIN_MIN, EVAL_BINS, N_BINS, Paths
-from warpalign.metrics import pearson_rows
-from warpalign.warps import warp_rows
 
 from trustalign import baselines as bl
 from trustalign import graphs, metrics
@@ -56,7 +56,8 @@ from trustalign.provenance import header
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / 'results'
-DATA = Paths().fish_oil
+BIN_MIN, EVAL_BINS, N_BINS = FISH_OIL_AXIS.bin_min, FISH_OIL_AXIS.eval_bins, FISH_OIL_AXIS.n_bins
+DATA = ROOT / 'data' / 'fish_oil'   # a symlink to the private data
 
 TOPOLOGIES = ('complete', 'star', 'weak_star', 'chain', 'ring', 'density0.4')
 BUDGETS = (10, 30, 100)
@@ -96,7 +97,7 @@ def load_fish(data: Path, cache: Path) -> dict:
         tics = [z[f'tic_{k}'] for k in range(len(names))]
         anc = Anchors(*(z[k] for k in ('ba', 'bb', 'sa', 'sb', 'ta', 'tb')))
         return {'names': names, 'sizes': [len(t) for t in tics], 'tics': tics, 'anchors': anc}
-    from warpalign.data import load_batch
+    from alignbench.datasets.fish_oil import load_batch
     names = sorted(p.name for p in Path(data).glob('batch_*') if p.is_dir())
     batches = [load_batch(b, data) for b in names]
     anc = harvest_anchors([b.chromas for b in batches], [b.tic_raw for b in batches])

@@ -3,14 +3,12 @@ from __future__ import annotations
 
 import importlib.util
 import re
-import shutil
 from pathlib import Path
 
 import jointalign
 import numpy as np
 import pytest
 
-import trustalign
 from trustalign import provenance
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -24,19 +22,20 @@ def load_script(filename: str):
     return mod
 
 
-def test_header_names_all_three_packages():
+def test_header_names_the_packages_and_environment():
     lines = provenance.header()
-    assert [ln.split()[0] for ln in lines] == ['trustalign', 'joint-align', 'warpalign']
-    assert re.fullmatch(r'trustalign \S+ @ \w+ \(src (clean|dirty)\)', lines[0])
-    assert jointalign.__version__ in lines[1]
+    names = [ln.split()[0] for ln in lines]
+    assert names[:3] == ['trustalign', 'alignbench', 'joint-align'] and names[-1] == 'environment:'
+    assert re.fullmatch(r'trustalign \S+ @ \w+ \(src (clean|dirty)\) from .+', lines[0])
+    assert jointalign.__version__ in lines[2]
 
 
-def test_trustalign_revision_outside_git(tmp_path, monkeypatch):
-    fake = tmp_path / 'site-packages' / 'trustalign' / '__init__.py'
-    fake.parent.mkdir(parents=True)
-    shutil.copy(trustalign.__file__, fake)
-    monkeypatch.setattr(trustalign, '__file__', str(fake))
-    assert provenance.trustalign_revision().endswith('(installed, no git)')
+def test_provenance_is_alignbench_s():
+    # One implementation for every package (alignbench.provenance tests pinned, editable and plain
+    # installs); trustalign keeps its names.
+    from alignbench import provenance as ab
+
+    assert provenance.trustalign_revision() == ab.revision('trustalign')
 
 
 @pytest.mark.slow

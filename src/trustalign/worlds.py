@@ -1,6 +1,10 @@
 """
 Random K-batch synthetic worlds with known drift (Experiment 1).
 
+Since the alignbench migration the generator is alignbench.datasets.synthetic (draw_specs,
+make_world_k; dataset id 'synthetic:k<K>'), which reproduces this module's worlds bit for bit;
+World keeps its fields and methods, and World.study gives the same world as an alignbench Study.
+
 Each batch k gets an independent random drift d_k and its own sample count and acquisition start;
 the compound library, peak shapes and noise are jointalign.synthetic's (make_world, in memory). The
 truth dictionary is make_world's, so jointalign.synthetic.true_map gives the exact correspondence
@@ -17,14 +21,12 @@ Drift families:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from functools import cached_property
 
 import numpy as np
-from jointalign import synthetic as syn
-
-FAMILY_I: dict[str, Any] = dict(shift=3.0, ramp=3.0, wiggle=(0.0, 0.3))
-N_SAMPLES = (2, 8)            # samples per batch, inclusive
-STARTS = (3.0, 5.0)           # acquisition start (min)
+from alignbench.data import Study
+from alignbench.datasets import synthetic as syn
+from alignbench.datasets.synthetic import FAMILY_I, N_SAMPLES, STARTS, draw_specs  # noqa: F401
 
 
 @dataclass
@@ -33,7 +35,7 @@ class World:
     specs: tuple[syn.BatchSpec, ...]
     chromas: list[np.ndarray]     # chromas[k]: (n_k, T, M) float32
     tic_raws: list[np.ndarray]    # tic_raws[k]: (n_k, T) float32
-    truth: dict                   # jointalign.synthetic truth (latent grid, drifts, compound τ)
+    truth: dict                   # the synthetic truth dict (latent grid, drifts, compound τ)
     seed: int
 
     @property
@@ -44,6 +46,11 @@ class World:
     def sizes(self) -> list[int]:
         return [s.n for s in self.specs]
 
+    @cached_property
+    def study(self) -> Study:
+        """The same world as an alignbench Study (with exact truth), for alignbench's metrics."""
+        return syn.to_study(self.specs, self.chromas, self.tic_raws, self.truth, f'synthetic:k{self.K}')
+
     def true_map(self, k: int, l: int, t_min: np.ndarray) -> np.ndarray:
         """Exact retention time (min) in batch l of whatever elutes at t_min in batch k."""
         return syn.true_map(self.truth, self.names[k], self.names[l], t_min)
@@ -51,34 +58,16 @@ class World:
     def observed_span(self, k: int) -> tuple[float, float]:
         """Earliest and latest elution time (min) of the compounds batch k actually records:
         inside the run and after its acquisition start (jitter-free positions)."""
-        tau = np.asarray(self.truth['compound_tau_min'])
-        rt = tau + self.specs[k].drift(tau)
-        seen = rt[(rt >= self.specs[k].start) & (rt < syn.RUN_MIN)]
-        return float(seen.min()), float(seen.max())
-
-
-def draw_specs(K: int, rng: np.random.Generator, family: str = 'i') -> tuple[syn.BatchSpec, ...]:
-    """K random batch specifications from one drift family."""
-    if family != 'i':
-        raise NotImplementedError(f'drift family {family!r}: only the paper-one family "i" exists yet')
-    specs = []
-    for k in range(K):
-        specs.append(syn.BatchSpec(
-            name=f'batch_{k:02d}',
-            n=int(rng.integers(N_SAMPLES[0], N_SAMPLES[1] + 1)),
-            shift=float(rng.uniform(-FAMILY_I['shift'], FAMILY_I['shift'])),
-            ramp=float(rng.uniform(-FAMILY_I['ramp'], FAMILY_I['ramp'])),
-            wiggle=float(rng.uniform(*FAMILY_I['wiggle'])),
-            phase=float(rng.uniform(0.0, 2 * np.pi)),
-            start=float(rng.choice(STARTS)),
-        ))
-    return tuple(specs)
+        truth: syn.SyntheticTruth = self.study.truth  # type: ignore[assignment]
+        return truth.observed_span(k)
 
 
 def make(K: int, seed: int, family: str = 'i', **world_kw) -> World:
     """One world. Every random draw comes from default_rng(seed): first the batch specs, then the
-    seed handed to jointalign.synthetic.make_world (library, compound times, samples)."""
-    rng = np.random.default_rng(seed)
-    specs = draw_specs(K, rng, family)
-    chromas, tic_raws, truth = syn.make_world(batches=specs, seed=int(rng.integers(2**31)), **world_kw)
-    return World([s.name for s in specs], specs, chromas, tic_raws, truth, seed)
+    seed handed to the synthetic generator (library, compound times, samples)."""
+    study = syn.make_world_k(K, seed, family, **world_kw)
+    truth: syn.SyntheticTruth = study.truth  # type: ignore[assignment]
+    w = World([s.name for s in truth.specs], truth.specs, [b.chromas for b in study.batches],
+              [b.tic_raw for b in study.batches], truth.truth, seed)
+    w.__dict__['study'] = study  # the cached_property, already known
+    return w

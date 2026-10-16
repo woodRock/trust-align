@@ -57,12 +57,14 @@ Each pilot stops for review before its full grid runs.
 
 | Repository | Package | Role |
 |---|---|---|
-| [warp-align](https://github.com/woodRock/warp-align) | `warpalign` | data loading, anchors, baselines, metrics, the WarpTransformer |
+| [align-bench](https://github.com/woodRock/align-bench) | `alignbench` | data loading, anchors, synthetic worlds, graphs, baselines, metrics, protocols, provenance |
 | [joint-align](https://github.com/woodRock/joint-align) | `jointalign` | the joint model (paper one) |
 | trust-align (this) | `trustalign` | paper two's experiments |
 
 Both upstreams are imported at pinned commits (`pyproject.toml`, mirrored in `requirements.txt`),
-never copied. A new fitting option, such as per-knot smoothness weights, is added **to jointalign** on
+never copied. The worlds, anchor graphs, shortest-path composition, held-out folds and truth metrics
+of Experiment 1 now live in alignbench (bit-identical; `trustalign.worlds`, `.graphs`, `.metrics`
+keep their names), so they can be benchmarked with `alignbench run`. A new fitting option, such as per-knot smoothness weights, is added **to jointalign** on
 its own branch: it defaults to today's behaviour, comes with a test that the default output is
 bit-identical, and is released under a new tag that this repository then pins.
 
@@ -71,7 +73,7 @@ bit-identical, and is released under a new tag that this repository then pins.
 ```bash
 git clone https://github.com/woodRock/trust-align.git
 cd trust-align
-pip install -e ".[dev]"            # pulls the pinned joint-align and warpalign
+pip install -e ".[dev]"            # pulls the pinned alignbench and joint-align
 python scripts/00_check_setup.py   # versions, data access, joint model sanity check
 make check                         # ruff, mypy, tests + coverage
 ```
@@ -81,20 +83,20 @@ this package with `--no-deps` (`make install`); otherwise pip replaces the edita
 the pinned commits:
 
 ```bash
-pip install -e path/to/warp-align
+pip install -e path/to/align-bench
 pip install --no-deps -e path/to/joint-align
 pip install --no-deps -e .
 ```
 
 ## Rules this repository follows
 
-- **Data stays private.** The fish oil data is read in place from the warpalign checkout
-  (`warpalign.config.Paths().fish_oil`). It is never copied, committed or uploaded, and real-data
+- **Data stays private.** The fish oil data is read in place from `data/fish_oil` (a git-ignored
+  symlink to the private data) or `--data`. It is never copied, committed or uploaded, and real-data
   tests skip without it. Git holds text reports (`results/*.txt`) only, never data, caches or binaries.
 - **No typed numbers.** Every number in a report, caption or this README is computed by a script and
   written to `results/*.txt`.
 - **Provenance.** Every result file starts with `trustalign.provenance.header()`: version, commit and
-  source state of trustalign, jointalign and warpalign.
+  source state of trustalign, alignbench and jointalign, and the numeric environment.
 - **Reproducible.** CPU only, and every random draw comes from an explicitly passed
   `np.random.default_rng(seed)`.
 - **The evaluation metric never chooses anything.** λ, α and calibration quantiles are chosen by

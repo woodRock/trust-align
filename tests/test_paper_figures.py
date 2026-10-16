@@ -121,11 +121,7 @@ def _has_paper_figure_inputs() -> bool:
         and (RESULTS / 'fish_sparsity_cache').is_dir()
     ):
         return False
-    try:
-        from warpalign.config import Paths
-        return Paths().fish_oil.is_dir()
-    except Exception:
-        return False
+    return (ROOT / 'data' / 'fish_oil').is_dir()
 
 
 @pytest.mark.skipif(
