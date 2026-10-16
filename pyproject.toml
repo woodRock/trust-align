@@ -17,8 +17,8 @@ dependencies = [
     # Direct references, pinned to pushed commits (neither is on PyPI). alignbench is pinned to the
     # commit joint-align itself pins; bump both deliberately, since every result file records them.
     # Local development against editable checkouts: see the README (install with --no-deps).
-    "alignbench @ git+https://github.com/woodRock/align-bench.git@1717d9cabc29e6f130fb412a56e22ae1277380d5",
-    "joint-align @ git+https://github.com/woodRock/joint-align.git@34b61c5bb40a708471b45dfe39cd28e0da02e4ac",
+    "alignbench @ git+https://github.com/woodRock/align-bench.git@879510f93f055d18db35ed62f17141a0ffaea1a7",
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@ef7cf97474c4e2cba9df46d90a337390245600e5",
 ]
 
 [project.optional-dependencies]

@@ -1,6 +1,6 @@
 # CI pin list, mirroring pyproject.toml (keep the two in step):
-#   alignbench   github.com/woodRock/align-bench  @ 1717d9c (the commit joint-align pins)
-#   joint-align  github.com/woodRock/joint-align  @ 34b61c5 (2.0, branch alignbench-2.0: bump to the
+#   alignbench   github.com/woodRock/align-bench  @ 879510f (the commit joint-align pins)
+#   joint-align  github.com/woodRock/joint-align  @ ef7cf97 (2.0, branch alignbench-2.0: bump to the
 #                merged commit / v2.0.0 tag before merging this branch)
 # Local development against editable alignbench and joint-align checkouts: make install (--no-deps).
 -e .[dev]
