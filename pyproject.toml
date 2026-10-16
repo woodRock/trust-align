@@ -18,7 +18,7 @@ dependencies = [
     # commit joint-align itself pins; bump both deliberately, since every result file records them.
     # Local development against editable checkouts: see the README (install with --no-deps).
     "alignbench @ git+https://github.com/woodRock/align-bench.git@879510f93f055d18db35ed62f17141a0ffaea1a7",
-    "joint-align @ git+https://github.com/woodRock/joint-align.git@ef7cf97474c4e2cba9df46d90a337390245600e5",
+    "joint-align @ git+https://github.com/woodRock/joint-align.git@132ecb40067731d537a25f42fed6e724bc4b53b0",
 ]
 
 [project.optional-dependencies]
