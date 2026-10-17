@@ -59,21 +59,21 @@ def _script(name: str):
     return mod
 
 
-_S13 = None
+_S02 = None
 
 
-def s13():
+def s02():
     """Script 02, loaded once per process."""
-    global _S13
-    if _S13 is None:
-        _S13 = _script('02_full_sparsity.py')
-    return _S13
+    global _S02
+    if _S02 is None:
+        _S02 = _script('02_full_sparsity.py')
+    return _S02
 
 
 def sweep_cell(world, anchors, setting, seed, lambdas) -> dict:
     """Every λ's map error for the joint model and composed pairwise on one test cell, and the λ that
     CV on the cell's own anchors picks for the joint model."""
-    m = s13()
+    m = s02()
     t0 = time.perf_counter()
     edges, kept, _, hubs, _ = m.prepare(world, anchors, setting, seed)
     fit = m.fitters(world.K, edges, hubs)
@@ -89,14 +89,14 @@ def sweep_cell(world, anchors, setting, seed, lambdas) -> dict:
 
 
 def run_task(K: int, seed: int, topology: str, cells: list[tuple], lambdas, world_kw: tuple):
-    world, anchors, _ = s13().world_and_anchors(K, seed, world_kw)
+    world, anchors, _ = s02().world_and_anchors(K, seed, world_kw)
     return {'K': K, 'seed': seed, 'topology': topology,
             'cells': {s: sweep_cell(world, anchors, s, seed, lambdas) for s in cells}}
 
 
 def run_sweep(grid, seeds, workers, cache: Path, lambdas, world_kw) -> dict:
     """{(setting, seed): sweep} for every cell, reusing checkpointed tasks."""
-    tasks = s13().tasks_for(grid, seeds)
+    tasks = s02().tasks_for(grid, seeds)
     done, todo = [], []
     for K, seed, topo, cells in tasks:
         f = cache / f'sweep_K{K}_s{seed}_{topo}.pkl'
@@ -144,13 +144,13 @@ def rule_errors(sweep: dict, setting, seeds, method: str, tuned_lam: float,
 
 
 def main(grid: list[tuple] | None = None, workers: int = 6, results: Path = RESULTS,
-         lambdas=metrics.LAMBDAS, world_kw: dict | None = None, s13_cache: Path | None = None,
+         lambdas=metrics.LAMBDAS, world_kw: dict | None = None, s02_cache: Path | None = None,
          cache: Path | None = None, tune_seeds=None, test_seeds=None) -> list[str]:
-    m = s13()
+    m = s02()
     tune_seeds = m.TUNE_SEEDS if tune_seeds is None else tune_seeds
     test_seeds = m.TEST_SEEDS if test_seeds is None else test_seeds
     grid = [s for s in m.full_grid() if s in set(m.settings(SUBSET))] if grid is None else grid
-    s13_cache = results / 'full_sparsity_cache' if s13_cache is None else s13_cache
+    s02_cache = results / 'full_sparsity_cache' if s02_cache is None else s02_cache
     cache = results / 'diagnose_lambda_cache' if cache is None else cache
     cache.mkdir(parents=True, exist_ok=True)
     wkw = tuple(sorted((world_kw or {}).items()))
@@ -158,13 +158,13 @@ def main(grid: list[tuple] | None = None, workers: int = 6, results: Path = RESU
     # Script 02's results for these settings; every task must already be checkpointed (no fits here).
     for phase, seeds in (('tune', tune_seeds), ('test', test_seeds)):
         missing = [t for t in m.tasks_for(grid, seeds)
-                   if not (s13_cache / f'{phase}_K{t[0]}_s{t[1]}_{t[2]}.pkl').exists()]
+                   if not (s02_cache / f'{phase}_K{t[0]}_s{t[1]}_{t[2]}.pkl').exists()]
         if missing:
-            raise FileNotFoundError(f'{len(missing)} script-13 {phase} checkpoints missing in {s13_cache}; '
+            raise FileNotFoundError(f'{len(missing)} script 02 {phase} checkpoints missing in {s02_cache}; '
                                     'run scripts/02_full_sparsity.py first')
-    tuned = m.run_phase('tune', m.tasks_for(grid, tune_seeds), 1, s13_cache, lambdas, None, wkw)
+    tuned = m.run_phase('tune', m.tasks_for(grid, tune_seeds), 1, s02_cache, lambdas, None, wkw)
     lams_by, _ = m.choose_lambdas(tuned, grid)
-    tested = m.run_phase('test', m.tasks_for(grid, test_seeds), 1, s13_cache, lambdas, lams_by, wkw)
+    tested = m.run_phase('test', m.tasks_for(grid, test_seeds), 1, s02_cache, lambdas, lams_by, wkw)
     full = {(*s, r['seed']): c for r in tested for s, c in r['cells'].items()}
     sweep = run_sweep(grid, test_seeds, workers, cache, lambdas, wkw)
     wall = time.perf_counter() - t0
@@ -176,7 +176,7 @@ def main(grid: list[tuple] | None = None, workers: int = 6, results: Path = RESU
 
 
 def report(grid, seeds, tuned, lams_by, full, sweep, lambdas, wall, workers) -> list[str]:
-    m = s13()
+    m = s02()
     n, brk = len(seeds), m.BREAK_MIN
     nb = lambda v: int(np.sum(v > brk))
     L = [__doc__.strip().splitlines()[0], '', *header(), '',
@@ -269,4 +269,4 @@ if __name__ == '__main__':
     ap.add_argument('--results', type=Path, default=RESULTS)
     ap.add_argument('--device', default='cpu', choices=['cpu'], help='CPU only (bit-reproducible)')
     a = ap.parse_args()
-    main(grid=s13().full_grid() if a.all else None, workers=a.workers, results=a.results)
+    main(grid=s02().full_grid() if a.all else None, workers=a.workers, results=a.results)

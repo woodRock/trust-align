@@ -77,14 +77,14 @@ def _script(name: str):
     return mod
 
 
-_S13 = None
+_S02 = None
 
 
-def s13():
-    global _S13
-    if _S13 is None:
-        _S13 = _script('02_full_sparsity.py')
-    return _S13
+def s02():
+    global _S02
+    if _S02 is None:
+        _S02 = _script('02_full_sparsity.py')
+    return _S02
 
 
 # ── data ──────────────────────────────────────────────────────────────────────
@@ -185,14 +185,14 @@ def run_cell(fish: dict, setting: tuple, draw: int, lambdas) -> dict:
     kept, bad = graphs.corrupt(anc.subset(train_idx), eps, rng)
     held = anc.subset(test)
     hubs = hubs_of(fish)
-    fit = s13().fitters(K, edges, hubs)
+    fit = s02().fitters(K, edges, hubs)
     reach = {}
     for m, h in hubs.items():
         r = {h} | {b for a, b in edges if a == h} | {a for a, b in edges if b == h}
         reach[m] = sorted({(min(p), max(p)) for p in permutations(sorted(r), 2)})
     all_pairs = list(combinations(range(K), 2))
     out: dict = {'n_kept': len(kept), 'n_held': len(held), 'n_edges': len(edges), 'lam': {}}
-    for name in s13().METHODS:
+    for name in s02().METHODS:
         lam = np.nan if name in bl.LAMBDA_FREE else metrics.select_lambda(fit[name], kept, lambdas)[0]
         f = fit[name](kept, lam)
         pairs = reach.get(name, all_pairs)
@@ -204,7 +204,7 @@ def run_cell(fish: dict, setting: tuple, draw: int, lambdas) -> dict:
         out['lam'][name] = lam
         if name == 'Joint':
             jm = f.map
-    for star, key in s13().STARS.items():
+    for star, key in s02().STARS.items():
         row = summarise(heldout_errors(jm, held, reach[star]), edges)
         row['tic_r'] = tic_r(jm, fish['tics'], reach[star])
         out[key] = row
@@ -289,7 +289,7 @@ def comparisons(settings) -> list[tuple]:
 
 
 def report(fish, settings, draws, cells, wall, workers, n_boot) -> list[str]:
-    m = s13()
+    m = s02()
     n = len(draws)
     rng = np.random.default_rng(15)
     names = [b.replace('batch_', '') for b in fish['names']]
