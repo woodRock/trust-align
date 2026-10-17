@@ -688,7 +688,7 @@ def build_numbers(meta: dict, grid: dict, breakdown: dict, lam: dict, scaling: d
 
 def main(out: Path = OUT, results: Path = RESULTS, html: Path | None = HTML) -> dict:
     s02, s03, s04, s05 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py',
-                                                '04_fish_sparsity.py', '05_paper_figures.py'))
+                                                '04_fish_sparsity.py', '05_figures.py'))
     committed = {n: (results / f'{n}.txt').read_text().splitlines()
                  for n in ('full_sparsity', 'diagnose_lambda', 'fish_sparsity')}
 

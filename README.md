@@ -63,7 +63,7 @@ python scripts/01_check_setup.py       # versions, data access, joint model sani
 python scripts/02_full_sparsity.py     # Experiment 1 full grid (3.6 CPU h; --workers 6 → ~40 min)
 python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~12 min)
 python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~15 min)
-python scripts/05_paper_figures.py     # figures and captions from the caches above (~1 min)
+python scripts/05_figures.py     # figures and captions from the caches above (~1 min)
 python scripts/06_site_data.py         # the website's data files (docs/data/*.json) from the same caches
 ```
 
@@ -127,7 +127,7 @@ pip install --no-deps -e .
 `main`. Every number on it, in charts and in prose, comes from `docs/data/*.json`, written by
 `scripts/06_site_data.py` from the same caches as the figures and checked against
 `results/*.txt`; the numbers in the page text are inserted by that script, never typed. The static
-figures in `docs/assets/` are written by `scripts/05_paper_figures.py --site`. Preview locally with
+figures in `docs/assets/` are written by `scripts/05_figures.py --site`. Preview locally with
 `python -m http.server -d docs`.
 
 ## Rules this repository follows

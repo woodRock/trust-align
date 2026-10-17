@@ -47,7 +47,7 @@ omit = [
     "scripts/__pycache__/*",
     # Scripts 05 and 06 read the experiment caches, which exist only locally (CI never has them); their
     # parsers and pure helpers are tested, the end-to-end runs are slow-marked local tests.
-    "scripts/05_paper_figures.py",
+    "scripts/05_figures.py",
     "scripts/06_site_data.py",
 ]
 
@@ -83,7 +83,7 @@ ignore = [
 "scripts/02_full_sparsity.py" = ["E402"]
 "scripts/03_diagnose_lambda.py" = ["E402"]
 "scripts/04_fish_sparsity.py" = ["E402"]
-"scripts/05_paper_figures.py" = ["E402"]
+"scripts/05_figures.py" = ["E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["trustalign"]

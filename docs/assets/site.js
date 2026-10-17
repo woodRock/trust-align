@@ -679,7 +679,7 @@ function setupExplorer(meta, grid, graphs) {
   }
   const chips = $('#explore-chips');
   const tableI = [[5, 'complete', 10, 0.0], [5, 'complete', 10, 0.3], [5, 'complete', 30, 0.3], [5, 'chain', 30, 0.3], [5, 'ring', 30, 0.3]];
-  const lead = document.createElement('span'); lead.className = 'muted'; lead.textContent = "The paper's Table I:";
+  const lead = document.createElement('span'); lead.className = 'muted'; lead.textContent = 'Key settings:';
   chips.appendChild(lead);
   for (const s of tableI) {
     const [K, t, B, e] = s;
