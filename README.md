@@ -5,14 +5,11 @@
 [![Built on joint-align](https://img.shields.io/badge/built%20on-joint--align-6E56CF)](https://github.com/woodRock/joint-align)
 [![Project site](https://img.shields.io/badge/site-woodrock.github.io%2Ftrust--align-0A7BBB)](https://woodrock.github.io/trust-align/)
 
-**When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity and Corrupted
-Correspondences in GC–MS**
+**When can a joint retention-time alignment of many GC–MS batches be trusted?** Experiments on anchor-graph
+connectivity and corrupted correspondences, on synthetic worlds with exact truth and on real fish oil anchors.
 
-Jesse Wood, Bach Hoai Nguyen, Bing Xue, Mengjie Zhang, Kevin Shedlock, Alastair B. Ross, Daniel Killeen.
-*IEEE Transactions on Artificial Intelligence*, manuscript in preparation.
-
-[Website](https://woodrock.github.io/trust-align/) · Paper: `TODO(arXiv)` · [Cite](#cite) ·
-[joint-align](https://github.com/woodRock/joint-align) (paper one) ·
+[Website](https://woodrock.github.io/trust-align/) · [Cite](#cite) ·
+[joint-align](https://github.com/woodRock/joint-align) (the joint model) ·
 [align-bench](https://github.com/woodRock/align-bench) (shared core)
 
 ## The question
@@ -23,7 +20,7 @@ every batch-to-batch map is cycle-consistent by construction. Consistency is alg
 of accuracy: on a sparse anchor graph with some wrong anchors, a joint fit can be perfectly
 consistent and wrong everywhere. This repository asks when a joint fit of many batches can be
 trusted, over anchor-graph topology, anchors per batch pair (*B*), the share of corrupted anchors
-(ε) and the number of batches *K*, on synthetic worlds with exact truth and on paper one's fish oil
+(ε) and the number of batches *K*, on synthetic worlds with exact truth and on joint-align's fish oil
 anchors.
 
 ## Key findings
@@ -50,16 +47,15 @@ Every number below is copied from `results/*.txt`; the section it comes from is 
 ## Scope and future work
 
 The repository was planned around three experiments: sparsity and corruption, adaptive smoothness,
-and calibrated uncertainty. The paper reports the first in full; it is a complete study on its own.
-The other two are not part of this paper and survive only as future work in its Discussion
-(spatially adaptive or edge-grouped regularisation, and calibrated uncertainty); no code for them
-exists here. `HYPOTHESES.md` is the superseded pre-registration written before the experiments'
+and calibrated uncertainty. Only the first was run, in full; it is a complete study on its own. The
+other two remain future work (spatially adaptive or edge-grouped regularisation, and calibrated
+uncertainty); no code for them exists here. `HYPOTHESES.md` is the superseded pre-registration written before the experiments'
 feasibility was known; results are reported against research questions, and every outcome is
 reported, including failures.
 
 ## Reproduce
 
-The scripts are numbered in the order that reproduces the paper's results (run from the repository
+The scripts are numbered in the order that reproduces every result in `results/` (run from the repository
 root; each step reads only what earlier steps wrote to `results/`):
 
 ```bash
@@ -67,7 +63,7 @@ python scripts/01_check_setup.py       # versions, data access, joint model sani
 python scripts/02_full_sparsity.py     # Experiment 1 full grid (3.6 CPU h; --workers 6 → ~40 min)
 python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~12 min)
 python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~15 min)
-python scripts/05_paper_figures.py     # paper figures and captions from the caches above (~1 min)
+python scripts/05_paper_figures.py     # figures and captions from the caches above (~1 min)
 python scripts/06_site_data.py         # the website's data files (docs/data/*.json) from the same caches
 ```
 
@@ -87,8 +83,8 @@ trustalign 0.1.0 under the scripts' old numbering. It projected 3.5 CPU h; the g
 | Repository | Package | Role |
 |---|---|---|
 | [align-bench](https://github.com/woodRock/align-bench) | `alignbench` | data loading, anchors, synthetic worlds, graphs, baselines, metrics, protocols, provenance |
-| [joint-align](https://github.com/woodRock/joint-align) | `jointalign` | the joint model (paper one) |
-| trust-align (this) | `trustalign` | paper two's experiments and website |
+| [joint-align](https://github.com/woodRock/joint-align) | `jointalign` | the joint model |
+| trust-align (this) | `trustalign` | these experiments and the website |
 
 Both upstreams are imported at pinned commits (`pyproject.toml`, mirrored in `requirements.txt`),
 never copied. The worlds, anchor graphs, shortest-path composition, held-out folds and truth metrics
@@ -98,8 +94,8 @@ smoothness weights, is added **to jointalign** on its own branch: it defaults to
 comes with a test that the default output is bit-identical, and is released under a new tag that this
 repository then pins.
 
-`warpalign` ([warp-align](https://github.com/woodRock/warp-align), the fish oil preprocessing and the
-warp transformer of an earlier paper) appears in every result header but is not a dependency: nothing
+`warpalign` ([warp-align](https://github.com/woodRock/warp-align), the fish oil preprocessing and a
+warp transformer) appears in every result header but is not a dependency: nothing
 here imports it. alignbench's provenance header lists every installed `alignbench.methods` plugin,
 and warpalign is installed as one on the machine that produced the results. The fish oil data is read
 by `alignbench.datasets.fish_oil`, from the on-disk format warpalign's preprocessing wrote.
@@ -129,7 +125,7 @@ pip install --no-deps -e .
 [woodrock.github.io/trust-align](https://woodrock.github.io/trust-align/) is a static site in `docs/`
 (plain HTML, CSS and ES-module JavaScript; D3 from a pinned CDN URL), served by GitHub Pages from
 `main`. Every number on it, in charts and in prose, comes from `docs/data/*.json`, written by
-`scripts/06_site_data.py` from the same caches as the paper figures and checked against
+`scripts/06_site_data.py` from the same caches as the figures and checked against
 `results/*.txt`; the numbers in the page text are inserted by that script, never typed. The static
 figures in `docs/assets/` are written by `scripts/05_paper_figures.py --site`. Preview locally with
 `python -m http.server -d docs`.
@@ -139,8 +135,8 @@ figures in `docs/assets/` are written by `scripts/05_paper_figures.py --site`. P
 - **Data stays private.** The fish oil data is read in place from `data/fish_oil` (a git-ignored
   symlink to the private data) or `--data`. It is never copied, committed or uploaded, and real-data
   tests skip without it. Git holds text reports (`results/*.txt`) only, never data, caches or binaries.
-  The website shows aggregate error statistics of the fish oil arm only: no spectra, TICs or
-  retention times of real samples.
+  The website shows aggregate error statistics of the fish oil arm, plus one real run (fig. 1a: one sep2015 sample's TIC, display-quantised intensity matrix and spectra, agreed with the
+  collaborators' data owner); no other spectra, TICs or retention times of real samples.
 - **No typed numbers.** Every number in a report, caption, this README or the website is computed by
   a script and written to `results/*.txt` or `docs/data/*.json`.
 - **Provenance.** Every result file starts with `trustalign.provenance.header()`: version, commit and
@@ -152,18 +148,16 @@ figures in `docs/assets/` are written by `scripts/05_paper_figures.py --site`. P
 
 ## Cite
 
-`CITATION.cff` holds the citation for the paper and the software (the DOI is `TODO` until there is a
-release). BibTeX for the paper:
+If you use this code or its results, please cite the repository (`CITATION.cff` has the same entry; the
+DOI is `TODO` until there is a release):
 
 ```bibtex
-@article{wood2026trust,
-  title   = {When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity and
-             Corrupted Correspondences in {GC--MS}},
-  author  = {Wood, Jesse and Nguyen, Bach Hoai and Xue, Bing and Zhang, Mengjie and
-             Shedlock, Kevin and Ross, Alastair B. and Killeen, Daniel},
-  journal = {IEEE Transactions on Artificial Intelligence},
-  year    = {2026},
-  note    = {Manuscript in preparation. Code: \url{https://github.com/woodRock/trust-align}}
+@software{wood_trustalign,
+  author  = {Wood, Jesse},
+  title   = {trust-align: when can joint {GC--MS} retention-time alignment be trusted?},
+  version = {0.2.1},
+  url     = {https://github.com/woodRock/trust-align},
+  license = {MIT}
 }
 ```
 
