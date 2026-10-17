@@ -1,5 +1,5 @@
 """
-05_paper_figures.py — the five IEEE TAI figures of paper two, from the per-world checkpoints behind
+05_figures.py — the five figures of Experiment 1 (IEEE TAI format), from the per-world checkpoints behind
 the committed reports, with a verification table against the reports and the manuscript.
 
   fig1_data                 (a) one real fish oil chromatogram (sep2015, the strong hub): 2-D log
@@ -39,7 +39,7 @@ With --site, panels (b) and (c) of fig 1 and fig 2 are also written as SVG, in a
 variant, to docs/assets/ for the project website (never panel (a): a figure of a real fish oil sample
 is shown only after the collaborators agree). Site data itself is scripts/06_site_data.py's.
 
-Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper] [--site [docs/assets]]
+Usage: python3.11 scripts/05_figures.py [--out figs/paper] [--site [docs/assets]]
 """
 from __future__ import annotations
 
@@ -210,7 +210,7 @@ SITE_THEMES = {'light': ('#1f1f1f', '#ffffff'), 'dark': ('#d9d9d4', '#161616')}
 
 def _site_rc(ink: str) -> dict:
     return {'text.color': ink, 'axes.labelcolor': ink, 'axes.edgecolor': ink, 'xtick.color': ink,
-            'ytick.color': ink, 'svg.fonttype': 'none', 'font.family': 'sans-serif',
+            'ytick.color': ink, 'svg.fonttype': 'none', 'svg.hashsalt': 'trust-align', 'font.family': 'sans-serif',
             'font.sans-serif': ['Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans']}
 
 
@@ -1009,7 +1009,7 @@ def main(out: Path = FIGS, results: Path = RESULTS, site: Path | None = None) ->
         paths += site_figures(site, world, anchors, cell_bad, s02)
 
     np.savez(results / 'cache_plot_data.npz', **arrays)
-    (out / 'captions_tai.md').write_text('# IEEE TAI figures (scripts/05_paper_figures.py)\n\n'
+    (out / 'captions_tai.md').write_text('# Experiment 1 figures (scripts/05_figures.py)\n\n'
                                          + '\n\n'.join(caps) + '\n')
     print()
     table = verify(d02, rec, r4['totals'], fish_cells, s02, s04)

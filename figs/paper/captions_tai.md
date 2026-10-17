@@ -1,4 +1,4 @@
-# IEEE TAI figures (scripts/05_paper_figures.py)
+# Experiment 1 figures (scripts/05_figures.py)
 
 **fig1_data.** (a) Fish oil sample 1___SNA1_Liver_Male_A (sep2015), 10–30 min, m/z 40–400: TIC (top), log intensity (bottom), spectrum at the tallest apex (14.40 min; largest ions m/z 55, 74, 87). (b) First-sample TICs of batches 0, 3, 6, 9 of test world 6 (K = 10, world seed 140006); triangles: one compound (latent 21.83 min) in each batch; red: a corrupted anchor of batch pair 3–6 in the K = 10, complete, budget 30, ε = 30% cell, moved -19.8 bins. (c) True drifts span -4.42 to +3.91 min.
 

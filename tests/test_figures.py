@@ -1,4 +1,4 @@
-"""scripts/05_paper_figures.py: the paper figures from the Experiment 1 caches (parsers; end to end offline)."""
+"""scripts/05_figures.py: the Experiment 1 figures from the caches (parsers; end to end offline)."""
 from __future__ import annotations
 
 import importlib.util
@@ -21,10 +21,10 @@ def load_script(filename: str):
 
 @pytest.fixture(scope='module')
 def s_tai():
-    return load_script('05_paper_figures.py')
+    return load_script('05_figures.py')
 
 
-def test_paper_figures_parsers(s_tai):
+def test_figures_parsers(s_tai):
     t1 = s_tai.parse_full_table1(RESULTS / 'full_sparsity.txt')
     assert (5, 'complete', 10, 0.0) in t1
     assert t1[(5, 'complete', 10, 0.0)][0] == '0.033'
@@ -55,7 +55,7 @@ def _has_paper_figure_inputs() -> bool:
     not _has_paper_figure_inputs(),
     reason='Requires experiment caches and private fish oil data (offline figure generation only)',
 )
-def test_paper_figures_end_to_end(s_tai, tmp_path):
+def test_figures_end_to_end(s_tai, tmp_path):
     res = s_tai.main(out=tmp_path, site=tmp_path / 'site')
     for name in ('fig1_data', 'fig2_graphs', 'fig3_synthetic_results',
                  'fig4_breakdown_diagnosis', 'fig5_fish_results'):

@@ -2,11 +2,12 @@
 
 Guidance for Claude Code (claude.ai/code) in this repository.
 
-`trustalign` backs one paper: *When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity
-and Corrupted Correspondences in GC–MS* (Wood et al., IEEE TAI, in preparation). It is paper two of
-the GC–MS alignment work: [align-bench](https://github.com/woodRock/align-bench) (`alignbench`) is the
-shared core, [joint-align](https://github.com/woodRock/joint-align) (`jointalign`) is the joint model
-of paper one. Both are imported at the commits pinned in `pyproject.toml`, never copied.
+`trustalign` asks when a joint retention-time alignment of many GC–MS batches can be trusted
+(anchor-graph connectivity, corrupted correspondences). It builds on
+[align-bench](https://github.com/woodRock/align-bench) (`alignbench`, the shared core) and
+[joint-align](https://github.com/woodRock/joint-align) (`jointalign`, the joint model), both imported
+at the commits pinned in `pyproject.toml`, never copied. A paper is in preparation; the README, site
+and `CITATION.cff` describe and cite the repository, not the paper, until it is published.
 
 ## Commands
 
@@ -25,8 +26,9 @@ checkouts with the pinned commits.
 ## Rules (README, "Rules this repository follows")
 
 - **The private data stays private.** `data/fish_oil` is a git-ignored symlink. Never copy, commit or
-  upload it; never put spectra, TICs or retention times of real samples on the website. Aggregate
-  error statistics are fine. Tests that need the data skip without it.
+  upload it. On the website, aggregate error statistics are fine, and so is the one real run of the
+  paper's fig. 1a (`docs/data/sample.json`, agreed with Jesse on 2026-10-17); no other real spectra,
+  TICs or retention times. Tests that need the data skip without it.
 - **No typed numbers.** Every number in `results/*.txt`, the figure captions, the README and the
   website is computed by a script. The website's prose numbers are `<data data-key="…">` elements
   filled by `scripts/06_site_data.py`.
@@ -60,4 +62,4 @@ checkouts with the pinned commits.
 ## Stop and ask before
 
 enabling GitHub Pages, bumping a pin in `pyproject.toml`, regenerating a committed report, showing
-any figure derived from real fish oil samples (fig. 1a), or tagging a release.
+any further real fish oil data on the site, or tagging a release.

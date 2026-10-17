@@ -18,7 +18,7 @@ RESULTS = ROOT / 'results'
 DOCS = ROOT / 'docs'
 DATA = DOCS / 'data'
 FILES = ('meta.json', 'grid.json', 'graphs.json', 'breakdown.json', 'lambda.json', 'scaling.json', 'fig4a.json',
-         'fish.json', 'world.json', 'numbers.json')
+         'fish.json', 'world.json', 'sample.json', 'numbers.json')
 
 
 def load_script(filename: str):
@@ -215,6 +215,18 @@ def test_world_is_synthetic_only(site):
     assert 'fish' not in json.dumps(w).lower()
 
 
+def test_sample_is_one_run_in_the_window(site):
+    w = site['sample.json']
+    n_t, n_mz = len(w['time_min']), len(w['spectrum_apex'])
+    assert w['batch'] == 'sep2015' and w['window_min'] == [10.0, 30.0] and w['mz_range'] == [40, 400]
+    assert n_mz == 361 and 80 <= n_t <= 95 and len(w['tic']) == n_t
+    rows = w['log_intensity']['rows']
+    assert len(rows) == n_t and all(len(r) == n_mz for r in rows)
+    assert all(isinstance(v, int) and 0 <= v <= 255 for r in rows for v in r)
+    assert w['time_min'][w['apex_index']] == w['apex_min'] and len(w['top_ions']) == 3
+    assert max(w['tic']) == 1.0 and max(w['spectrum_apex']) == 100.0
+
+
 def test_fig4a(s06, site, reports):
     f = site['fig4a.json']
     t1 = s06.parse_medians(reports['full_sparsity'], 1)
@@ -275,7 +287,7 @@ def test_page_has_text_links_and_data_links_without_javascript():
     assert 'arxiv' not in html.lower()                  # no paper links until there is a preprint
     for asset in ('fig1_bc.svg', 'fig1_bc_dark.svg', 'fig2_graphs.svg', 'fig2_graphs_dark.svg'):
         assert (DOCS / 'assets' / asset).exists() and f'assets/{asset}' in html
-    assert 'fig1_data' not in html                      # never the raw fish oil sample (fig 1 a)
+    assert 'data/sample.json' in html                  # fig 1 (a): the one real run, agreed with Jesse
 
 
 # ── locally, with the caches ──────────────────────────────────────────────────

@@ -10,6 +10,7 @@ Inputs
       the per-world checkpoints of scripts 02–04
   results/fish_anchors.npz   the fish arm's harvested anchors (script 04's local cache; aggregates only
                              are exported)
+  data/fish_oil              one real run for fig 1 (a) (sample.json); nothing else real is exported
   results/cache_plot_data.npz  the per-world arrays, fig 4 (a) curves and anchors written by script 05
   results/*.txt              the committed reports, which everything is checked against
 
@@ -30,6 +31,8 @@ Outputs (docs/data/, compact JSON with sorted keys; minutes rounded to 4 decimal
   fig4a.json      the broken chain world of fig 4 (a): anchors and the fitted drift curves
   fish.json       the fish arm: per-draw held-out errors by setting, medians, tests, broken draws
   world.json      the synthetic world of fig 1 (b, c): TICs, true drifts, one anchor chain, kept anchors
+  sample.json     fig 1 (a): one real fish oil run (TIC, 8-bit log-intensity matrix, apex spectrum), the one
+                  piece of real data on the site, agreed with Jesse
   numbers.json    every number that appears in the page's prose, by key
 docs/index.html   its <data data-key="…">…</data> elements are filled from numbers.json in place.
 
@@ -540,8 +543,36 @@ def build_world(s02, s05) -> dict:
     }
 
 
+def build_sample(s04, s05) -> dict:
+    """sample.json: the one real fish oil run of the paper's fig 1 (a), as the site draws it: its TIC in the
+    10–30 min window, the log-intensity matrix (RT × m/z 40–400) quantised to 8 bits for display, and the
+    spectrum at the tallest apex. One sample, agreed with Jesse on 2026-10-17; no other real data leaves
+    the private folder."""
+    from alignbench.axis import FISH_OIL_AXIS
+    chroma, tic, sid = s05.fish_sample(s04.DATA)
+    T = FISH_OIL_AXIS.times
+    win = (T >= s05.FISH_WINDOW[0]) & (T <= s05.FISH_WINDOW[1])
+    inten = (chroma.astype(float) ** 2) * tic[:, None]          # chroma rows are sqrt-compressed, L2-normalised
+    mz = np.arange(chroma.shape[1])
+    msel = (mz >= s05.MZ_RANGE[0]) & (mz <= s05.MZ_RANGE[1])
+    img = inten[np.ix_(win, msel)]
+    logimg = np.log10(img + img.max() * 1e-4)
+    lo, hi = float(logimg.min()), float(logimg.max())
+    q = np.round((logimg - lo) / (hi - lo) * 255).astype(int)
+    apex = int(np.flatnonzero(win)[np.argmax(tic[win])])
+    spec = inten[apex] / inten[apex].max() * 100
+    top = sorted(int(m) for m in mz[msel][np.argsort(spec[msel])[-3:]])
+    return {'batch': s05.FISH_BATCH.replace('batch_', ''), 'sample_id': str(sid),
+            'window_min': list(s05.FISH_WINDOW), 'mz_range': list(s05.MZ_RANGE),
+            'time_min': np.round(T[win], 4), 'tic': np.round(tic[win] / tic[win].max(), 4),
+            'apex_min': round(float(T[apex]), 4), 'apex_index': int(np.flatnonzero(win).tolist().index(apex)),
+            'top_ions': top, 'spectrum_apex': Precise(np.round(spec[msel], 1).tolist()),
+            'log_intensity': {'levels': 255, 'log10_min': round(lo, 4), 'log10_max': round(hi, 4),
+                              'rows': [Precise(r.tolist()) for r in q]}}
+
+
 def build_numbers(meta: dict, grid: dict, breakdown: dict, lam: dict, scaling: dict, fig4a: dict, fish: dict,
-                  graphs_: dict, world: dict, full_lines: list[str]) -> dict[str, str]:
+                  graphs_: dict, world: dict, sample: dict, full_lines: list[str]) -> dict[str, str]:
     """Every number the page's prose can cite, by key."""
     N: dict[str, str] = {}
     for key, line in meta['results_provenance'].items():
@@ -631,6 +662,14 @@ def build_numbers(meta: dict, grid: dict, breakdown: dict, lam: dict, scaling: d
     N['world|n_anchors_shown'] = str(len(world['anchors']['a']))
     N['world|shown_list'] = ', '.join(str(k) for k in world['shown'])
     N['world|n_bad_shown'] = str(sum(world['anchors']['bad']))
+    N['sample|id'] = sample['sample_id']
+    N['sample|batch'] = sample['batch']
+    N['sample|apex_min'] = f'{sample["apex_min"]:.2f}'
+    N['sample|top_ions'] = ', '.join(str(m) for m in sample['top_ions'])
+    N['sample|window'] = f'{sample["window_min"][0]:g}–{sample["window_min"][1]:g}'
+    N['sample|mz'] = f'{sample["mz_range"][0]}–{sample["mz_range"][1]}'
+    N['sample|n_bins'] = str(len(sample['time_min']))
+    N['sample|n_mz'] = str(len(sample['spectrum_apex']))
     drifts = np.array(world['drift'])
     N['world|drift_min'] = f'{drifts.min():+.2f}'
     N['world|drift_max'] = f'{drifts.max():+.2f}'
@@ -649,7 +688,7 @@ def build_numbers(meta: dict, grid: dict, breakdown: dict, lam: dict, scaling: d
 
 def main(out: Path = OUT, results: Path = RESULTS, html: Path | None = HTML) -> dict:
     s02, s03, s04, s05 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py',
-                                                '04_fish_sparsity.py', '05_paper_figures.py'))
+                                                '04_fish_sparsity.py', '05_figures.py'))
     committed = {n: (results / f'{n}.txt').read_text().splitlines()
                  for n in ('full_sparsity', 'diagnose_lambda', 'fish_sparsity')}
 
@@ -684,6 +723,7 @@ def main(out: Path = OUT, results: Path = RESULTS, html: Path | None = HTML) -> 
     fig4a = build_fig4a(z, full_lines, s05)
     fish_json = build_fish(fish_cells, fish, s02, s04, fish_lines)
     world = build_world(s02, s05)
+    sample = build_sample(s04, s05)
     meta = {
         'generated': dt.date.today().isoformat(),
         'results_provenance': dict(zip(('trustalign', 'alignbench', 'joint-align', 'warpalign', 'environment'),
@@ -702,13 +742,14 @@ def main(out: Path = OUT, results: Path = RESULTS, html: Path | None = HTML) -> 
                      'scaling': 'full_sparsity.txt §5', 'lambda': 'diagnose_lambda.txt §2, §3',
                      'fish': 'fish_sparsity.txt §2, §4, §5, §6'},
     }
-    numbers = build_numbers(meta, grid, breakdown, lam, scaling, fig4a, fish_json, graphs_, world, full_lines)
+    numbers = build_numbers(meta, grid, breakdown, lam, scaling, fig4a, fish_json, graphs_, world, sample,
+                            full_lines)
     lam.pop('all_settings')
 
     out.mkdir(parents=True, exist_ok=True)
     files = {'meta.json': meta, 'grid.json': grid, 'graphs.json': graphs_, 'breakdown.json': breakdown,
              'lambda.json': lam, 'scaling.json': scaling, 'fig4a.json': fig4a, 'fish.json': fish_json,
-             'world.json': world, 'numbers.json': numbers}
+             'world.json': world, 'sample.json': sample, 'numbers.json': numbers}
     total = 0
     for name, obj in files.items():
         text = dumps(obj)

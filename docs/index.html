@@ -103,12 +103,24 @@
 <!-- 01 ─────────────────────────────────────────────────────────────────── -->
 <section class="chapter" id="graphs">
   <div class="chapter-head reveal">
-    <div class="kicker">01 — THE ANCHOR GRAPH</div>
+    <div class="kicker">01 — THE DATA AND THE ANCHOR GRAPH</div>
     <h2>Six ways to connect <var>K</var> batches, three budgets, three doses of corruption</h2>
     <p class="intro">A spectral anchor is one compound seen in two batches: one pair of retention times. Anchors turn the batches
       into a graph, and a method is a rule for turning that graph into a map <var>g</var><sub><var>k</var>→<var>l</var></sub> for
       every ordered pair, anchors or not. Each connected pair keeps <var>B</var> anchors; a share <var>ε</var> of them is moved by
       a fixed, large amount, as a wrong spectral match would be.</p>
+  </div>
+  <div class="card reveal sample-card">
+    <div class="card-head">
+      <div>
+        <h3>One real GC–MS run</h3>
+        <p class="sub">Fish oil sample <data data-key="sample|id">1___SNA1_Liver_Male_A</data> (batch <data data-key="sample|batch">sep2015</data>), <data data-key="sample|window">10–30</data> min, <var>m/z</var> <data data-key="sample|mz">40–400</data>. Every retention-time slice holds a whole mass spectrum; an anchor is the same spectrum found in two batches.</p>
+      </div>
+      <button class="small-btn js-only" id="sample-apex" type="button">Jump to the tallest peak</button>
+    </div>
+    <div class="chart" id="sample-chart" role="img" aria-label="A real fish oil GC-MS run: the total ion chromatogram above a heatmap of log intensity over retention time and m/z, with the mass spectrum at the selected retention time to the right. Move the pointer across the heatmap to scrub through retention time."></div>
+    <noscript><p class="caption">The interactive view needs JavaScript; its data is in <a href="data/sample.json">sample.json</a>.</p></noscript>
+    <p class="caption">Hover or drag across the run to scrub; arrow keys step one bin. Top: total ion chromatogram; middle: log intensity, retention time across and <var>m/z</var> up; right: the spectrum under the playhead, normalised to its largest ion. The tallest apex, at <data data-key="sample|apex_min">14.40</data> min, is dominated by <var>m/z</var> <data data-key="sample|top_ions">55, 74, 87</data>. The display matrix is quantised to 8 bits. <a class="data-link" href="data/sample.json">Data</a></p>
   </div>
   <div class="grid-2 wide-left">
     <div class="card reveal">
@@ -165,7 +177,7 @@
     <h2>Every one of the <data data-key="n_settings">114</data> settings, every world</h2>
     <p class="intro">Pick batches, topology, anchor budget and corruption. One point per test world; boxes are quartiles, whiskers
       the range; the vermilion line is the broken-world cutoff at <data data-key="break_min">0.3</data> min. The tables hold the
-      medians, the tuned λ and the paired tests the paper reports for the setting.</p>
+      medians, the tuned λ and the paired tests <code>full_sparsity.txt</code> reports for the setting.</p>
   </div>
   <div class="controls js-only" id="explore-controls">
     <label>Batches <var>K</var><select id="sel-K"></select></label>
@@ -173,7 +185,7 @@
     <label>Anchors per edge <var>B</var><select id="sel-B"></select></label>
     <label>Corruption <var>ε</var><select id="sel-eps"></select></label>
   </div>
-  <div class="chips js-only" id="explore-chips" role="group" aria-label="Rows of the paper's Table I"></div>
+  <div class="chips js-only" id="explore-chips" role="group" aria-label="Key settings"></div>
   <div class="explorer js-only">
     <div class="card graph-card">
       <div class="chart" id="explore-graph" role="img" aria-label="The anchor graph of the chosen setting: batches on a circle, anchored pairs joined by lines, the star hub ringed."></div>
@@ -189,7 +201,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <p class="caption">Paired tests the paper reports for this setting: two-sided Wilcoxon over test worlds, Holm over all <data data-key="rq1b|n_comparisons">94</data> RQ1b comparisons; Δ = joint − competitor, so negative favours the joint fit.</p>
+      <p class="caption">Paired tests reported for this setting in <code>full_sparsity.txt</code>: two-sided Wilcoxon over test worlds, Holm over all <data data-key="rq1b|n_comparisons">94</data> RQ1b comparisons; Δ = joint − competitor, so negative favours the joint fit.</p>
       <div class="table-wrap">
         <table id="explore-tests">
           <thead><tr><th>Comparison</th><th>Median Δ (min)</th><th>Joint wins</th><th>p</th><th>Holm p</th></tr></thead>
@@ -200,10 +212,10 @@
   </div>
   <p class="note">Stars are scored only on the pairs they reach: on a chain the star through batch 0 reaches one pair; on a weak-star graph the star through the weak hub uses every anchor and <em>is</em> the joint model. “Indirect pairs” have no kept anchors between them. <a class="data-link" href="data/grid.json">Data</a></p>
   <div class="no-js-only">
-    <p>Without JavaScript the explorer cannot run. The paper's Table I rows, read from the same data:</p>
+    <p>Without JavaScript the explorer cannot run. Five key settings, read from the same data:</p>
     <div class="table-wrap">
       <table>
-        <caption>Table I (<var>K</var> = 5): median map error over 20 test worlds, min</caption>
+        <caption>Key settings (<var>K</var> = 5): median map error over 20 test worlds, min</caption>
         <thead><tr><th>Setting</th><th>Joint</th><th>Star</th><th>Composed pairwise</th></tr></thead>
         <tbody>
           <tr><td>complete, <var>B</var> = 10, <var>ε</var> = 0</td><td><data data-key="t1|5|complete|10|0.0|Joint">0.033</data></td><td><data data-key="t1|5|complete|10|0.0|Star">0.054</data></td><td><data data-key="t1|5|complete|10|0.0|Composed pairwise">0.046</data></td></tr>
@@ -312,7 +324,7 @@
       <p class="caption">Only aggregate error statistics of the real data are shown or published. Held-out anchors come from the same matching pipeline as the fitted ones: an independent <em>sample</em> of correspondences, not independent chemical ground truth. <a class="data-link" href="data/fish.json">Data</a></p>
     </div>
     <div class="card reveal">
-      <h3>Table II: complete graph</h3>
+      <h3>Complete graph, budgets 10 and 100</h3>
       <p class="sub">Held-out anchor error (min), median over <data data-key="fish|n_draws">20</data> draws.</p>
       <div class="table-wrap">
         <table id="fish-table">
@@ -339,7 +351,7 @@
     <h2>What these results do and don't show</h2>
   </div>
   <div class="limits">
-    <div class="limit reveal"><h3>One estimator, one drift family</h3><p>Every finding is about paper one's joint model with its robust reweighting and λ rule, on drifts made of a shift, a smooth ramp and a small wiggle. Other estimators and drifts with breakpoints were not tested.</p></div>
+    <div class="limit reveal"><h3>One estimator, one drift family</h3><p>Every finding is about joint-align's joint model with its robust reweighting and λ rule, on drifts made of a shift, a smooth ramp and a small wiggle. Other estimators and drifts with breakpoints were not tested.</p></div>
     <div class="limit reveal"><h3>Uniformly directed corruption</h3><p>Corrupted anchors are moved by a fixed, large amount in one direction, as a systematic spectral mismatch would be. Whether real mismatches look like this is open. <span class="todo">TODO(chemist check)</span></p></div>
     <div class="limit reveal"><h3>Monotone warps, one instrument</h3><p>Elution order is assumed preserved between batches, which holds for one column and method <span class="todo">TODO(chemist check)</span>; cross-instrument compatibility was not tested <span class="todo">TODO(chemist check)</span>.</p></div>
     <div class="limit reveal"><h3>No deployment-time test yet</h3><p>Breakdowns here are known because the truth is known. A rule that warns a user from the anchors alone, adaptive or edge-grouped regularisation, and calibrated uncertainty are future work. Held-out real anchors share the matching pipeline with the fitted ones.</p></div>
@@ -362,7 +374,7 @@
       <div class="step"><span class="i">02</span><span><code>02_full_sparsity.py</code> — the full grid: <data data-key="n_settings">114</data> settings × <data data-key="n_worlds">20</data> test worlds, checkpointed</span><span class="time"><data data-key="runtime|02_cpu_h">3.59</data> CPU h</span></div>
       <div class="step"><span class="i">03</span><span><code>03_diagnose_lambda.py</code> — every λ refitted on script 02's corrupted cells</span><span class="time">≈ <data data-key="runtime|03_cpu_min">65</data> CPU min</span></div>
       <div class="step"><span class="i">04</span><span><code>04_fish_sparsity.py</code> — the fish oil arm (private data)</span><span class="time">≈ <data data-key="runtime|04_cpu_min">83</data> CPU min</span></div>
-      <div class="step"><span class="i">05</span><span><code>05_paper_figures.py</code> — the paper's figures and captions, checked against the reports</span><span class="time">seconds</span></div>
+      <div class="step"><span class="i">05</span><span><code>05_figures.py</code> — static figures and captions, checked against the reports</span><span class="time">seconds</span></div>
       <div class="step"><span class="i">06</span><span><code>06_site_data.py</code> — this page's data, regenerated from the caches and stopped on any difference from the reports</span><span class="time">seconds</span></div>
     </div>
     <div class="stack">
