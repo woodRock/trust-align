@@ -1,8 +1,10 @@
-15_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
+04_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
 
-trustalign 0.1.0 @ f320eae (src clean)
-joint-align 1.1.0 @ 842ca59 (src clean)
-warpalign 2.0.0 @ ea404e7 (src clean) from ~/Desktop/warp-align
+trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align
+alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench
+joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align
+warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align
+environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0
 
 1. Data: batches apr2016 (n=10), aug2015 (n=2), jan2016 (n=26), jul2016 (n=16), sep2015 (n=36); 25,011 anchors. Strong hub sep2015, weak hub aug2015; chain order aug2015 – sep2015 – jan2016 – apr2016 – jul2016.
    Anchors per pair (unaligned TIC r; drifted if < 0.5): apr2016×aug2015=138 (0.00*)  apr2016×jan2016=1891 (0.13*)  apr2016×jul2016=1463 (0.90)  apr2016×sep2015=2475 (0.04*)  aug2015×jan2016=322 (0.58)  aug2015×jul2016=228 (0.04*)  aug2015×sep2015=497 (0.73)  jan2016×jul2016=3374 (0.13*)  jan2016×sep2015=10227 (0.81)  jul2016×sep2015=4396 (0.05*)
@@ -307,5 +309,5 @@ warpalign 2.0.0 @ ea404e7 (src clean) from ~/Desktop/warp-align
    density0.4    100   0.3       0.482 / 0.625       0.501 / 0.641       0.282 / 0.336
 
 ============================================================================================================================
-8. Run time: 4.6 s per cell (mean); 6 workers; wall time 843 s (of this invocation; checkpointed tasks are reused)
+8. Run time: 4.6 s per cell (mean); 6 workers; wall time 0 s (of this invocation; checkpointed tasks are reused)
 
