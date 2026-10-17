@@ -45,7 +45,10 @@ filterwarnings = [
 source = ["trustalign", "scripts"]
 omit = [
     "scripts/__pycache__/*",
+    # Scripts 05 and 06 read the experiment caches, which exist only locally (CI never has them); their
+    # parsers and pure helpers are tested, the end-to-end runs are slow-marked local tests.
     "scripts/05_paper_figures.py",
+    "scripts/06_site_data.py",
 ]
 
 [tool.coverage.report]
