@@ -1,8 +1,10 @@
-13_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
+02_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
 
-trustalign 0.1.0 @ 651749e (src clean)
-joint-align 1.1.0 @ 842ca59 (src clean)
-warpalign 2.0.0 @ ea404e7 (src clean) from ~/Desktop/warp-align
+trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align
+alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench
+joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align
+warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align
+environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0
 
 114 settings; tuning worlds [0, 1, 2], test worlds 3–22 (20); drift family (i): shift ±3.0 min, ramp ±3.0 min, wiggle 0.0–0.3 min; samples per batch 2–8.
 Map error = |ĝ − g*| (min) over every RT bin where compounds exist in both batches. Per test world: the median over pairs and times; tables give the median over test worlds. "indirect" = pairs without kept anchors between them. Stars are scored on the pairs they reach. Solver: fit_joint(solver='active_set').
