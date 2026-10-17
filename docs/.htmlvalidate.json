@@ -1,0 +1,9 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-inline-style": "off",
+    "require-sri": ["error", {"target": "crossorigin", "exclude": ["https://fonts.googleapis.com/"]}],
+    "long-title": "off",
+    "no-trailing-whitespace": "off"
+  }
+}

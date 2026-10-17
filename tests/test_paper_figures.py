@@ -56,7 +56,7 @@ def _has_paper_figure_inputs() -> bool:
     reason='Requires experiment caches and private fish oil data (offline figure generation only)',
 )
 def test_paper_figures_end_to_end(s_tai, tmp_path):
-    res = s_tai.main(out=tmp_path)
+    res = s_tai.main(out=tmp_path, site=tmp_path / 'site')
     for name in ('fig1_data', 'fig2_graphs', 'fig3_synthetic_results',
                  'fig4_breakdown_diagnosis', 'fig5_fish_results'):
         pdf = tmp_path / f'{name}.pdf'
@@ -64,6 +64,10 @@ def test_paper_figures_end_to_end(s_tai, tmp_path):
         assert pdf.stat().st_size > 1000
         assert pdf.read_bytes()[:5] == b'%PDF-'
     assert (tmp_path / 'captions_tai.md').exists()
-    assert len(res['paths']) == 5
+    assert len(res['paths']) == 5 + 4
+    for name in ('fig1_bc', 'fig1_bc_dark', 'fig2_graphs', 'fig2_graphs_dark'):
+        svg = (tmp_path / 'site' / f'{name}.svg').read_text()
+        assert svg.startswith('<?xml') and '<svg' in svg
+    assert 'Fish oil' not in (tmp_path / 'site' / 'fig1_bc.svg').read_text()      # never panel (a)
     assert len(res['captions']) == 5
     assert len(res['table']) > 20

@@ -3,55 +3,61 @@
 [![CI](https://github.com/woodRock/trust-align/actions/workflows/ci.yml/badge.svg)](https://github.com/woodRock/trust-align/actions/workflows/ci.yml)
 ![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB?logo=python&logoColor=white)
 [![Built on joint-align](https://img.shields.io/badge/built%20on-joint--align-6E56CF)](https://github.com/woodRock/joint-align)
+[![Project site](https://img.shields.io/badge/site-woodrock.github.io%2Ftrust--align-0A7BBB)](https://woodrock.github.io/trust-align/)
 
-**When can a joint alignment of many GC-MS batches be trusted, and how would a user know?**
+**When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity and Corrupted
+Correspondences in GC–MS**
 
-Paper one ([joint-align](https://github.com/woodRock/joint-align)) fits one monotone warp per batch
-into a shared retention-time frame, jointly over spectral anchors from every cross-batch sample pair,
-so every batch-to-batch map is consistent by construction. Its fish oil results left three open
-problems (numbers in joint-align's `results/multibatch_align.txt`):
+Jesse Wood, Bach Hoai Nguyen, Bing Xue, Mengjie Zhang, Kevin Shedlock, Alastair B. Ross, Daniel Killeen.
+*IEEE Transactions on Artificial Intelligence*, manuscript in preparation.
 
-1. **The joint model's advantage is small on well-connected data.** A star design through one
-   dominant reference batch comes close to it, so that data cannot show *when* joint fitting matters.
-2. **Uniform smoothing costs local accuracy.** Dense PCHIP, which interpolates every anchor, has lower
-   held-out anchor error where anchors are dense.
-3. **Uncertainty under-covers.** The bootstrap intervals contain fewer held-out anchors than their
-   nominal 90 %, and barely widen where anchors are sparse.
+[Website](https://woodrock.github.io/trust-align/) · Paper: `TODO(arXiv)` · [Cite](#cite) ·
+[joint-align](https://github.com/woodRock/joint-align) (paper one) ·
+[align-bench](https://github.com/woodRock/align-bench) (shared core)
 
-Working title **[to decide]**: *When Does Joint Alignment Help? Sparse, Noisy Correspondences and
-Calibrated Uncertainty in Many-Batch GC–MS Alignment.*
+## The question
 
-## Experiments
+A joint alignment ([joint-align](https://github.com/woodRock/joint-align)) fits one monotone
+retention-time warp per GC–MS batch into a shared frame, from spectral anchors between batches, so
+every batch-to-batch map is cycle-consistent by construction. Consistency is algebra, not evidence
+of accuracy: on a sparse anchor graph with some wrong anchors, a joint fit can be perfectly
+consistent and wrong everywhere. This repository asks when a joint fit of many batches can be
+trusted, over anchor-graph topology, anchors per batch pair (*B*), the share of corrupted anchors
+(ε) and the number of batches *K*, on synthetic worlds with exact truth and on paper one's fish oil
+anchors.
 
-| | Question | Where |
-|---|---|---|
-| **1. Sparsity and corruption** | When does the joint model beat a star fit through one hub, and pairwise fits composed along paths? Synthetic worlds with exact truth, over topology × anchor budget × corruption × K, plus a thinned fish arm. | `worlds.py`, `graphs.py`, `baselines.py`, scripts 02 (full grid), 03 (λ diagnosis), 04 (fish arm), 05 (figures) |
-| **2. Adaptive smoothness** | Can smoothness weights that follow anchor density close the local-accuracy gap without losing the joint model's gains? | `adaptive.py` (+ `smooth_weights` upstream), scripts to come |
-| **3. Calibrated uncertainty** | Can conformal intervals, using local evidence such as disagreement between pairwise paths, reach 90 % coverage in every stratum? | `calibrate.py`, scripts to come |
+## Key findings
 
-As in paper one, the experiments are framed as questions rather than formal hypotheses. Each
-experiment's grid, metrics and analyses are committed before its full run, and every outcome is
-reported, including failures. Negative results count. (`HYPOTHESES.md` holds the hypotheses written
-before the experiments' feasibility was known; they are superseded.)
+Every number below is copied from `results/*.txt`; the section it comes from is in brackets.
 
-## Status
+1. **On well-connected data, a star through a good reference is nearly as good as the joint fit.**
+   Complete graph, *B* = 100: the median joint − star difference lies between −0.0053 and +0.0006 min
+   over *K* and ε (`full_sparsity.txt` §3). Through the weak hub instead, the joint fit is better in
+   20/20 test worlds at *B* = 10 (§4).
+2. **Sparse, corrupted chains break the joint fit, and the broken fit is still cycle-consistent.**
+   *K* = 5, chain, *B* = 30, ε = 0.3: median map error 1.525 min for the joint fit against 0.140 min
+   for composed pairwise fits (§1); 0.80 of the test worlds broken (> 0.3 min) against 0.45 (§6).
+3. **Choosing λ is only part of the story.** Over the 960 corrupted test worlds of script 03, the
+   cross-validated λ leaves 175 broken, a fixed λ = 10 leaves 160, and an oracle λ chosen per world
+   with the truth still leaves 80 (`diagnose_lambda.txt` §3).
+4. **The joint advantage over composed pairwise fits grows with *K* at fixed edge density.** Density
+   0.4, *B* = 30, ε = 0.15: slope −0.0084 min per doubling of *K* [−0.0107, −0.0063]
+   (`full_sparsity.txt` §5).
+5. **The fish oil anchors agree.** Complete graph, *B* = 10, ε = 0.3: held-out anchor error
+   0.133 min (joint) against 0.410 (star) and 0.284 (composed pairwise); at *B* = 100, ε = 0:
+   0.059, 0.069 and 0.056 min (`fish_sparsity.txt` §2).
 
-| Step | State |
-|---|---|
-| Repository skeleton, CI, provenance, environment check | done |
-| `make_world` in jointalign (in-memory synthetic worlds) | done (joint-align `20d81c8`) |
-| Questions and analysis plan (hypotheses in `HYPOTHESES.md` superseded 2026-10-15) | done |
-| Experiment 1 pilot, draft connectivity run and breakdown diagnosis | done; superseded by the full grid, scripts removed (in git history before v0.2.1) |
-| `solver='active_set'` in jointalign (joint-align `v1.1.0`) | done |
-| Experiment 1 full grid (script 02) and λ diagnosis (script 03) | done |
-| Experiment 1 fish arm (script 04) | done |
-| `smooth_weights` in jointalign, release → Experiment 2 | not started |
-| Experiment 3 pilot → report → full run | not started |
-| Experiment 1 figures and captions, numbers computed (script 05) | done |
+## Scope and future work
 
-Each pilot stops for review before its full grid runs.
+The repository was planned around three experiments: sparsity and corruption, adaptive smoothness,
+and calibrated uncertainty. The paper reports the first in full; it is a complete study on its own.
+The other two are not part of this paper and survive only as future work in its Discussion
+(spatially adaptive or edge-grouped regularisation, and calibrated uncertainty); no code for them
+exists here. `HYPOTHESES.md` is the superseded pre-registration written before the experiments'
+feasibility was known; results are reported against research questions, and every outcome is
+reported, including failures.
 
-## Reproduce Experiment 1
+## Reproduce
 
 The scripts are numbered in the order that reproduces the paper's results (run from the repository
 root; each step reads only what earlier steps wrote to `results/`):
@@ -62,11 +68,19 @@ python scripts/02_full_sparsity.py     # Experiment 1 full grid (3.6 CPU h; --wo
 python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~12 min)
 python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~15 min)
 python scripts/05_paper_figures.py     # paper figures and captions from the caches above (~1 min)
+python scripts/06_site_data.py         # the website's data files (docs/data/*.json) from the same caches
 ```
 
 Scripts 02–04 checkpoint every task under `results/*_cache/` and reuse it, so an interrupted run
-resumes; delete (or move) those caches to recompute from scratch. A full rerun on 2026-10-17
-reproduced every committed report (map errors to within 2e-10 min).
+resumes; delete (or move) those caches to recompute from scratch. The caches and `results/*.npz`
+are git-ignored and exist only locally, so CI never regenerates results or site data: both are
+generated locally and committed as text (`results/*.txt`, `docs/data/*.json`). A full rerun on
+2026-10-17 after the alignbench refactor reproduced every committed report (map errors to within
+2e-10 min); the reports record the code that produced them in their first lines.
+
+`results/full_sparsity_timing.txt` is historical: the `--timing` sample run before the full grid, at
+trustalign 0.1.0 under the scripts' old numbering. It projected 3.5 CPU h; the grid took 3.59 CPU h
+(`full_sparsity.txt` §11). Rerun `scripts/02_full_sparsity.py --timing` (about 3 min) to refresh it.
 
 ## How the repositories fit together
 
@@ -74,14 +88,21 @@ reproduced every committed report (map errors to within 2e-10 min).
 |---|---|---|
 | [align-bench](https://github.com/woodRock/align-bench) | `alignbench` | data loading, anchors, synthetic worlds, graphs, baselines, metrics, protocols, provenance |
 | [joint-align](https://github.com/woodRock/joint-align) | `jointalign` | the joint model (paper one) |
-| trust-align (this) | `trustalign` | paper two's experiments |
+| trust-align (this) | `trustalign` | paper two's experiments and website |
 
 Both upstreams are imported at pinned commits (`pyproject.toml`, mirrored in `requirements.txt`),
 never copied. The worlds, anchor graphs, shortest-path composition, held-out folds and truth metrics
-of Experiment 1 now live in alignbench (bit-identical; `trustalign.worlds`, `.graphs`, `.metrics`
-keep their names), so they can be benchmarked with `alignbench run`. A new fitting option, such as per-knot smoothness weights, is added **to jointalign** on
-its own branch: it defaults to today's behaviour, comes with a test that the default output is
-bit-identical, and is released under a new tag that this repository then pins.
+of Experiment 1 live in alignbench (bit-identical; `trustalign.worlds`, `.graphs`, `.metrics` keep
+their names), so they can be benchmarked with `alignbench run`. A new fitting option, such as per-knot
+smoothness weights, is added **to jointalign** on its own branch: it defaults to today's behaviour,
+comes with a test that the default output is bit-identical, and is released under a new tag that this
+repository then pins.
+
+`warpalign` ([warp-align](https://github.com/woodRock/warp-align), the fish oil preprocessing and the
+warp transformer of an earlier paper) appears in every result header but is not a dependency: nothing
+here imports it. alignbench's provenance header lists every installed `alignbench.methods` plugin,
+and warpalign is installed as one on the machine that produced the results. The fish oil data is read
+by `alignbench.datasets.fish_oil`, from the on-disk format warpalign's preprocessing wrote.
 
 ## Setup
 
@@ -103,19 +124,48 @@ pip install --no-deps -e path/to/joint-align
 pip install --no-deps -e .
 ```
 
+## Website
+
+[woodrock.github.io/trust-align](https://woodrock.github.io/trust-align/) is a static site in `docs/`
+(plain HTML, CSS and ES-module JavaScript; D3 from a pinned CDN URL), served by GitHub Pages from
+`main`. Every number on it, in charts and in prose, comes from `docs/data/*.json`, written by
+`scripts/06_site_data.py` from the same caches as the paper figures and checked against
+`results/*.txt`; the numbers in the page text are inserted by that script, never typed. The static
+figures in `docs/assets/` are written by `scripts/05_paper_figures.py --site`. Preview locally with
+`python -m http.server -d docs`.
+
 ## Rules this repository follows
 
 - **Data stays private.** The fish oil data is read in place from `data/fish_oil` (a git-ignored
   symlink to the private data) or `--data`. It is never copied, committed or uploaded, and real-data
   tests skip without it. Git holds text reports (`results/*.txt`) only, never data, caches or binaries.
-- **No typed numbers.** Every number in a report, caption or this README is computed by a script and
-  written to `results/*.txt`.
+  The website shows aggregate error statistics of the fish oil arm only: no spectra, TICs or
+  retention times of real samples.
+- **No typed numbers.** Every number in a report, caption, this README or the website is computed by
+  a script and written to `results/*.txt` or `docs/data/*.json`.
 - **Provenance.** Every result file starts with `trustalign.provenance.header()`: version, commit and
   source state of trustalign, alignbench and jointalign, and the numeric environment.
 - **Reproducible.** CPU only, and every random draw comes from an explicitly passed
   `np.random.default_rng(seed)`.
-- **The evaluation metric never chooses anything.** λ, α and calibration quantiles are chosen by
-  held-out anchor error on retention-time-blocked folds, never by TIC r or the synthetic truth.
+- **The evaluation metric never chooses anything.** λ is chosen by held-out anchor error on
+  retention-time-blocked folds, never by TIC r or the synthetic truth.
+
+## Cite
+
+`CITATION.cff` holds the citation for the paper and the software (the DOI is `TODO` until there is a
+release). BibTeX for the paper:
+
+```bibtex
+@article{wood2026trust,
+  title   = {When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity and
+             Corrupted Correspondences in {GC--MS}},
+  author  = {Wood, Jesse and Nguyen, Bach Hoai and Xue, Bing and Zhang, Mengjie and
+             Shedlock, Kevin and Ross, Alastair B. and Killeen, Daniel},
+  journal = {IEEE Transactions on Artificial Intelligence},
+  year    = {2026},
+  note    = {Manuscript in preparation. Code: \url{https://github.com/woodRock/trust-align}}
+}
+```
 
 ## License
 

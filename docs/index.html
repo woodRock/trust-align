@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trust Align</title>
+<meta name="description" content="When can a joint retention-time alignment of many GC–MS batches be trusted? An interactive tour of the results: anchor graphs, corrupted anchors, 114 synthetic settings and real fish oil data.">
+<meta property="og:title" content="trust-align — consistent is not correct">
+<meta property="og:description" content="A joint alignment of GC–MS batches agrees with itself by construction. Explore where that agreement means accuracy and where it hides a breakdown.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 5 27 13 23 26 9 26 5 13Z' fill='none' stroke='%23888' stroke-width='1.4'/%3E%3Ccircle cx='16' cy='5' r='3.6' fill='%230072B2'/%3E%3Ccircle cx='27' cy='13' r='3.6' fill='%23E69F00'/%3E%3Ccircle cx='23' cy='26' r='3.6' fill='%23009E73'/%3E%3Ccircle cx='9' cy='26' r='3.6' fill='%23CC79A7'/%3E%3Ccircle cx='5' cy='13' r='3.6' fill='%23D55E00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script>
+  // Apply a saved theme before first paint (no flash). ?theme= overrides for screenshots.
+  try {
+    const q = new URLSearchParams(location.search).get('theme');
+    const t = q === 'dark' || q === 'light' ? q : localStorage.getItem('ta-theme');
+    if (t) document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous" defer></script>
+<script type="module" src="assets/site.js"></script>
+</head>
+<body>
+
+<nav class="nav" aria-label="Sections">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5 27 13 23 26 9 26 5 13Z" fill="none" stroke="var(--muted)" stroke-width="1.4"/><circle cx="16" cy="5" r="3.6" fill="#0072B2"/><circle cx="27" cy="13" r="3.6" fill="#E69F00"/><circle cx="23" cy="26" r="3.6" fill="#009E73"/><circle cx="9" cy="26" r="3.6" fill="#CC79A7"/><circle cx="5" cy="13" r="3.6" fill="#D55E00"/></svg>
+      trust-align
+    </a>
+    <div class="nav-links">
+      <a href="#graphs">Graphs</a>
+      <a href="#consistent">Consistent ≠ correct</a>
+      <a href="#explore">Explore</a>
+      <a href="#break">Breakdown</a>
+      <a href="#lambda">λ</a>
+      <a href="#scaling">Scaling</a>
+      <a href="#fish">Fish oil</a>
+      <a href="#limits">Caveats</a>
+      <a href="#reproduce">Reproduce</a>
+    </div>
+    <button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle colour theme" title="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.4 5.4 0 0 1-9.54-4.54A5.4 5.4 0 0 1 13.36 3.1C12.92 3.04 12.46 3 12 3Z"/></svg>
+    </button>
+    <a class="icon-btn" href="https://github.com/woodRock/trust-align" aria-label="GitHub repository">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    </a>
+  </div>
+  <div class="progress" id="progress"></div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="reveal">
+        <div class="eyebrow">GC–MS · retention-time alignment · many batches</div>
+        <h1>Consistent is <span class="grad">not correct.</span></h1>
+        <p class="subtitle">When can joint retention-time alignment be trusted? Graph connectivity and corrupted correspondences in GC–MS.</p>
+        <p class="byline">Jesse Wood</p>
+        <p class="lede">A joint alignment maps every GC–MS batch into one shared clock, so every batch-to-batch map agrees with
+          every other one by construction. On well-connected data that agreement is earned. On a sparse chain with a few wrong
+          anchors it is not: the fit stays perfectly consistent and is wrong by more than a minute. These pages let you find the line.</p>
+        <div class="cta">
+          <a class="btn primary" href="#explore">Explore <data data-key="n_settings">114</data> settings ↓</a>
+          <a class="btn" href="https://github.com/woodRock/trust-align">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.66.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Code
+          </a>
+        </div>
+      </div>
+      <figure class="hero-figure reveal">
+        <div class="fig-head">
+          <span class="state-label" id="hero-state"><span class="state-dot"></span><span>Own clocks: the same compound, a different minute in every batch</span></span>
+          <div class="seg" role="group" aria-label="Hero animation">
+            <button type="button" id="hero-play" aria-pressed="true">Auto-play</button>
+            <button type="button" id="hero-raw" aria-pressed="false">Drifted</button>
+            <button type="button" id="hero-al" aria-pressed="false">True frame</button>
+          </div>
+        </div>
+        <div class="chart" id="hero-chart" role="img" aria-label="Four batch chromatograms of a synthetic world stacked vertically, with anchors drawn as lines between neighbouring batches. As the slider moves to the true frame the chromatograms slide into register, the clean anchors become vertical and the corrupted anchors stay slanted."></div>
+        <div class="slider"><span>own clocks</span><input type="range" id="hero-alpha" min="0" max="100" value="0" aria-label="Degree of alignment, 0 to 100 percent"><span>true frame</span></div>
+        <noscript>
+          <picture><source srcset="assets/fig1_bc_dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/fig1_bc.svg" alt="Four batch chromatograms with an anchor chain and one corrupted anchor, and the true drift curves of all ten batches." style="width:100%"></picture>
+        </noscript>
+        <figcaption class="caption">Batches <data data-key="world|shown_list">0, 3, 6, 9</data> of one synthetic world of <var>K</var> = <data data-key="world|K">10</data> (first sample each), and the <data data-key="world|n_anchors_shown">90</data> anchors the <var>B</var> = 30, <var>ε</var> = 30 % cell kept between them: <data data-key="world|n_bad_shown">21</data> are corrupted (vermilion). Triangles: one compound, latent <data data-key="world|chain_latent_min">21.83</data> min. Hover an anchor. <a class="data-link" href="data/world.json">Data</a></figcaption>
+      </figure>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat reveal"><div class="v num" data-count="n_settings">0</div><div class="k">synthetic settings: topology × anchors per pair × corruption × <var>K</var>, each with an exact truth</div></div>
+      <div class="stat reveal"><div class="v num" data-count="n_worlds">0</div><div class="k">test worlds per setting; λ tuned on <data data-key="n_tuning_worlds">3</data> separate worlds, never on these</div></div>
+      <div class="stat reveal"><div class="v num" data-count="lamtot|n">0</div><div class="k">test-world refits at every λ, to separate the model's failures from the tuning's</div></div>
+      <div class="stat reveal"><div class="v num" data-count="fish|n_anchors">0</div><div class="k">real spectral anchors from <data data-key="fish|n_batches">5</data> fish oil batches, thinned and corrupted the same way</div></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 01 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="graphs">
+  <div class="chapter-head reveal">
+    <div class="kicker">01 — THE ANCHOR GRAPH</div>
+    <h2>Six ways to connect <var>K</var> batches, three budgets, three doses of corruption</h2>
+    <p class="intro">A spectral anchor is one compound seen in two batches: one pair of retention times. Anchors turn the batches
+      into a graph, and a method is a rule for turning that graph into a map <var>g</var><sub><var>k</var>→<var>l</var></sub> for
+      every ordered pair, anchors or not. Each connected pair keeps <var>B</var> anchors; a share <var>ε</var> of them is moved by
+      a fixed, large amount, as a wrong spectral match would be.</p>
+  </div>
+  <div class="grid-2 wide-left">
+    <div class="card reveal">
+      <div class="card-head">
+        <h3>The six topologies</h3>
+        <div class="seg" id="zoo-K" role="group" aria-label="Number of batches"></div>
+      </div>
+      <div class="zoo" id="zoo"></div>
+      <noscript><picture><source srcset="assets/fig2_graphs_dark.svg" media="(prefers-color-scheme: dark)"><img src="assets/fig2_graphs.svg" alt="Six small circular graphs of ten batches each: complete, density 0.4, ring, chain, star and weak-star." style="width:100%"></picture></noscript>
+      <p class="caption">One representative test world per <var>K</var>. Node colour is the batch, as in the drift chart; the ringed node is the hub. The star goes through batch 0 (<data data-key="hub_n|10">5</data> samples at <var>K</var> = 10); the weak-star through the batch with the fewest samples (batch <data data-key="weak_hub|10">5</data>, <data data-key="weak_hub_n|10">3</data> samples). Density 0.4 is redrawn in every cell; <var>K</var> = 20 was run on the complete, chain and density 0.4 graphs only. <a class="data-link" href="data/graphs.json">Data</a></p>
+    </div>
+    <div class="card reveal">
+      <h3>True drift of every batch</h3>
+      <p class="sub">What each method has to recover, exactly known in the synthetic worlds.</p>
+      <div class="chart" id="drift-chart" role="img" aria-label="Ten smooth drift curves, one per batch, against latent retention time, spanning about minus four to plus four minutes."></div>
+      <p class="caption">Batch <var>k</var> records a compound of latent time <var>τ</var> at <var>τ</var> + <var>d<sub>k</sub></var>(<var>τ</var>). Drifts span <data data-key="world|drift_min">-4.42</data> to <data data-key="world|drift_max">+3.91</data> min in this world. Hover a curve.</p>
+    </div>
+  </div>
+  <div class="legend reveal" id="method-legend"></div>
+  <p class="caption reveal">Five methods see the same anchors in every cell. <strong>Joint</strong> fits one monotone warp per batch into a shared frame from all kept anchors. <strong>Star</strong> uses only anchors that touch a hub (batch 0); <strong>Weak-star</strong> a hub with the fewest samples. <strong>Pairwise</strong> fits each connected pair alone and composes fits along the shortest anchor path; <strong>PCHIP</strong> does the same with a spline through every anchor. Stars are scored only on the pairs they reach.</p>
+</section>
+
+<!-- 02 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="consistent">
+  <div class="chapter-head reveal">
+    <div class="kicker">02 — THE CENTRAL POINT</div>
+    <h2>A joint fit always agrees with itself. That is algebra, not evidence.</h2>
+    <p class="intro">The joint model estimates one warp <var>f<sub>k</sub></var> per batch and defines every map as
+      <var>g</var><sub><var>k</var>→<var>l</var></sub> = <var>f<sub>l</sub></var><sup>−1</sup> ∘ <var>f<sub>k</sub></var>. Any round trip returns
+      exactly to its start. If wrong anchors pull one chain edge off, the shared frame absorbs the error and every map across
+      that edge inherits it, still in perfect agreement with all the others.</p>
+  </div>
+  <div class="grid-2 wide-right">
+    <div class="card reveal">
+      <div class="card-head"><h3>Every cycle closes</h3><button class="small-btn js-only" id="cycle-replay" type="button">Replay</button></div>
+      <div class="chart" id="cycle-chart" role="img" aria-label="A chain of five batches. A marker travels from batch 1 to 2 to 3 and back, returning exactly to its start, while the maps along the broken edge are far from the truth."></div>
+      <div class="readout" id="cycle-readout"></div>
+    </div>
+    <div class="card reveal">
+      <div class="card-head">
+        <h3>…and can still be wrong by a minute</h3>
+        <div class="checks js-only" id="fig4a-toggles" role="group" aria-label="Curves to show"></div>
+      </div>
+      <div class="chart" id="fig4a-chart" role="img" aria-label="Line chart of the fitted drift between batches 1 and 2 against retention time in batch 1, for the joint model at the cross-validated and the fixed smoothing, the composed pairwise fit and the ground truth, with the clean and corrupted anchors of the edge as points."></div>
+      <p class="caption">Test world <data data-key="fig4a|seed">3</data> of <var>K</var> = 5, chain, <var>B</var> = 30, <var>ε</var> = 30 %, edge <data data-key="fig4a|edge">1–2</data>, the chain edge with the largest joint error. <data data-key="fig4a|n_clean">21</data> clean and <data data-key="fig4a|n_bad">9</data> corrupted anchors. World-median map error: Joint (CV λ = <data data-key="fig4a|lam|joint_cv">300</data>) <strong><data data-key="fig4a|err|joint_cv">1.538</data> min</strong>, Joint (λ = <data data-key="fig4a|lam|joint_fixed">10</data>) <data data-key="fig4a|err|joint_fixed">0.116</data> min, Pairwise <data data-key="fig4a|err|pairwise">0.073</data> min. <data data-key="fig4a|n_broken">16</data> of <data data-key="n_worlds">20</data> worlds of this setting are broken. <a class="data-link" href="data/fig4a.json">Data</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="explore">
+  <div class="chapter-head reveal">
+    <div class="kicker">03 — EXPLORE</div>
+    <h2>Every one of the <data data-key="n_settings">114</data> settings, every world</h2>
+    <p class="intro">Pick batches, topology, anchor budget and corruption. One point per test world; boxes are quartiles, whiskers
+      the range; the vermilion line is the broken-world cutoff at <data data-key="break_min">0.3</data> min. The tables hold the
+      medians, the tuned λ and the paired tests the paper reports for the setting.</p>
+  </div>
+  <div class="controls js-only" id="explore-controls">
+    <label>Batches <var>K</var><select id="sel-K"></select></label>
+    <label>Topology<select id="sel-topo"></select></label>
+    <label>Anchors per edge <var>B</var><select id="sel-B"></select></label>
+    <label>Corruption <var>ε</var><select id="sel-eps"></select></label>
+  </div>
+  <div class="chips js-only" id="explore-chips" role="group" aria-label="Rows of the paper's Table I"></div>
+  <div class="explorer js-only">
+    <div class="card graph-card">
+      <div class="chart" id="explore-graph" role="img" aria-label="The anchor graph of the chosen setting: batches on a circle, anchored pairs joined by lines, the star hub ringed."></div>
+      <div class="readout" id="explore-graph-note"></div>
+    </div>
+    <div class="card">
+      <div class="chart" id="explore-chart" role="img" aria-label="Strip and box plot of per-world median map error for the five methods in the chosen setting, log scale, with the 0.3 minute broken-world line."></div>
+      <div class="readout" id="explore-readout"></div>
+      <p class="caption" id="explore-caption"></p>
+      <div class="table-wrap">
+        <table id="explore-table">
+          <thead><tr><th>Method</th><th>Median map error (min)</th><th>Tuned λ</th><th>Broken worlds</th><th>Indirect pairs</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="caption">Paired tests the paper reports for this setting: two-sided Wilcoxon over test worlds, Holm over all <data data-key="rq1b|n_comparisons">94</data> RQ1b comparisons; Δ = joint − competitor, so negative favours the joint fit.</p>
+      <div class="table-wrap">
+        <table id="explore-tests">
+          <thead><tr><th>Comparison</th><th>Median Δ (min)</th><th>Joint wins</th><th>p</th><th>Holm p</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="note">Stars are scored only on the pairs they reach: on a chain the star through batch 0 reaches one pair; on a weak-star graph the star through the weak hub uses every anchor and <em>is</em> the joint model. “Indirect pairs” have no kept anchors between them. <a class="data-link" href="data/grid.json">Data</a></p>
+  <div class="no-js-only">
+    <p>Without JavaScript the explorer cannot run. The paper's Table I rows, read from the same data:</p>
+    <div class="table-wrap">
+      <table>
+        <caption>Table I (<var>K</var> = 5): median map error over 20 test worlds, min</caption>
+        <thead><tr><th>Setting</th><th>Joint</th><th>Star</th><th>Composed pairwise</th></tr></thead>
+        <tbody>
+          <tr><td>complete, <var>B</var> = 10, <var>ε</var> = 0</td><td><data data-key="t1|5|complete|10|0.0|Joint">0.033</data></td><td><data data-key="t1|5|complete|10|0.0|Star">0.054</data></td><td><data data-key="t1|5|complete|10|0.0|Composed pairwise">0.046</data></td></tr>
+          <tr><td>complete, <var>B</var> = 10, <var>ε</var> = 0.3</td><td><data data-key="t1|5|complete|10|0.3|Joint">0.043</data></td><td><data data-key="t1|5|complete|10|0.3|Star">0.144</data></td><td><data data-key="t1|5|complete|10|0.3|Composed pairwise">0.171</data></td></tr>
+          <tr><td>complete, <var>B</var> = 30, <var>ε</var> = 0.3</td><td><data data-key="t1|5|complete|30|0.3|Joint">0.028</data></td><td><data data-key="t1|5|complete|30|0.3|Star">0.048</data></td><td><data data-key="t1|5|complete|30|0.3|Composed pairwise">0.076</data></td></tr>
+          <tr><td>chain, <var>B</var> = 30, <var>ε</var> = 0.3</td><td><data data-key="t1|5|chain|30|0.3|Joint">1.525</data></td><td><data data-key="t1|5|chain|30|0.3|Star">0.052</data></td><td><data data-key="t1|5|chain|30|0.3|Composed pairwise">0.140</data></td></tr>
+          <tr><td>ring, <var>B</var> = 30, <var>ε</var> = 0.3</td><td><data data-key="t1|5|ring|30|0.3|Joint">0.045</data></td><td><data data-key="t1|5|ring|30|0.3|Star">0.071</data></td><td><data data-key="t1|5|ring|30|0.3|Composed pairwise">0.116</data></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="break">
+  <div class="chapter-head reveal">
+    <div class="kicker">04 — WHERE IT BREAKS</div>
+    <h2>Few anchors and many wrong ones break everything; the chain breaks the joint fit first</h2>
+    <p class="intro">Share of the <data data-key="n_worlds">20</data> test worlds broken (median map error above <data data-key="break_min">0.3</data> min),
+      joint beside composed pairwise, in every corrupted setting. Hover a cell for its Wilson 95 % interval. At <var>K</var> = 5,
+      chain, <var>B</var> = 30, <var>ε</var> = 30 % the joint fit breaks in <data data-key="bd|5|chain|30|0.3|Joint">0.80</data> of worlds
+      against <data data-key="bd|5|chain|30|0.3|Composed pairwise">0.45</data> for composed pairwise.</p>
+  </div>
+  <div class="card reveal">
+    <div id="heat"></div>
+    <div class="legend-scale js-only"><span>0</span><span class="bar" id="heat-legend"></span><span>1</span><span class="muted">share of broken worlds · rows ε, columns B</span></div>
+    <noscript><p class="caption">The heatmap needs JavaScript; its data is in <a href="data/breakdown.json">breakdown.json</a> (section 6 of <code>full_sparsity.txt</code>).</p></noscript>
+    <p class="caption"><a class="data-link" href="data/breakdown.json">Data</a></p>
+  </div>
+</section>
+
+<!-- 05 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="lambda">
+  <div class="chapter-head reveal">
+    <div class="kicker">05 — THE SMOOTHING PARAMETER</div>
+    <h2>Tuning λ helps. Even an oracle λ leaves <data data-key="lamtot|oracle">80</data> of <data data-key="lamtot|n">960</data> worlds broken.</h2>
+    <p class="intro">Every corrupted setting of the weak-star, chain, ring and density 0.4 graphs at <var>K</var> = 5 and 10 was refitted
+      at every λ. The cross-validated rule leaves <data data-key="lamtot|cv">175</data> worlds broken, a fixed λ = 10 leaves
+      <data data-key="lamtot|fixed">160</data>, and choosing the best λ per world with the truth in hand still leaves
+      <data data-key="lamtot|oracle">80</data>. The oracle is a bound, not a rule: what remains is the model's failure. Click a bar
+      to see which worlds.</p>
+  </div>
+  <div class="card reveal">
+    <div class="chart" id="lambda-chart" role="img" aria-label="Grouped bar chart of broken test worlds by topology under three smoothing rules: cross-validated, fixed at 10, and per-world oracle."></div>
+    <div class="readout" id="lambda-readout">Click a bar to list the broken worlds behind it.</div>
+    <noscript><p class="caption">The chart needs JavaScript; its data is in <a href="data/lambda.json">lambda.json</a>.</p></noscript>
+    <p class="caption"><var>K</var> ∈ {5, 10} × 3 budgets × 2 corruption rates: <data data-key="lamtopo|n">240</data> worlds per topology. The complete and star graphs were not refitted: no world broke there. <a class="data-link" href="data/lambda.json">Data</a></p>
+  </div>
+</section>
+
+<!-- 06 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="scaling">
+  <div class="chapter-head reveal">
+    <div class="kicker">06 — MORE BATCHES</div>
+    <h2>At a fixed edge density, the joint advantage grows with <var>K</var></h2>
+    <p class="intro">Per-world difference between the joint and the composed pairwise error at <var>B</var> = 30, <var>ε</var> = 15 %.
+      On the density 0.4 graph it moves from <data data-key="rq1c|density0.4|0.15|K5">+0.0034</data> min at <var>K</var> = 5 to
+      <data data-key="rq1c|density0.4|0.15|K20">-0.0118</data> min at <var>K</var> = 20: <data data-key="rq1c|density0.4|0.15|slope">-0.0084</data> min
+      per doubling of <var>K</var>, 95 % interval <data data-key="rq1c|density0.4|0.15|ci">[-0.0107, -0.0063]</data>. On the complete graph the joint
+      fit leads at every <var>K</var> but the gap does not widen; on the chain, whose density falls as 2/<var>K</var>, pairwise stays ahead.</p>
+  </div>
+  <div class="grid-2 wide-left">
+    <div class="card reveal">
+      <div class="chart" id="scaling-chart" role="img" aria-label="Scatter of per-world joint minus pairwise error against the number of batches on a log scale for the density 0.4 and complete graphs, with least-squares lines and bootstrap bands."></div>
+      <noscript><p class="caption">The chart needs JavaScript; its data is in <a href="data/scaling.json">scaling.json</a>.</p></noscript>
+      <p class="caption">Small points: test worlds; large markers: medians; lines: least-squares fit on log<sub>2</sub> <var>K</var> with its 95 % band from resampling worlds within each <var>K</var>. Negative favours the joint model. <a class="data-link" href="data/scaling.json">Data</a></p>
+    </div>
+    <div class="card reveal">
+      <h3>All six rows</h3>
+      <p class="sub">Joint − composed pairwise, median over all pairs (min), <var>B</var> = 30.</p>
+      <div class="table-wrap">
+        <table class="nowrap">
+          <thead><tr><th>Topology</th><th><var>ε</var></th><th><var>K</var> = 5</th><th><var>K</var> = 10</th><th><var>K</var> = 20</th><th>Slope [95 % CI]</th></tr></thead>
+          <tbody>
+            <tr><td>complete</td><td>0</td><td><data data-key="rq1c|complete|0.0|K5">-0.0075</data></td><td><data data-key="rq1c|complete|0.0|K10">-0.0071</data></td><td><data data-key="rq1c|complete|0.0|K20">-0.0126</data></td><td><data data-key="rq1c|complete|0.0|slope">-0.0021</data> <data data-key="rq1c|complete|0.0|ci">[-0.0032, -0.0008]</data></td></tr>
+            <tr><td>complete</td><td>0.15</td><td><data data-key="rq1c|complete|0.15|K5">-0.0143</data></td><td><data data-key="rq1c|complete|0.15|K10">-0.0105</data></td><td><data data-key="rq1c|complete|0.15|K20">-0.0090</data></td><td><data data-key="rq1c|complete|0.15|slope">+0.0026</data> <data data-key="rq1c|complete|0.15|ci">[+0.0015, +0.0039]</data></td></tr>
+            <tr><td>chain</td><td>0</td><td><data data-key="rq1c|chain|0.0|K5">+0.0041</data></td><td><data data-key="rq1c|chain|0.0|K10">+0.0050</data></td><td><data data-key="rq1c|chain|0.0|K20">+0.0058</data></td><td><data data-key="rq1c|chain|0.0|slope">-0.0002</data> <data data-key="rq1c|chain|0.0|ci">[-0.0050, +0.0042]</data></td></tr>
+            <tr><td>chain</td><td>0.15</td><td><data data-key="rq1c|chain|0.15|K5">+0.0170</data></td><td><data data-key="rq1c|chain|0.15|K10">+0.0136</data></td><td><data data-key="rq1c|chain|0.15|K20">+0.0089</data></td><td><data data-key="rq1c|chain|0.15|slope">-0.0098</data> <data data-key="rq1c|chain|0.15|ci">[-0.0235, +0.0014]</data></td></tr>
+            <tr><td>density 0.4</td><td>0</td><td><data data-key="rq1c|density0.4|0.0|K5">-0.0068</data></td><td><data data-key="rq1c|density0.4|0.0|K10">-0.0076</data></td><td><data data-key="rq1c|density0.4|0.0|K20">-0.0133</data></td><td><data data-key="rq1c|density0.4|0.0|slope">-0.0047</data> <data data-key="rq1c|density0.4|0.0|ci">[-0.0071, -0.0023]</data></td></tr>
+            <tr><td>density 0.4</td><td>0.15</td><td><data data-key="rq1c|density0.4|0.15|K5">+0.0034</data></td><td><data data-key="rq1c|density0.4|0.15|K10">-0.0052</data></td><td><data data-key="rq1c|density0.4|0.15|K20">-0.0118</data></td><td><data data-key="rq1c|density0.4|0.15|slope">-0.0084</data> <data data-key="rq1c|density0.4|0.15|ci">[-0.0107, -0.0063]</data></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="fish">
+  <div class="chapter-head reveal">
+    <div class="kicker">07 — REAL DATA</div>
+    <h2>The fish oil anchors tell the same story</h2>
+    <p class="intro"><data data-key="fish|n_anchors">25,011</data> spectral anchors from <data data-key="fish|n_batches">5</data> batches
+      (<data data-key="fish|n|sep2015">36</data>, <data data-key="fish|n|jan2016">26</data>, <data data-key="fish|n|jul2016">16</data>, <data data-key="fish|n|apr2016">10</data> and <data data-key="fish|n|aug2015">2</data> samples),
+      thinned and corrupted like the synthetic worlds, <data data-key="fish|n_draws">20</data> draws per setting. No truth exists, so each method is scored on the real anchors
+      the draw <em>did not keep</em>. Strong hub <data data-key="fish|hub">sep2015</data>, weak hub <data data-key="fish|weak_hub">aug2015</data>.</p>
+  </div>
+  <div class="grid-2 wide-left">
+    <div class="card reveal">
+      <div class="card-head">
+        <h3>Held-out anchor error, median and IQR over <data data-key="fish|n_draws">20</data> draws</h3>
+        <div class="seg js-only" id="fish-topo" role="group" aria-label="Topology"></div>
+      </div>
+      <div class="chart" id="fish-chart" role="img" aria-label="Two panels, budget 10 and budget 100: held-out anchor error with interquartile range for the joint, star and composed pairwise fits at corruption 0, 15 and 30 percent, log scale."></div>
+      <noscript><p class="caption">The chart needs JavaScript; its data is in <a href="data/fish.json">fish.json</a>.</p></noscript>
+      <p class="caption">Only aggregate error statistics of the real data are shown or published. Held-out anchors come from the same matching pipeline as the fitted ones: an independent <em>sample</em> of correspondences, not independent chemical ground truth. <a class="data-link" href="data/fish.json">Data</a></p>
+    </div>
+    <div class="card reveal">
+      <h3>Table II: complete graph</h3>
+      <p class="sub">Held-out anchor error (min), median over <data data-key="fish|n_draws">20</data> draws.</p>
+      <div class="table-wrap">
+        <table id="fish-table">
+          <thead><tr><th>Setting</th><th>Joint</th><th>Star</th><th>Pairwise</th></tr></thead>
+          <tbody>
+            <tr><td><var>B</var> = 10, <var>ε</var> = 0</td><td><data data-key="fish|complete|10|0.0|Joint">0.079</data></td><td><data data-key="fish|complete|10|0.0|Star">0.097</data></td><td><data data-key="fish|complete|10|0.0|Composed pairwise">0.077</data></td></tr>
+            <tr><td><var>B</var> = 10, <var>ε</var> = 0.15</td><td><data data-key="fish|complete|10|0.15|Joint">0.092</data></td><td><data data-key="fish|complete|10|0.15|Star">0.124</data></td><td><data data-key="fish|complete|10|0.15|Composed pairwise">0.086</data></td></tr>
+            <tr><td><var>B</var> = 10, <var>ε</var> = 0.3</td><td><data data-key="fish|complete|10|0.3|Joint">0.133</data></td><td><data data-key="fish|complete|10|0.3|Star">0.410</data></td><td><data data-key="fish|complete|10|0.3|Composed pairwise">0.284</data></td></tr>
+            <tr><td><var>B</var> = 100, <var>ε</var> = 0</td><td><data data-key="fish|complete|100|0.0|Joint">0.059</data></td><td><data data-key="fish|complete|100|0.0|Star">0.069</data></td><td><data data-key="fish|complete|100|0.0|Composed pairwise">0.056</data></td></tr>
+            <tr><td><var>B</var> = 100, <var>ε</var> = 0.15</td><td><data data-key="fish|complete|100|0.15|Joint">0.063</data></td><td><data data-key="fish|complete|100|0.15|Star">0.071</data></td><td><data data-key="fish|complete|100|0.15|Composed pairwise">0.062</data></td></tr>
+            <tr><td><var>B</var> = 100, <var>ε</var> = 0.3</td><td><data data-key="fish|complete|100|0.3|Joint">0.077</data></td><td><data data-key="fish|complete|100|0.3|Star">0.113</data></td><td><data data-key="fish|complete|100|0.3|Composed pairwise">0.080</data></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">Few corrupted anchors (<var>B</var> = 10, <var>ε</var> = 30 %): the joint fit's <data data-key="fish|complete|10|0.3|Joint">0.133</data> min against the star's <data data-key="fish|complete|10|0.3|Star">0.410</data> and pairwise's <data data-key="fish|complete|10|0.3|Composed pairwise">0.284</data>. Plenty of clean ones (<var>B</var> = 100, <var>ε</var> = 0): the three are within a few hundredths. And on the fish chain at <var>B</var> = 10, <var>ε</var> = 30 % the joint fit breaks too: <data data-key="fish|chain|10|0.3|Joint">0.829</data> min against <data data-key="fish|chain|10|0.3|Composed pairwise">1.149</data> for pairwise.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="limits">
+  <div class="chapter-head reveal">
+    <div class="kicker">08 — CAVEATS</div>
+    <h2>What these results do and don't show</h2>
+  </div>
+  <div class="limits">
+    <div class="limit reveal"><h3>One estimator, one drift family</h3><p>Every finding is about paper one's joint model with its robust reweighting and λ rule, on drifts made of a shift, a smooth ramp and a small wiggle. Other estimators and drifts with breakpoints were not tested.</p></div>
+    <div class="limit reveal"><h3>Uniformly directed corruption</h3><p>Corrupted anchors are moved by a fixed, large amount in one direction, as a systematic spectral mismatch would be. Whether real mismatches look like this is open. <span class="todo">TODO(chemist check)</span></p></div>
+    <div class="limit reveal"><h3>Monotone warps, one instrument</h3><p>Elution order is assumed preserved between batches, which holds for one column and method <span class="todo">TODO(chemist check)</span>; cross-instrument compatibility was not tested <span class="todo">TODO(chemist check)</span>.</p></div>
+    <div class="limit reveal"><h3>No deployment-time test yet</h3><p>Breakdowns here are known because the truth is known. A rule that warns a user from the anchors alone, adaptive or edge-grouped regularisation, and calibrated uncertainty are future work. Held-out real anchors share the matching pipeline with the fitted ones.</p></div>
+  </div>
+</section>
+
+<!-- 09 ─────────────────────────────────────────────────────────────────── -->
+<section class="chapter" id="reproduce">
+  <div class="chapter-head reveal">
+    <div class="kicker">09 — REPRODUCE</div>
+    <h2>Run it yourself</h2>
+    <p class="intro">Everything comes from <a href="https://github.com/woodRock/trust-align">woodRock/trust-align</a>, built on
+      <a href="https://github.com/woodRock/align-bench">align-bench</a> (data, anchors, worlds, graphs, metrics, provenance) and
+      <a href="https://github.com/woodRock/joint-align">joint-align</a> (the joint model). CPU only, explicit seeds, each script reads
+      only what the earlier ones wrote. The fish oil data is private; scripts that need it skip without it.</p>
+  </div>
+  <div class="grid-2 wide-left">
+    <div class="steps reveal">
+      <div class="step"><span class="i">01</span><span><code>01_check_setup.py</code> — versions, data access, a joint-model sanity check</span><span class="time">seconds</span></div>
+      <div class="step"><span class="i">02</span><span><code>02_full_sparsity.py</code> — the full grid: <data data-key="n_settings">114</data> settings × <data data-key="n_worlds">20</data> test worlds, checkpointed</span><span class="time"><data data-key="runtime|02_cpu_h">3.59</data> CPU h</span></div>
+      <div class="step"><span class="i">03</span><span><code>03_diagnose_lambda.py</code> — every λ refitted on script 02's corrupted cells</span><span class="time">≈ <data data-key="runtime|03_cpu_min">65</data> CPU min</span></div>
+      <div class="step"><span class="i">04</span><span><code>04_fish_sparsity.py</code> — the fish oil arm (private data)</span><span class="time">≈ <data data-key="runtime|04_cpu_min">83</data> CPU min</span></div>
+      <div class="step"><span class="i">05</span><span><code>05_paper_figures.py</code> — the paper's figures and captions, checked against the reports</span><span class="time">seconds</span></div>
+      <div class="step"><span class="i">06</span><span><code>06_site_data.py</code> — this page's data, regenerated from the caches and stopped on any difference from the reports</span><span class="time">seconds</span></div>
+    </div>
+    <div class="stack">
+      <div class="card reveal">
+        <h3>Versions behind the results</h3>
+        <p class="sub">The provenance header every report starts with. <a class="data-link" href="data/meta.json">Data</a></p>
+        <div class="versions">
+          <div><data data-key="prov|trustalign">trustalign 0.2.1 @ 782257c (src clean)</data></div>
+          <div><data data-key="prov|alignbench">alignbench 0.1.0.dev0 @ 40c6fdb (src clean)</data></div>
+          <div><data data-key="prov|joint-align">joint-align 2.0.2 @ b730f08 (src clean)</data></div>
+          <div><data data-key="prov|warpalign">warpalign 3.0.1 @ 156cfe2 (src clean)</data> <span class="muted">(an installed plugin, not a dependency)</span></div>
+          <div><data data-key="prov|environment">environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0</data></div>
+        </div>
+      </div>
+      <div class="card reveal" id="cite">
+        <h3>Cite the software</h3>
+        <p class="sub">Jesse Wood. <em>trust-align: when can joint GC–MS retention-time alignment be trusted?</em> <a href="https://github.com/woodRock/trust-align">github.com/woodRock/trust-align</a>. The repository's <code>CITATION.cff</code> has the full entry; a release DOI is <span class="todo">TODO(DOI)</span>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Site data generated on <data data-key="generated">2026-10-17</data> by <code>scripts/06_site_data.py</code> from the caches behind <code>results/*.txt</code>; every number on this page is in <a href="data/numbers.json">numbers.json</a> or one of the data files linked above. Colours follow the Okabe–Ito palette. Code MIT.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -23,10 +23,11 @@ checkpoints/
 !/results/*.txt
 /figs/**/*.png
 /figs/**/*.pdf
-# Draft-run figures are small and shared for the paper draft.
-!/figs/draft/*.png
 logs/
 *.log
+
+# The website (docs/) is tracked in full: its data JSON and exported SVG/PNG figures included.
+!/docs/**
 
 # Jupyter
 .ipynb_checkpoints/

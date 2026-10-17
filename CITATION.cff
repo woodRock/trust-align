@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the paper (preferred-citation) and the software."
+title: "trustalign: when can joint GC-MS retention-time alignment be trusted?"
+type: software
+version: 0.2.1
+doi: TODO
+license: MIT
+repository-code: "https://github.com/woodRock/trust-align"
+url: "https://woodrock.github.io/trust-align/"
+authors:
+  - family-names: Wood
+    given-names: Jesse
+keywords:
+  - GC-MS
+  - retention time alignment
+  - batch effects
+  - anchor graphs
+  - corrupted correspondences
+  - chemometrics
+preferred-citation:
+  type: article
+  title: "When Can Joint Retention-Time Alignment Be Trusted? Graph Connectivity and Corrupted Correspondences in GC-MS"
+  journal: "IEEE Transactions on Artificial Intelligence"
+  year: 2026
+  status: in-preparation
+  doi: TODO
+  url: "https://woodrock.github.io/trust-align/"
+  authors:
+    - family-names: Wood
+      given-names: Jesse
+    - family-names: Nguyen
+      given-names: Bach Hoai
+    - family-names: Xue
+      given-names: Bing
+    - family-names: Zhang
+      given-names: Mengjie
+    - family-names: Shedlock
+      given-names: Kevin
+    - family-names: Ross
+      given-names: Alastair B.
+    - family-names: Killeen
+      given-names: Daniel

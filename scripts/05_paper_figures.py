@@ -21,12 +21,13 @@ the committed reports, with a verification table against the reports and the man
   fig5_fish_results         held-out anchor error on the fish oil data, complete graph, budgets 10 and
                             100, ε ∈ {0, 15, 30} %: median and IQR over the 20 draws
 
-Sources (never the superseded pilot or draft runs):
-  results/full_sparsity_cache/   script 02 at trustalign 651749e (results/full_sparsity.txt): tuning
-                                 seeds 0–2, test seeds 3–22, drift family (i)
-  results/diagnose_lambda_cache/ script 03 (results/diagnose_lambda.txt): refits of script 02's exact
-                                 test cells; its Section 0 checks them against script 02
-  results/fish_sparsity_cache/   script 04 at trustalign f320eae (results/fish_sparsity.txt), 20 draws
+Sources (never the superseded pilot or draft runs; the code that produced each report is recorded in
+its first lines, currently trustalign 0.2.1 with alignbench 0.1.0.dev0 and joint-align 2.0.2):
+  results/full_sparsity_cache/   script 02's checkpoints (results/full_sparsity.txt): tuning seeds 0–2,
+                                 test seeds 3–22, drift family (i)
+  results/diagnose_lambda_cache/ script 03's checkpoints (results/diagnose_lambda.txt): refits of script
+                                 02's exact test cells; its Section 0 checks them against script 02
+  results/fish_sparsity_cache/   script 04's checkpoints (results/fish_sparsity.txt), 20 draws
   results/fish_anchors.npz, and the fish oil data read in place from data/fish_oil (fig1 a)
 
 Every plotted number is computed from those checkpoints (or from a refit that is checked against
@@ -34,7 +35,11 @@ them); the script stops if any recomputed median differs from the committed repo
 arrays it plots are written to results/cache_plot_data.npz (git-ignored), captions with computed
 numbers to figs/paper/captions_tai.md.
 
-Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper]
+With --site, panels (b) and (c) of fig 1 and fig 2 are also written as SVG, in a light and a dark
+variant, to docs/assets/ for the project website (never panel (a): a figure of a real fish oil sample
+is shown only after the collaborators agree). Site data itself is scripts/06_site_data.py's.
+
+Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper] [--site [docs/assets]]
 """
 from __future__ import annotations
 
@@ -198,6 +203,24 @@ def _save(fig, out: Path, name: str) -> Path:
     return path
 
 
+# The website's two colour themes: ink (text, axes, neutral lines) and the panel background that
+# labels and legends sit on. The data colours (C, viridis) are the same in both.
+SITE_THEMES = {'light': ('#1f1f1f', '#ffffff'), 'dark': ('#d9d9d4', '#161616')}
+
+
+def _site_rc(ink: str) -> dict:
+    return {'text.color': ink, 'axes.labelcolor': ink, 'axes.edgecolor': ink, 'xtick.color': ink,
+            'ytick.color': ink, 'svg.fonttype': 'none', 'font.family': 'sans-serif',
+            'font.sans-serif': ['Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans']}
+
+
+def _save_svg(fig, out: Path, name: str) -> Path:
+    path = out / f'{name}.svg'
+    fig.savefig(path, format='svg', bbox_inches='tight', pad_inches=0.04, transparent=True,
+                metadata={'Date': None})
+    return path
+
+
 def batch_colors(K: int):
     import matplotlib
     cmap = matplotlib.colormaps['viridis']
@@ -206,13 +229,13 @@ def batch_colors(K: int):
 
 # ── data: the checkpoints behind the reports ──────────────────────────────────
 
-def load_s13(cache: Path, s13) -> dict:
+def load_s02(cache: Path, s02) -> dict:
     """Script 02's tuning and test checkpoints for its full grid (every one must exist)."""
-    grid = s13.full_grid()
+    grid = s02.full_grid()
     out: dict[str, Any] = {}
-    for phase, seeds in (('tune', s13.TUNE_SEEDS), ('test', s13.TEST_SEEDS)):
+    for phase, seeds in (('tune', s02.TUNE_SEEDS), ('test', s02.TEST_SEEDS)):
         runs = []
-        for K, seed, topo, cells in s13.tasks_for(grid, seeds):
+        for K, seed, topo, cells in s02.tasks_for(grid, seeds):
             f = cache / f'{phase}_K{K}_s{seed}_{topo}.pkl'
             if not f.exists():
                 raise FileNotFoundError(f'{f} missing: run scripts/02_full_sparsity.py first')
@@ -222,16 +245,16 @@ def load_s13(cache: Path, s13) -> dict:
             runs.append(r)
         out[phase] = runs
     out['cells'] = {(*s, r['seed']): c for r in out['test'] for s, c in r['cells'].items()}
-    out['lams'], _ = s13.choose_lambdas(out['tune'], grid)
-    out['grid'], out['seeds'] = grid, sorted(s13.TEST_SEEDS)
+    out['lams'], _ = s02.choose_lambdas(out['tune'], grid)
+    out['grid'], out['seeds'] = grid, sorted(s02.TEST_SEEDS)
     return out
 
 
-def stat13(d13, setting, method, key='median_all', tag='cv') -> np.ndarray:
-    return np.array([d13['cells'][(*setting, s)][(method, tag)][key] for s in d13['seeds']])
+def stat02(d02, setting, method, key='median_all', tag='cv') -> np.ndarray:
+    return np.array([d02['cells'][(*setting, s)][(method, tag)][key] for s in d02['seeds']])
 
 
-def replay_rq1c(d13, s13) -> dict:
+def replay_rq1c(d02, s02) -> dict:
     """Script 02's report, rerun on its checkpoints with slope_ci recording every bootstrap replicate
     (intercept and slopes). The resampling is script 02's own: same generator, same order of draws,
     so the slopes and CIs are exactly those of results/full_sparsity.txt."""
@@ -257,35 +280,35 @@ def replay_rq1c(d13, s13) -> dict:
             return est[1:], est[1:], est[1:]
         return est[1:], np.nanpercentile(b[:, 1:], 2.5, axis=0), np.nanpercentile(b[:, 1:], 97.5, axis=0)
 
-    original = s13.slope_ci
-    s13.slope_ci = slope_ci
+    original = s02.slope_ci
+    s02.slope_ci = slope_ci
     try:
-        s13.report(d13['cells'], d13['grid'], d13['seeds'], d13['lams'], d13['tune'], d13['test'], 0.0, 6,
-                   s13.N_BOOT)
+        s02.report(d02['cells'], d02['grid'], d02['seeds'], d02['lams'], d02['tune'], d02['test'], 0.0, 6,
+                   s02.N_BOOT)
     finally:
-        s13.slope_ci = original
+        s02.slope_ci = original
     return rec
 
 
-def load_s14(cache: Path, s13, s14, d13) -> dict:
-    grid = [s for s in s13.full_grid() if s in set(s13.settings(s14.SUBSET))]
+def load_s03(cache: Path, s02, s03, d02) -> dict:
+    grid = [s for s in s02.full_grid() if s in set(s02.settings(s03.SUBSET))]
     sweep: dict[tuple[tuple, int], Any] = {}
-    for K, seed, topo, _cells in s13.tasks_for(grid, s13.TEST_SEEDS):
+    for K, seed, topo, _cells in s02.tasks_for(grid, s02.TEST_SEEDS):
         f = cache / f'sweep_K{K}_s{seed}_{topo}.pkl'
         if not f.exists():
             raise FileNotFoundError(f'{f} missing: run scripts/03_diagnose_lambda.py first')
         r = pickle.loads(f.read_bytes())
         sweep.update({(s, r['seed']): c for s, c in r['cells'].items()})
-    tuned = [r for r in d13['tune'] if any(s in grid for s in r['cells'])]
+    tuned = [r for r in d02['tune'] if any(s in grid for s in r['cells'])]
     tuned = [{**r, 'cells': {s: c for s, c in r['cells'].items() if s in grid}} for r in tuned]
-    lams, _ = s13.choose_lambdas(tuned, grid)
+    lams, _ = s02.choose_lambdas(tuned, grid)
     return {'grid': grid, 'sweep': sweep, 'lams': lams}
 
 
-def load_s15(cache: Path, s15) -> dict:
+def load_s04(cache: Path, s04) -> dict:
     cells = {}
-    for topo in s15.TOPOLOGIES:
-        for d in s15.DRAWS:
+    for topo in s04.TOPOLOGIES:
+        for d in s04.DRAWS:
             f = cache / f'fish_{topo}_d{d}.pkl'
             if not f.exists():
                 raise FileNotFoundError(f'{f} missing: run scripts/04_fish_sparsity.py first')
@@ -294,8 +317,8 @@ def load_s15(cache: Path, s15) -> dict:
     return cells
 
 
-def stat15(cells, setting, method, s15) -> np.ndarray:
-    return np.array([cells[(setting, d)][method]['median_all'] for d in s15.DRAWS])
+def stat04(cells, setting, method, s04) -> np.ndarray:
+    return np.array([cells[(setting, d)][method]['median_all'] for d in s04.DRAWS])
 
 
 # ── parsers for the committed reports (verification only) ────────────────────
@@ -369,7 +392,7 @@ def fish_sample(data: Path):
 
 def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
     plt = _plt()
-    from jointalign.synthetic import BIN_MIN, TIME_AXIS
+    from jointalign.synthetic import BIN_MIN
     from matplotlib.gridspec import GridSpec
     cols = batch_colors(world.K)
     fig = plt.figure(figsize=(DOUBLE, 2.4))
@@ -423,55 +446,11 @@ def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
 
     # (b) four batch TICs of the test world, one anchor chain and one corrupted anchor
     ax = fig.add_subplot(gs[1])
-    gap = 1.25
-    off = {k: (len(SHOW) - 1 - r) * gap for r, k in enumerate(SHOW)}
-    tics = {k: world.tic_raws[k][0] / world.tic_raws[k][0].max() for k in SHOW}
-    lvl = lambda k, t: off[k] + np.interp(t, TIME_AXIS, tics[k])
-    for k in SHOW:
-        ax.plot(TIME_AXIS, tics[k] + off[k], color=cols[k], lw=0.7)
-        ax.text(44.5, off[k] + 0.15, f'batch {k}', color=cols[k], fontsize=6.8, va='bottom', ha='right',
-                bbox=dict(facecolor='white', alpha=0.75, edgecolor='none', pad=0.5))
-    tau = np.asarray(world.truth['compound_tau_min'])
-    h0 = np.interp(tau + world.specs[SHOW[0]].drift(tau), TIME_AXIS, tics[SHOW[0]])
-    sel = (tau > 15) & (tau < 25)
-    tc = float(tau[sel][np.argmax(h0[sel])])                 # tallest batch-0 compound, 15–25 min latent
-    xs = [tc + world.specs[k].drift(tc) for k in SHOW]
-    ys = [lvl(k, x) + 0.1 for k, x in zip(SHOW, xs)]
-    ax.plot(xs, ys, ls=':', color='k', lw=0.9)
-    ax.plot(xs, ys, 'v', color='k', ms=3.5, label='valid chain')
-    a, b, ta, tb_true, tb_bad = cell_bad
-    ya = lvl(a, ta * BIN_MIN) + 0.1
-    yb_true = lvl(b, tb_true * BIN_MIN) + 0.1
-    yb_bad = lvl(b, tb_bad * BIN_MIN) + 0.1
-    ax.plot([ta * BIN_MIN, tb_true * BIN_MIN], [ya, yb_true], ls=':', color='0.45', lw=0.8)
-    ax.plot([ta * BIN_MIN, tb_bad * BIN_MIN], [ya, yb_bad], ls='--', color=C['bad'], lw=0.9)
-    ax.plot(ta * BIN_MIN, ya, 'v', color=C['bad'], ms=3.5)
-    ax.plot(tb_true * BIN_MIN, yb_true, 'v', color='0.45', ms=3.5)
-    ax.plot(tb_bad * BIN_MIN, yb_bad, 'x', color=C['bad'], ms=4.5, mew=1.2,
-            label=f'corrupted ({tb_bad - tb_true:+.0f} bins)')
-    ax.set_xlim(0, 45)
-    ax.set_ylim(-0.1, off[SHOW[0]] + 1.85)
-    ax.set_yticks([])
-    ax.spines['left'].set_visible(False)
-    ax.set_xlabel('retention time in each batch (min)')
-    ax.legend(loc='upper left', fontsize=7.0, handlelength=1.2, borderaxespad=0.2, ncol=1,
-              frameon=True, facecolor='white', framealpha=0.85, edgecolor='none')
-    _title(ax, 'b', f'Multi-batch TICs (K = {world.K})')
-    _despine(ax)
+    tc, a, b, tb_true, tb_bad = panel_1b(ax, world, cell_bad, cols)
 
     # (c) true drift of every batch
     ax = fig.add_subplot(gs[2])
-    drifts = np.array([s.drift(TIME_AXIS) for s in world.specs])
-    for k in range(world.K):
-        ax.plot(TIME_AXIS, drifts[k], color=cols[k], lw=1.0)
-    ax.axhline(0, color='0.75', lw=0.5, zorder=0)
-    ax.set_xlim(0, 45)
-    ax.set_ylim(-3.5, 3.5)
-    ax.set_yticks([-3, -2, -1, 0, 1, 2, 3])
-    ax.set_xlabel('latent retention time (min)')
-    ax.set_ylabel(r'true drift $d_k^*(t)$ (min)')
-    _title(ax, 'c', f'True drift (K = {world.K})')
-    _despine(ax)
+    drifts = panel_1c(ax, world, cols)
 
     p = _save(fig, out, 'fig1_data')
     plt.close(fig)
@@ -487,12 +466,71 @@ def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
     return p, cap
 
 
-def corrupted_anchor(world, anchors, s13) -> tuple:
+def panel_1b(ax, world, cell_bad, cols, ink: str = 'k', bg: str = 'white') -> tuple:
+    """Fig 1 (b): four batch TICs, one compound's anchor chain and one corrupted anchor. Returns the
+    chain compound's latent time, the corrupted pair and its true and corrupted times (bins)."""
+    from jointalign.synthetic import BIN_MIN, TIME_AXIS
+    gap = 1.25
+    off = {k: (len(SHOW) - 1 - r) * gap for r, k in enumerate(SHOW)}
+    tics = {k: world.tic_raws[k][0] / world.tic_raws[k][0].max() for k in SHOW}
+    lvl = lambda k, t: off[k] + np.interp(t, TIME_AXIS, tics[k])
+    for k in SHOW:
+        ax.plot(TIME_AXIS, tics[k] + off[k], color=cols[k], lw=0.7)
+        ax.text(44.5, off[k] + 0.15, f'batch {k}', color=cols[k], fontsize=6.8, va='bottom', ha='right',
+                bbox=dict(facecolor=bg, alpha=0.75, edgecolor='none', pad=0.5))
+    tau = np.asarray(world.truth['compound_tau_min'])
+    h0 = np.interp(tau + world.specs[SHOW[0]].drift(tau), TIME_AXIS, tics[SHOW[0]])
+    sel = (tau > 15) & (tau < 25)
+    tc = float(tau[sel][np.argmax(h0[sel])])                 # tallest batch-0 compound, 15–25 min latent
+    xs = [tc + world.specs[k].drift(tc) for k in SHOW]
+    ys = [lvl(k, x) + 0.1 for k, x in zip(SHOW, xs)]
+    ax.plot(xs, ys, ls=':', color=ink, lw=0.9)
+    ax.plot(xs, ys, 'v', color=ink, ms=3.5, label='valid chain')
+    a, b, ta, tb_true, tb_bad = cell_bad
+    ya = lvl(a, ta * BIN_MIN) + 0.1
+    yb_true = lvl(b, tb_true * BIN_MIN) + 0.1
+    yb_bad = lvl(b, tb_bad * BIN_MIN) + 0.1
+    ax.plot([ta * BIN_MIN, tb_true * BIN_MIN], [ya, yb_true], ls=':', color='0.55', lw=0.8)
+    ax.plot([ta * BIN_MIN, tb_bad * BIN_MIN], [ya, yb_bad], ls='--', color=C['bad'], lw=0.9)
+    ax.plot(ta * BIN_MIN, ya, 'v', color=C['bad'], ms=3.5)
+    ax.plot(tb_true * BIN_MIN, yb_true, 'v', color='0.55', ms=3.5)
+    ax.plot(tb_bad * BIN_MIN, yb_bad, 'x', color=C['bad'], ms=4.5, mew=1.2,
+            label=f'corrupted ({tb_bad - tb_true:+.0f} bins)')
+    ax.set_xlim(0, 45)
+    ax.set_ylim(-0.1, off[SHOW[0]] + 1.85)
+    ax.set_yticks([])
+    ax.spines['left'].set_visible(False)
+    ax.set_xlabel('retention time in each batch (min)')
+    ax.legend(loc='upper left', fontsize=7.0, handlelength=1.2, borderaxespad=0.2, ncol=1,
+              frameon=True, facecolor=bg, framealpha=0.85, edgecolor='none')
+    _title(ax, 'b', f'Multi-batch TICs (K = {world.K})')
+    _despine(ax)
+    return tc, a, b, tb_true, tb_bad
+
+
+def panel_1c(ax, world, cols) -> np.ndarray:
+    """Fig 1 (c): the true drift of every batch. Returns the drift curves (batches × time)."""
+    from jointalign.synthetic import TIME_AXIS
+    drifts = np.array([s.drift(TIME_AXIS) for s in world.specs])
+    for k in range(world.K):
+        ax.plot(TIME_AXIS, drifts[k], color=cols[k], lw=1.0)
+    ax.axhline(0, color='0.6', lw=0.5, zorder=0)
+    ax.set_xlim(0, 45)
+    ax.set_ylim(-3.5, 3.5)
+    ax.set_yticks([-3, -2, -1, 0, 1, 2, 3])
+    ax.set_xlabel('latent retention time (min)')
+    ax.set_ylabel(r'true drift $d_k^*(t)$ (min)')
+    _title(ax, 'c', f'True drift (K = {world.K})')
+    _despine(ax)
+    return drifts
+
+
+def corrupted_anchor(world, anchors, s02) -> tuple:
     """One real corrupted anchor of CORRUPT_CELL between two batches drawn in fig 1 (b): the one at the
     tallest batch-a TIC among the corrupted anchors of consecutive shown pairs (first samples only
     when any exist)."""
     from jointalign.synthetic import BIN_MIN, TIME_AXIS
-    _, kept, bad, _, _ = s13.prepare(world, anchors, CORRUPT_CELL, WORLD_SEED)
+    _, kept, bad, _, _ = s02.prepare(world, anchors, CORRUPT_CELL, WORLD_SEED)
     shown = {(min(p), max(p)) for p in itertools.pairwise(SHOW)}
     best, score = None, -1.0
     for i in np.flatnonzero(bad):
@@ -512,32 +550,35 @@ def corrupted_anchor(world, anchors, s13) -> tuple:
 
 # ── Figure 2 ──────────────────────────────────────────────────────────────────
 
-def fig2(out: Path, world, anchors, s13) -> tuple[Path, str]:
-    plt = _plt()
+def graph_panels(world, anchors, s02) -> tuple:
+    """Fig 2's six (name, edges, hub) panels for the representative world: density 0.4 and the weak hub
+    exactly as script 02 drew them in DENSITY_CELL."""
     from trustalign import graphs
     K = world.K
-    cols = batch_colors(K)
-    dens_edges = s13.prepare(world, anchors, DENSITY_CELL, WORLD_SEED)[0]
+    dens_edges = s02.prepare(world, anchors, DENSITY_CELL, WORLD_SEED)[0]
     weak = graphs.weak_hub(world.sizes)
-    panels = (('complete', graphs.edges_for('complete', K, world.sizes), None),
-              ('density 0.4', dens_edges, None),
-              ('ring', graphs.edges_for('ring', K, world.sizes), None),
-              ('chain', graphs.edges_for('chain', K, world.sizes), None),
-              ('star', graphs.edges_for('star', K, world.sizes), 0),
-              ('weak-star', graphs.edges_for('weak_star', K, world.sizes), weak))
+    return (('complete', graphs.edges_for('complete', K, world.sizes), None),
+            ('density 0.4', dens_edges, None),
+            ('ring', graphs.edges_for('ring', K, world.sizes), None),
+            ('chain', graphs.edges_for('chain', K, world.sizes), None),
+            ('star', graphs.edges_for('star', K, world.sizes), 0),
+            ('weak-star', graphs.edges_for('weak_star', K, world.sizes), weak))
+
+
+def draw_graphs(fig, axes, world, panels, cols, ink: str = 'k') -> None:
+    K = world.K
     ang = np.pi / 2 - 2 * np.pi * np.arange(K) / K               # batch 0 (the reference) at the top
     xy = np.c_[np.cos(ang), np.sin(ang)]
-    fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
     for i, (ax, (name, edges, hub)) in enumerate(zip(axes, panels)):
         for a, b in sorted(edges):
-            ax.plot(*xy[[a, b]].T, color='0.4', lw=0.55, zorder=1)
-        ax.scatter(*xy.T, s=16, c=cols, zorder=3, edgecolor='k', linewidth=0.3)
+            ax.plot(*xy[[a, b]].T, color='0.5', lw=0.55, zorder=1)
+        ax.scatter(*xy.T, s=16, c=cols, zorder=3, edgecolor=ink, linewidth=0.3)
         if hub is not None:
             strong = name == 'star'
             halo_col = C['Star'] if strong else C['Weak-Star']
             ax.scatter(*xy[hub], s=95, facecolor='none', zorder=2, linewidth=1.3,
                        edgecolor=halo_col, linestyle='-' if strong else (0, (1.5, 1)))
-            ax.scatter(*xy[hub], s=35, c=[cols[hub]], zorder=4, edgecolor='k', linewidth=0.4)
+            ax.scatter(*xy[hub], s=35, c=[cols[hub]], zorder=4, edgecolor=ink, linewidth=0.4)
             if strong:
                 note = f'hub: batch {hub} ({world.sizes[hub]} samples)'
             else:
@@ -549,6 +590,16 @@ def fig2(out: Path, world, anchors, s13) -> tuple[Path, str]:
         ax.set_aspect('equal')
         ax.axis('off')
     fig.subplots_adjust(wspace=0.05, left=0.0, right=1.0)
+
+
+def fig2(out: Path, world, anchors, s02) -> tuple[Path, str]:
+    plt = _plt()
+    K = world.K
+    cols = batch_colors(K)
+    panels = graph_panels(world, anchors, s02)
+    weak = panels[-1][2]
+    fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
+    draw_graphs(fig, axes, world, panels, cols)
     p = _save(fig, out, 'fig2_graphs')
     plt.close(fig)
     cap = (
@@ -565,7 +616,7 @@ def fig2(out: Path, world, anchors, s13) -> tuple[Path, str]:
 
 # ── Figure 3 ──────────────────────────────────────────────────────────────────
 
-def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
+def fig3(out: Path, d02, rec, s02) -> tuple[Path, str, dict]:
     plt = _plt()
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(DOUBLE, 2.6), gridspec_kw={'width_ratios': [1.35, 1]})
     rng = np.random.default_rng(0)                                 # strip-plot jitter only
@@ -576,7 +627,7 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
     for gi, topo in enumerate(topos):
         s = (F3A_K, topo, F3A_BUDGET, F3A_EPS)
         for mi, m in enumerate(meths):
-            v = stat13(d13, s, m)
+            v = stat02(d02, s, m)
             arrays[f'fig3a|{topo}|{m}'] = v
             x = gi + (mi - 1) * (w + 0.03)
             ax1.boxplot(v, positions=[x], widths=w, whis=(0, 100), patch_artist=True, showfliers=False,
@@ -585,8 +636,8 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
                         whiskerprops=dict(color=C[m], lw=0.6), capprops=dict(color=C[m], lw=0.6))
             ax1.scatter(x + rng.uniform(-w / 3, w / 3, len(v)), v, s=5, color=C[m], edgecolor='none', zorder=3,
                         alpha=0.9)
-    ax1.axhline(s13.BREAK_MIN, color=C['bad'], ls='--', lw=0.8)
-    ax1.text(-0.48, 0.33, f'Broken-world cutoff ({s13.BREAK_MIN:.2f} min)',
+    ax1.axhline(s02.BREAK_MIN, color=C['bad'], ls='--', lw=0.8)
+    ax1.text(-0.48, 0.33, f'Broken-world cutoff ({s02.BREAK_MIN:.2f} min)',
              color=C['bad'], fontsize=7, ha='left', va='bottom')
     ax1.set_yscale('log')
     ax1.set_ylim(0.01, 4)
@@ -596,7 +647,7 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
     handles = [plt.Rectangle((0, 0), 1, 1, facecolor=C[m], alpha=0.6, edgecolor=C[m]) for m in meths]
     ax1.legend(handles, [LABEL[m] for m in meths], loc='upper left', ncol=3, handlelength=1.0, columnspacing=1.0)
     _title(ax1, 'a', f'K = {F3A_K}, budget {F3A_BUDGET}, ε = {F3A_EPS:.0%} '
-                     f'({len(d13["seeds"])} test worlds per box)')
+                     f'({len(d02["seeds"])} test worlds per box)')
 
     Ks: tuple[int, ...] = F3B_KS
     lsx = np.log2(np.array(Ks, dtype=float))
@@ -608,7 +659,7 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
         dx = (ti - 0.5) * 0.14
         meds = []
         for s, x in zip(sets, lsx):
-            d = stat13(d13, s, 'Joint') - stat13(d13, s, 'Composed pairwise')
+            d = stat02(d02, s, 'Joint') - stat02(d02, s, 'Composed pairwise')
             arrays[f'fig3b|{topo}|K{s[0]}'] = d
             meds.append(float(np.median(d)))
             ax2.scatter(x + dx + rng.uniform(-0.04, 0.04, len(d)), d, s=4, color=col, alpha=0.45, edgecolor='none')
@@ -640,7 +691,7 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
     plt.close(fig)
     dt = trends['density0.4']
     cap = (
-        f'**fig3_synthetic_results.** (a) World-level median map error over the {len(d13["seeds"])} test worlds '
+        f'**fig3_synthetic_results.** (a) World-level median map error over the {len(d02["seeds"])} test worlds '
         f'(boxes: quartiles, whiskers: range). Stars are scored on the pairs they reach. (b) Paired per-world '
         f'difference; large markers: medians; lines: least-squares fit on log2 K with 95 % bands from '
         f'resampling test worlds within each K (script 02). Density 0.4 slope {dt[0][1]:+.4f} min per '
@@ -651,20 +702,20 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
 
 # ── Figure 4 ──────────────────────────────────────────────────────────────────
 
-def refit_broken_world(d13, s13) -> dict:
+def refit_broken_world(d02, s02) -> dict:
     """The broken F4A test world closest to the setting's median joint error, refitted and checked."""
     from jointalign.synthetic import BIN_MIN
 
     from trustalign import metrics
-    v = stat13(d13, F4A, 'Joint')
+    v = stat02(d02, F4A, 'Joint')
     med = float(np.median(v))
-    broken = [i for i in range(len(v)) if v[i] > s13.BREAK_MIN]
+    broken = [i for i in range(len(v)) if v[i] > s02.BREAK_MIN]
     i = min(broken, key=lambda j: (abs(v[j] - med), j))
-    seed = d13['seeds'][i]
-    world, anchors, _ = s13.world_and_anchors(F4A[0], seed)
-    edges, kept, bad, hubs, _ = s13.prepare(world, anchors, F4A, seed)
-    fit = s13.fitters(world.K, edges, hubs)
-    cell = d13['cells'][(*F4A, seed)]
+    seed = d02['seeds'][i]
+    world, anchors, _ = s02.world_and_anchors(F4A[0], seed)
+    edges, kept, bad, hubs, _ = s02.prepare(world, anchors, F4A, seed)
+    fit = s02.fitters(world.K, edges, hubs)
+    cell = d02['cells'][(*F4A, seed)]
     runs = {
         'Joint cv': ('Joint', 'cv'),
         'Joint fixed': ('Joint', 'fixed'),
@@ -684,21 +735,21 @@ def refit_broken_world(d13, s13) -> dict:
             'n_broken': len(broken), 'bin': BIN_MIN}
 
 
-def lambda_counts(d14, s13, s14) -> dict:
+def lambda_counts(d03, s02, s03) -> dict:
     """Broken test worlds per topology and λ rule over the corrupted settings of script 03."""
     out: dict = {}
-    for s in d14['grid']:
+    for s in d03['grid']:
         if s[3] == 0:
             continue
-        e = s14.rule_errors(d14['sweep'], s, sorted(s13.TEST_SEEDS), 'Joint', d14['lams'][s]['Joint'])
+        e = s03.rule_errors(d03['sweep'], s, sorted(s02.TEST_SEEDS), 'Joint', d03['lams'][s]['Joint'])
         for rule, _, _ in F4B_RULES:
             out.setdefault((s[1], rule), [0, 0])
-            out[(s[1], rule)][0] += int(np.sum(e[rule] > s13.BREAK_MIN))
+            out[(s[1], rule)][0] += int(np.sum(e[rule] > s02.BREAK_MIN))
             out[(s[1], rule)][1] += len(e[rule])
     return out
 
 
-def fig4(out: Path, bw: dict, counts: dict, s13) -> tuple[Path, str, dict]:
+def fig4(out: Path, bw: dict, counts: dict, s02) -> tuple[Path, str, dict]:
     plt = _plt()
     from jointalign.synthetic import TIME_AXIS
 
@@ -765,19 +816,26 @@ def fig4(out: Path, bw: dict, counts: dict, s13) -> tuple[Path, str, dict]:
         f'Edge {a}–{b} is the chain edge with the largest joint error. World median map error: '
         f'Joint (CV) {e["Joint cv"]:.3f}, Joint (λ = 10) {e["Joint fixed"]:.3f}, '
         f'Pairwise {e["Pairwise cv"]:.3f} min. (b) Broken test worlds '
-        f'(> {s13.BREAK_MIN} min) over script 03\'s corrupted settings ({len(order)} topologies × K ∈ {{5, 10}} × '
+        f'(> {s02.BREAK_MIN} min) over script 03\'s corrupted settings ({len(order)} topologies × K ∈ {{5, 10}} × '
         f'3 budgets × 2 ε): ' + '; '.join(f'{lab} {tot[r][0]}/{tot[r][1]}' for r, lab, _ in F4B_RULES)
         + '. The oracle uses the truth: a bound, not a rule.'
     )
     arrays = {f'fig4a|{k}': v for k, v in curves.items()}
     arrays['fig4a|t'] = t
+    arrays['fig4a|anchors_ta'] = ta                                  # min, batch a
+    arrays['fig4a|anchors_dt'] = tb - ta                             # min, anchor drift t_b − t_a
+    arrays['fig4a|anchors_bad'] = bad[m].astype(int)
+    arrays['fig4a|edge_seed'] = np.array([a, b, bw['seed']])
+    arrays['fig4a|lams'] = np.array([bw['lam'][k] for k in ('Joint cv', 'Joint fixed', 'Pairwise cv')])
+    arrays['fig4a|world_errors'] = np.array([e[k] for k in ('Joint cv', 'Joint fixed', 'Pairwise cv')])
+    arrays['fig4a|setting_median_nbroken'] = np.array([bw['median'], bw['n_broken']])
     arrays.update({f'fig4b|{tp}|{r}': np.array(counts[(tp, r)]) for tp in order for r, _, _ in F4B_RULES})
     return p, cap, {'arrays': arrays, 'totals': tot}
 
 
 # ── Figure 5 ──────────────────────────────────────────────────────────────────
 
-def fig5(out: Path, fish_cells, s15) -> tuple[Path, str, dict]:
+def fig5(out: Path, fish_cells, s04) -> tuple[Path, str, dict]:
     plt = _plt()
     fig, axes = plt.subplots(1, 2, figsize=(SINGLE, 2.5), sharey=True)
     eps: tuple[float, ...] = F5_EPSILONS
@@ -789,7 +847,7 @@ def fig5(out: Path, fish_cells, s15) -> tuple[Path, str, dict]:
         for mi, m in enumerate(meths):
             q_list = []
             for e in eps:
-                v = stat15(fish_cells, ('complete', budget, e), m, s15)
+                v = stat04(fish_cells, ('complete', budget, e), m, s04)
                 arrays[f'fig5|B{budget}|eps{e}|{m}'] = v
                 q_list.append(np.nanpercentile(v, [25, 50, 75]))
             q_arr = np.array(q_list)
@@ -815,23 +873,49 @@ def fig5(out: Path, fish_cells, s15) -> tuple[Path, str, dict]:
     p = _save(fig, out, 'fig5_fish_results')
     plt.close(fig)
     cap = (f'**fig5_fish_results.** Fish oil data (K = 5, complete graph): held-out spectral-anchor error, median '
-           f'and interquartile range over {len(s15.DRAWS)} thinning/corruption draws per condition.')
+           f'and interquartile range over {len(s04.DRAWS)} thinning/corruption draws per condition.')
     return p, cap, arrays
+
+
+# ── website figures ───────────────────────────────────────────────────────────
+
+def site_figures(site: Path, world, anchors, cell_bad, s02) -> list[Path]:
+    """Fig 1 (b, c) and fig 2 as SVG for docs/assets/, one file per colour theme (fig1_bc.svg,
+    fig1_bc_dark.svg, fig2_graphs.svg, fig2_graphs_dark.svg). Panel (a) of fig 1 is never exported."""
+    plt = _plt()
+    site.mkdir(parents=True, exist_ok=True)
+    cols = batch_colors(world.K)
+    panels = graph_panels(world, anchors, s02)
+    paths = []
+    for theme, (ink, bg) in SITE_THEMES.items():
+        suffix = '' if theme == 'light' else '_dark'
+        with plt.rc_context(_site_rc(ink)):
+            fig, (ax_b, ax_c) = plt.subplots(1, 2, figsize=(DOUBLE, 2.5), gridspec_kw={'width_ratios': [1.3, 1]})
+            panel_1b(ax_b, world, cell_bad, cols, ink=ink, bg=bg)
+            panel_1c(ax_c, world, cols)
+            fig.tight_layout(w_pad=2.0)
+            paths.append(_save_svg(fig, site, f'fig1_bc{suffix}'))
+            plt.close(fig)
+            fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
+            draw_graphs(fig, axes, world, panels, cols, ink=ink)
+            paths.append(_save_svg(fig, site, f'fig2_graphs{suffix}'))
+            plt.close(fig)
+    return paths
 
 
 # ── verification ──────────────────────────────────────────────────────────────
 
-def verify(d13, rec, tot4, fish_cells, s13, s15) -> list[str]:
+def verify(d02, rec, tot4, fish_cells, s02, s04) -> list[str]:
     """Recomputed values vs the committed reports and the manuscript; raises on any mismatch."""
     t1 = parse_full_table1(RESULTS / 'full_sparsity.txt')
     rq = parse_full_rq1c(RESULTS / 'full_sparsity.txt')
     lt = parse_lambda_totals(RESULTS / 'diagnose_lambda.txt')
     t2 = parse_fish_table2(RESULTS / 'fish_sparsity.txt')
-    col13 = {m: i for i, m in enumerate(s13.METHODS)}
+    col02 = {m: i for i, m in enumerate(s02.METHODS)}
     rows = []
 
     def med13(s, m):
-        return f'{float(np.nanmedian(stat13(d13, s, m))):.3f}'
+        return f'{float(np.nanmedian(stat02(d02, s, m))):.3f}'
 
     for key, (s, m) in {
         'Table I  K=5 complete B=10 ε=0    Joint': ((5, 'complete', 10, 0.0), 'Joint'),
@@ -839,12 +923,12 @@ def verify(d13, rec, tot4, fish_cells, s13, s15) -> list[str]:
         **{f'Table I  K=5 {t:<8} B=30 ε=0.3  {LABEL[m]}': ((5, t, 30, 0.3), m)
            for t in ('complete', 'chain', 'ring') for m in ('Joint', 'Star', 'Composed pairwise')},
     }.items():
-        rows.append((key, med13(s, m), t1[s][col13[m]], MANUSCRIPT[key]))
+        rows.append((key, med13(s, m), t1[s][col02[m]], MANUSCRIPT[key]))
     for topo in ('density0.4', 'complete'):
         sets = tuple((K, topo, 30, 0.15) for K in (5, 10, 20))
         rep = rq[(topo, 0.15)]
         for j, s in enumerate(sets):
-            d = stat13(d13, s, 'Joint') - stat13(d13, s, 'Composed pairwise')
+            d = stat02(d02, s, 'Joint') - stat02(d02, s, 'Composed pairwise')
             key = f'RQ1c {topo:<10} ε=0.15 K={s[0]:<2} Δ'
             rows.append((key, f'{np.median(d):+.4f}', rep[j], MANUSCRIPT[key]))
         if topo == 'density0.4':
@@ -858,12 +942,12 @@ def verify(d13, rec, tot4, fish_cells, s13, s15) -> list[str]:
                       ('λ diag broken, per-world oracle λ', 'per world')):
         k, n = tot4[rule]
         rows.append((key, f'{k}/{n}', f'{lt["Joint"][rule]}/{lt["n"]}', MANUSCRIPT[key]))
-    col15 = {m: i for i, m in enumerate(s13.METHODS)}
+    col04 = {m: i for i, m in enumerate(s02.METHODS)}
     for budget, e in ((10, 0.3), (100, 0.0)):
         for m in F5_METHODS:
             key = f'Table II B={budget:<3} ε={e:<3g} {LABEL[m]}'
-            v = f'{float(np.nanmedian(stat15(fish_cells, ("complete", budget, e), m, s15))):.3f}'
-            rows.append((key, v, t2[('complete', budget, e)][col15[m]], MANUSCRIPT[key]))
+            v = f'{float(np.nanmedian(stat04(fish_cells, ("complete", budget, e), m, s04))):.3f}'
+            rows.append((key, v, t2[('complete', budget, e)][col04[m]], MANUSCRIPT[key]))
     w = max(len(r[0]) for r in rows)
     L = [f'{"quantity":<{w}}  {"recomputed":>10}  {"report":>10}  {"manuscript":>10}  ok',
          '-' * (w + 42)]
@@ -884,48 +968,51 @@ def verify(d13, rec, tot4, fish_cells, s13, s15) -> list[str]:
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
+def main(out: Path = FIGS, results: Path = RESULTS, site: Path | None = None) -> dict:
     out.mkdir(parents=True, exist_ok=True)
-    s13, s14, s15 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py', '04_fish_sparsity.py'))
+    s02, s03, s04 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py', '04_fish_sparsity.py'))
     print('loading script 02 checkpoints …', flush=True)
-    d13 = load_s13(results / 'full_sparsity_cache', s13)
+    d02 = load_s02(results / 'full_sparsity_cache', s02)
     print('replaying script 02\'s report (exact bootstrap) …', flush=True)
-    rec = replay_rq1c(d13, s13)
-    d14 = load_s14(results / 'diagnose_lambda_cache', s13, s14, d13)
-    fish_cells = load_s15(results / 'fish_sparsity_cache', s15)
+    rec = replay_rq1c(d02, s02)
+    d03 = load_s03(results / 'diagnose_lambda_cache', s02, s03, d02)
+    fish_cells = load_s04(results / 'fish_sparsity_cache', s04)
 
     print('building test world and refitting fig 4 (a) …', flush=True)
-    world, anchors, _ = s13.world_and_anchors(WORLD_K, WORLD_SEED)
-    cell_bad = corrupted_anchor(world, anchors, s13)
-    fish = fish_sample(s15.DATA)
-    bw = refit_broken_world(d13, s13)
-    counts = lambda_counts(d14, s13, s14)
+    world, anchors, _ = s02.world_and_anchors(WORLD_K, WORLD_SEED)
+    cell_bad = corrupted_anchor(world, anchors, s02)
+    fish = fish_sample(s04.DATA)
+    bw = refit_broken_world(d02, s02)
+    counts = lambda_counts(d03, s02, s03)
 
     paths, caps, arrays = [], [], {}
     p, c = fig1(out, world, cell_bad, fish)
     paths.append(p)
     caps.append(c)
-    p, c = fig2(out, world, anchors, s13)
+    p, c = fig2(out, world, anchors, s02)
     paths.append(p)
     caps.append(c)
-    p, c, a = fig3(out, d13, rec, s13)
+    p, c, a = fig3(out, d02, rec, s02)
     paths.append(p)
     caps.append(c)
     arrays.update(a)
-    p, c, r4 = fig4(out, bw, counts, s13)
+    p, c, r4 = fig4(out, bw, counts, s02)
     paths.append(p)
     caps.append(c)
     arrays.update(r4['arrays'])
-    p, c, a = fig5(out, fish_cells, s15)
+    p, c, a = fig5(out, fish_cells, s04)
     paths.append(p)
     caps.append(c)
     arrays.update(a)
+
+    if site is not None:
+        paths += site_figures(site, world, anchors, cell_bad, s02)
 
     np.savez(results / 'cache_plot_data.npz', **arrays)
     (out / 'captions_tai.md').write_text('# IEEE TAI figures (scripts/05_paper_figures.py)\n\n'
                                          + '\n\n'.join(caps) + '\n')
     print()
-    table = verify(d13, rec, r4['totals'], fish_cells, s13, s15)
+    table = verify(d02, rec, r4['totals'], fish_cells, s02, s04)
     print('\n' + '\n'.join(str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p) for p in paths))
     return {'paths': paths, 'captions': caps, 'table': table}
 
@@ -933,5 +1020,7 @@ def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', type=Path, default=FIGS)
+    ap.add_argument('--site', type=Path, nargs='?', const=ROOT / 'docs' / 'assets', default=None,
+                    help='also write the website\'s SVG figures (fig 1 b, c and fig 2) to this folder')
     a = ap.parse_args()
-    main(out=a.out)
+    main(out=a.out, site=a.site)

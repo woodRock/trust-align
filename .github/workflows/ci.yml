@@ -6,6 +6,9 @@ name: CI
 #
 # Upstream canary: the same tests against both upstream main branches (weekly, on demand and on
 # every push). Non-blocking: a failure means bumping the pins will need changes here.
+#
+# Site: the committed website data (docs/data/*.json, written locally by scripts/06_site_data.py from
+# caches CI never has) is checked against results/*.txt, and docs/ is link- and HTML-checked.
 
 on:
   push:
@@ -27,6 +30,7 @@ env:
   TORCH_INDEX: https://download.pytorch.org/whl/cpu  # CPU wheels: no CUDA download
   RUFF_VERSION: '0.17.0'
   MYPY_VERSION: '2.4.0'
+  HTML_VALIDATE_VERSION: '11.16.2'
 
 jobs:
   lint:
@@ -83,3 +87,27 @@ jobs:
             "joint-align @ git+https://github.com/woodRock/joint-align.git@main"
       - run: python -c "from trustalign.provenance import header; print(*header(), sep='\n')"
       - run: python -m pytest
+
+  site:
+    name: Site (data vs reports, links, HTML)
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: pip install numpy pytest
+      - name: Committed site data matches results/*.txt and the page's numbers
+        run: python -m pytest tests/test_site_data.py -m "not slow" -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install -g html-validate@$HTML_VALIDATE_VERSION
+      - run: html-validate --config docs/.htmlvalidate.json docs/index.html
+      - name: "Links (offline: local files and fragments only)"
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          args: "--offline --root-dir ${{ github.workspace }}/docs --include-fragments --exclude '^data:' docs/index.html"
+          fail: true
