@@ -106,8 +106,8 @@ jobs:
           node-version: '22'
       - run: npm install -g html-validate@$HTML_VALIDATE_VERSION
       - run: html-validate --config docs/.htmlvalidate.json docs/index.html
-      - name: Links (offline: local files and anchors only)
+      - name: "Links (offline: local files and fragments only)"
         uses: lycheeverse/lychee-action@v2.9.0
         with:
-          args: --offline --root-dir ${{ github.workspace }}/docs --include-fragments docs/index.html
+          args: "--offline --root-dir ${{ github.workspace }}/docs --include-fragments --exclude '^data:' docs/index.html"
           fail: true
