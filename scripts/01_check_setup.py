@@ -1,5 +1,5 @@
 """
-00_check_setup.py — Check the environment before any experiment: versions, data access, and that
+01_check_setup.py — Check the environment before any experiment: versions, data access, and that
 the pinned joint model still reproduces itself.
 
 1. Provenance: trustalign, alignbench and jointalign revisions (as every result file records them).
@@ -54,7 +54,7 @@ def joint_check(seed: int = 0) -> list[str]:
 
 
 def main(data: Path = DATA, results: Path = RESULTS) -> list[str]:
-    lines = ['00_check_setup.py — environment check', '', *header(), '', *data_summary(data), '',
+    lines = ['01_check_setup.py — environment check', '', *header(), '', *data_summary(data), '',
              *joint_check()]
     results.mkdir(parents=True, exist_ok=True)
     (results / 'setup_check.txt').write_text('\n'.join(lines) + '\n')

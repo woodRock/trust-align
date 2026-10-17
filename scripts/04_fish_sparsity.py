@@ -1,7 +1,7 @@
 """
-15_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
+04_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
 
-The full grid (scripts/13_full_sparsity.py) on paper one's fish oil data: the 25,011 spectral anchors
+The full grid (scripts/02_full_sparsity.py) on paper one's fish oil data: the 25,011 spectral anchors
 harvested from every cross-batch sample pair of the five batches (jointalign.harvest_anchors, as in
 paper one) are thinned and corrupted like a synthetic world, and the same methods are compared.
 
@@ -17,11 +17,11 @@ Settings (K = 5 batches):
             chain and ring in acquisition order aug2015–sep2015–jan2016–apr2016–jul2016 (the ring adds
             jul2016–aug2015); density0.4 (4 of the 10 batch pairs, a random connected subset per draw)
   budget    10, 30, 100 anchors per kept batch pair (a pair with fewer keeps all it has)
-  ε         0, 0.15, 0.30 of the kept anchors corrupted (graphs.corrupt, as in script 13)
+  ε         0, 0.15, 0.30 of the kept anchors corrupted (graphs.corrupt, as in script 02)
   draws     20 random thinning and corruption draws per setting. One dataset: the spread over draws
             measures sensitivity to which anchors survive, not to other datasets.
-λ: paper one's rule on each draw's own kept anchors (RT-blocked CV; script 14 found it slightly better
-than a shared tuned λ). Methods, fitters and statistics are script 13's (solver='active_set').
+λ: paper one's rule on each draw's own kept anchors (RT-blocked CV; script 03 found it slightly better
+than a shared tuned λ). Methods, fitters and statistics are script 02's (solver='active_set').
 
 Data stays private: read in place from data/fish_oil (a git-ignored symlink) or --data. The
 harvested anchors and TICs are cached locally (results/fish_anchors.npz, never committed: *.npz is
@@ -83,7 +83,7 @@ _S13 = None
 def s13():
     global _S13
     if _S13 is None:
-        _S13 = _script('13_full_sparsity.py')
+        _S13 = _script('02_full_sparsity.py')
     return _S13
 
 

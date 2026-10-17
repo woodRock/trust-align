@@ -40,7 +40,7 @@ def test_provenance_is_alignbench_s():
 
 @pytest.mark.slow
 def test_check_setup_on_synthetic_data(tmp_path):
-    s00 = load_script('00_check_setup.py')
+    s00 = load_script('01_check_setup.py')
     lines = s00.main(data=tmp_path / 'no-data', results=tmp_path / 'results')
     txt = (tmp_path / 'results' / 'setup_check.txt').read_text()
     assert txt.splitlines()[2].startswith('trustalign')
@@ -50,7 +50,7 @@ def test_check_setup_on_synthetic_data(tmp_path):
 
 
 def test_data_summary_counts_samples_without_reading_them(tmp_path):
-    s00 = load_script('00_check_setup.py')
+    s00 = load_script('01_check_setup.py')
     for name, n in (('batch_a', 2), ('batch_b', 3)):
         (tmp_path / name / 'chroma').mkdir(parents=True)
         for i in range(n):
@@ -59,67 +59,13 @@ def test_data_summary_counts_samples_without_reading_them(tmp_path):
     assert lines[1].split() == ['batch_a', '2', 'samples'] and lines[2].split() == ['batch_b', '3', 'samples']
 
 
-@pytest.mark.slow
-def test_pilot_end_to_end_on_a_tiny_grid(tmp_path):
-    s10 = load_script('10_pilot_sparsity.py')
-    cells = s10.main(Ks=(3,), topologies=('complete', 'chain'), budgets=(10, None), epsilons=(0.0, 0.15),
-                     seeds=(0, 1), results=tmp_path, lambdas=(1.0, 100.0),
-                     world_kw=dict(n_compounds=30, mz_bins=300))
-    txt = (tmp_path / 'pilot_sparsity.txt').read_text()
-    assert txt.splitlines()[2].startswith('trustalign')
-    for section in ('1. Map error vs truth', '2. Sensitivity', '3. Sanity check', '4. Robust reweighting',
-                    '5. Cycle inconsistency', '6. Run time', 'Wall time'):
-        assert section in txt
-    assert len(cells) == 16
-    first = cells[(3, 'chain', 10, 0.15, 0)]
-    assert cells[(3, 'chain', 10, 0.15, 1)]['lam'] == first['lam']        # λ chosen once, reused
-    assert first['cv_seconds'] > 0 and cells[(3, 'chain', 10, 0.15, 1)]['cv_seconds'] == 0
-    z = np.load(tmp_path / 'pilot_sparsity.npz')
-    assert len(z['cell_keys']) == 16 and 'Joint|cv|median_all' in z.files
-
-
-@pytest.mark.slow
-def test_draft_connectivity_on_a_tiny_grid(tmp_path):
-    s11 = load_script('11_draft_connectivity.py')
-    noises = (('clean', 0.0, 0.0), ('jitter 1.0', 1.0, 0.0), ('ε 30%', 0.0, 0.30))
-    runs = s11.main(seeds=(0, 1), workers=1, results=tmp_path, figs=tmp_path / 'figs', k=5, budget=10,
-                    structures=('star', 'chain', 'chain+1', 'ring', 'density1.0', 'density0.4'), noises=noises,
-                    world_kw=dict(n_compounds=30, mz_bins=300))
-    txt = (tmp_path / 'draft_connectivity.txt').read_text()
-    assert 'DRAFT' in txt and txt.splitlines()[4].startswith('trustalign')
-    for section in ('1. Median map error', '2. Pairs with no direct anchors', '3. Paired comparisons',
-                    '4. Robust reweighting', '5. Run time'):
-        assert section in txt
-    cell = runs[0][('chain', 'clean')]
-    assert cell['n_edges'] == 4 and 0 < cell['star_coverage'] < 1
-    assert runs[0][('star', 'clean')]['star_coverage'] == 1.0
-    for f in ('regime_map.png', 'loop_closure.png', 'edge_removal.png', 'captions.md'):
-        assert (tmp_path / 'figs' / f).stat().st_size > 0
-    z = np.load(tmp_path / 'draft_connectivity.npz')
-    assert list(z['seeds']) == [0, 1] and 'chain|clean|Joint|median_all' in z.files
-
-
-@pytest.mark.slow
-def test_diagnose_breakdown_on_one_seed(tmp_path):
-    s12 = load_script('12_diagnose_breakdown.py')
-    lines = s12.main(results=tmp_path, draft_seeds=(1,), pilot_seeds=(0,))
-    txt = (tmp_path / 'diagnose_breakdown.txt').read_text()
-    assert txt.splitlines()[2].startswith('trustalign')
-    for section in ('1. Per seed', '2. Broken seeds in detail', '3. Summary over seeds', 'Wall time'):
-        assert section in txt
-    # The draft's ring seed 1 is the worst broken case; refitting without its corrupted anchors repairs it.
-    row = next(ln for ln in lines if 'draft ring ε30% seed 1' in ln and 'BROKEN' in ln)
-    joint, oracle = float(row.split()[5]), float(row.split()[9])
-    assert joint > s12.BROKEN > oracle
-
-
 TINY_GRID = [(4, 'complete', 100, 0.0), (4, 'complete', 10, 0.15), (4, 'weak_star', 10, 0.15),
              (4, 'chain', 10, 0.0), (4, 'chain', 30, 0.15), (4, 'density0.4', 30, 0.0), (5, 'density0.4', 30, 0.0)]
 
 
 @pytest.mark.slow
 def test_full_sparsity_on_a_tiny_grid_and_resumes(tmp_path):
-    s13 = load_script('13_full_sparsity.py')
+    s13 = load_script('02_full_sparsity.py')
     kw = dict(grid=TINY_GRID, tune_seeds=(0,), test_seeds=(3, 4, 5), workers=1, results=tmp_path,
               lambdas=(1.0, 100.0), world_kw=dict(n_compounds=30, mz_bins=300), n_boot=50)
     out = s13.main(**kw)
@@ -151,7 +97,7 @@ def test_full_sparsity_on_a_tiny_grid_and_resumes(tmp_path):
 
 
 def test_full_sparsity_statistics():
-    s13 = load_script('13_full_sparsity.py')
+    s13 = load_script('02_full_sparsity.py')
     assert s13.holm([0.01, 0.04, np.nan, 0.03]) == pytest.approx([0.03, 0.06, np.nan, 0.06], nan_ok=True)
     lo, hi = s13.wilson(0, 20)
     assert lo == 0.0 and 0.1 < hi < 0.2
@@ -175,12 +121,12 @@ def test_full_sparsity_statistics():
 
 @pytest.mark.slow
 def test_diagnose_lambda_on_a_tiny_grid(tmp_path):
-    s13 = load_script('13_full_sparsity.py')
-    s14 = load_script('14_diagnose_lambda.py')
+    s13 = load_script('02_full_sparsity.py')
+    s14 = load_script('03_diagnose_lambda.py')
     grid = [(4, 'chain', 10, 0.30), (4, 'ring', 10, 0.0)]
     kw = dict(tune_seeds=(0,), test_seeds=(3, 4, 5), results=tmp_path, lambdas=(1.0, 10.0, 100.0),
               world_kw=dict(n_compounds=30, mz_bins=300))
-    with pytest.raises(FileNotFoundError):                      # needs script 13's checkpoints first
+    with pytest.raises(FileNotFoundError):                      # needs script 02's checkpoints first
         s14.main(grid=grid, workers=1, **kw)
     s13.main(grid=grid, workers=1, n_boot=20, **kw)
     lines = s14.main(grid=grid, workers=1, **kw)
@@ -190,7 +136,7 @@ def test_diagnose_lambda_on_a_tiny_grid(tmp_path):
                     '4. Run time'):
         assert section in txt
     check = next(line for line in lines if line.startswith('0. Check'))
-    assert float(check.split('max |difference| ')[1].split()[0]) < 1e-9    # reproduces script 13 exactly
+    assert float(check.split('max |difference| ')[1].split()[0]) < 1e-9    # reproduces script 02 exactly
     sweep = s14.run_sweep(grid, (3, 4, 5), 1, tmp_path / 'diagnose_lambda_cache', (1.0, 10.0, 100.0),
                           (('mz_bins', 300), ('n_compounds', 30)))       # reused from the checkpoints
     e = s14.rule_errors(sweep, grid[0], (3, 4, 5), 'Joint', 10.0)
@@ -201,7 +147,7 @@ def test_diagnose_lambda_on_a_tiny_grid(tmp_path):
 @pytest.mark.slow
 def test_fish_sparsity_on_the_synthetic_stand_in(tmp_path):
     from jointalign.synthetic import make_dataset
-    s15 = load_script('15_fish_sparsity.py')
+    s15 = load_script('04_fish_sparsity.py')
     data = tmp_path / 'data'
     make_dataset(data, n_compounds=30, mz_bins=300, seed=1)          # same five batch names as the fish data
     settings = [('complete', 100, 0.0), ('weak_star', 10, 0.0), ('chain', 10, 0.15), ('ring', 10, 0.30)]

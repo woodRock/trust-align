@@ -1,16 +1,16 @@
 """
-14_diagnose_lambda.py — How much of Experiment 1's breakdown comes from choosing λ?
+03_diagnose_lambda.py — How much of Experiment 1's breakdown comes from choosing λ?
 
-Diagnostic, not an experiment. In the full grid (scripts/13_full_sparsity.py) the joint model broke
+Diagnostic, not an experiment. In the full grid (scripts/02_full_sparsity.py) the joint model broke
 down on sparse, corrupted graphs, and its λ (tuned on 3 separate worlds) sometimes did far worse than
 the fixed λ = 10 of the sensitivity check. This script separates the λ rule from the model:
 
-  1. From script 13's checkpoints (no fits): tuned vs fixed λ per setting, and the tuning worlds' CV
+  1. From script 02's checkpoints (no fits): tuned vs fixed λ per setting, and the tuning worlds' CV
      curves — which λ each tuning world prefers and how flat the curve is.
-  2. Refits of script 13's exact test cells (same worlds, same anchors) at every λ of the grid, for
+  2. Refits of script 02's exact test cells (same worlds, same anchors) at every λ of the grid, for
      the joint model and composed pairwise, plus paper one's rule applied to each test world itself
      (λ by RT-blocked CV on that world's own anchors, as a user would). Compared rules:
-        tuned      script 13's λ (median CV score over the tuning worlds)
+        tuned      script 02's λ (median CV score over the tuning worlds)
         λ = 10     the fixed sensitivity λ
         own CV     CV on the test world's own anchors (joint only)
         best λ     the single λ with the lowest median error over the setting's test worlds
@@ -63,10 +63,10 @@ _S13 = None
 
 
 def s13():
-    """Script 13, loaded once per process."""
+    """Script 02, loaded once per process."""
     global _S13
     if _S13 is None:
-        _S13 = _script('13_full_sparsity.py')
+        _S13 = _script('02_full_sparsity.py')
     return _S13
 
 
@@ -155,13 +155,13 @@ def main(grid: list[tuple] | None = None, workers: int = 6, results: Path = RESU
     cache.mkdir(parents=True, exist_ok=True)
     wkw = tuple(sorted((world_kw or {}).items()))
     t0 = time.perf_counter()
-    # Script 13's results for these settings; every task must already be checkpointed (no fits here).
+    # Script 02's results for these settings; every task must already be checkpointed (no fits here).
     for phase, seeds in (('tune', tune_seeds), ('test', test_seeds)):
         missing = [t for t in m.tasks_for(grid, seeds)
                    if not (s13_cache / f'{phase}_K{t[0]}_s{t[1]}_{t[2]}.pkl').exists()]
         if missing:
             raise FileNotFoundError(f'{len(missing)} script-13 {phase} checkpoints missing in {s13_cache}; '
-                                    'run scripts/13_full_sparsity.py first')
+                                    'run scripts/02_full_sparsity.py first')
     tuned = m.run_phase('tune', m.tasks_for(grid, tune_seeds), 1, s13_cache, lambdas, None, wkw)
     lams_by, _ = m.choose_lambdas(tuned, grid)
     tested = m.run_phase('test', m.tasks_for(grid, test_seeds), 1, s13_cache, lambdas, lams_by, wkw)
@@ -180,12 +180,12 @@ def report(grid, seeds, tuned, lams_by, full, sweep, lambdas, wall, workers) -> 
     n, brk = len(seeds), m.BREAK_MIN
     nb = lambda v: int(np.sum(v > brk))
     L = [__doc__.strip().splitlines()[0], '', *header(), '',
-         f'{len(grid)} settings × {n} test worlds of scripts/13_full_sparsity.py (same worlds and anchors); '
+         f'{len(grid)} settings × {n} test worlds of scripts/02_full_sparsity.py (same worlds and anchors); '
          f'λ grid {[f"{x:g}" for x in lambdas]}. Map error: median over pairs and times per test world (min); '
          f'tables give the median over test worlds and, in brackets, the test worlds broken down (> {brk} min). '
          'The "best λ" and "per world" columns use the truth: bounds, not rules.', '']
 
-    # 0. The refits reproduce script 13.
+    # 0. The refits reproduce script 02.
     dev = []
     for s in grid:
         for seed in seeds:
@@ -194,7 +194,7 @@ def report(grid, seeds, tuned, lams_by, full, sweep, lambdas, wall, workers) -> 
                 for tag in ('cv', 'fixed'):
                     lam = cell[(name, tag)]['lam']
                     dev.append(abs(sw[name][lam][0] - cell[(name, tag)]['median_all']))
-    L += ['=' * 118, '0. Check: the refits reproduce script 13\'s map errors at its tuned and fixed λ: '
+    L += ['=' * 118, '0. Check: the refits reproduce script 02\'s map errors at its tuned and fixed λ: '
           f'max |difference| {np.nanmax(dev):.2e} min over {len(dev)} fits', '']
 
     # 1. Tuned vs fixed λ, and the tuning worlds' CV curves (from the checkpoints).

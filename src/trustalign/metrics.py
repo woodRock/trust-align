@@ -1,7 +1,7 @@
 """
 Error against the truth, held-out anchor error, λ selection, cycle inconsistency, rejection rates.
 
-λ selection is paper one's rule (joint-align scripts/30_multibatch_align.py): RT blocks of 12 bins,
+λ selection is paper one's rule (joint-align scripts/01_multibatch_align.py): RT blocks of 12 bins,
 block b in fold b mod 5; an anchor is held out if either of its times falls in the fold and used for
 training only if neither does; the score is the median |held-out error|. Neither TIC r nor the
 synthetic truth is ever used to choose anything. All of it is alignbench.metrics (anchors, truth)
