@@ -25,9 +25,9 @@ Calibrated Uncertainty in Many-Batch GC–MS Alignment.*
 
 | | Question | Where |
 |---|---|---|
-| **1. Sparsity and corruption** | When does the joint model beat a star fit through one hub, and pairwise fits composed along paths? Synthetic worlds with exact truth, over topology × anchor budget × corruption × K, plus a thinned fish arm. | `worlds.py`, `graphs.py`, `baselines.py`, scripts 10 (pilot), 11 (draft connectivity run), 12 (breakdown diagnosis), 13 (full grid) |
-| **2. Adaptive smoothness** | Can smoothness weights that follow anchor density close the local-accuracy gap without losing the joint model's gains? | `adaptive.py` (+ `smooth_weights` upstream), script 30 |
-| **3. Calibrated uncertainty** | Can conformal intervals, using local evidence such as disagreement between pairwise paths, reach 90 % coverage in every stratum? | `calibrate.py`, script 40 |
+| **1. Sparsity and corruption** | When does the joint model beat a star fit through one hub, and pairwise fits composed along paths? Synthetic worlds with exact truth, over topology × anchor budget × corruption × K, plus a thinned fish arm. | `worlds.py`, `graphs.py`, `baselines.py`, scripts 02 (full grid), 03 (λ diagnosis), 04 (fish arm), 05 (figures) |
+| **2. Adaptive smoothness** | Can smoothness weights that follow anchor density close the local-accuracy gap without losing the joint model's gains? | `adaptive.py` (+ `smooth_weights` upstream), scripts to come |
+| **3. Calibrated uncertainty** | Can conformal intervals, using local evidence such as disagreement between pairwise paths, reach 90 % coverage in every stratum? | `calibrate.py`, scripts to come |
 
 As in paper one, the experiments are framed as questions rather than formal hypotheses. Each
 experiment's grid, metrics and analyses are committed before its full run, and every outcome is
@@ -41,17 +41,32 @@ before the experiments' feasibility was known; they are superseded.)
 | Repository skeleton, CI, provenance, environment check | done |
 | `make_world` in jointalign (in-memory synthetic worlds) | done (joint-align `20d81c8`) |
 | Questions and analysis plan (hypotheses in `HYPOTHESES.md` superseded 2026-10-15) | done |
-| Experiment 1 pilot (`worlds`, `graphs`, `baselines`, `metrics`, script 10) | pilot run, awaiting review |
-| Experiment 1 draft connectivity run and breakdown diagnosis (scripts 11, 12) | done (draft protocol) |
+| Experiment 1 pilot, draft connectivity run and breakdown diagnosis | done; superseded by the full grid, scripts removed (in git history before v0.2.1) |
 | `solver='active_set'` in jointalign (joint-align `v1.1.0`) | done |
-| Experiment 1 full grid (script 13) | running |
-| Experiment 1 fish arm | not started |
+| Experiment 1 full grid (script 02) and λ diagnosis (script 03) | done |
+| Experiment 1 fish arm (script 04) | done |
 | `smooth_weights` in jointalign, release → Experiment 2 | not started |
 | Experiment 3 pilot → report → full run | not started |
-| Paper figures for the draft (script 20; captions in `figs/paper/captions.md`) | done |
-| Final figures and captions (numbers computed) | not started |
+| Experiment 1 figures and captions, numbers computed (script 05) | done |
 
 Each pilot stops for review before its full grid runs.
+
+## Reproduce Experiment 1
+
+The scripts are numbered in the order that reproduces the paper's results (run from the repository
+root; each step reads only what earlier steps wrote to `results/`):
+
+```bash
+python scripts/01_check_setup.py       # versions, data access, joint model sanity check (seconds)
+python scripts/02_full_sparsity.py     # Experiment 1 full grid (3.6 CPU h; --workers 6 → ~40 min)
+python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~12 min)
+python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~15 min)
+python scripts/05_paper_figures.py     # paper figures and captions from the caches above (~1 min)
+```
+
+Scripts 02–04 checkpoint every task under `results/*_cache/` and reuse it, so an interrupted run
+resumes; delete (or move) those caches to recompute from scratch. A full rerun on 2026-10-17
+reproduced every committed report (map errors to within 2e-10 min).
 
 ## How the repositories fit together
 
@@ -74,7 +89,7 @@ bit-identical, and is released under a new tag that this repository then pins.
 git clone https://github.com/woodRock/trust-align.git
 cd trust-align
 pip install -e ".[dev]"            # pulls the pinned alignbench and joint-align
-python scripts/00_check_setup.py   # versions, data access, joint model sanity check
+python scripts/01_check_setup.py   # versions, data access, joint model sanity check
 make check                         # ruff, mypy, tests + coverage
 ```
 

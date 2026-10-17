@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trustalign"
-version = "0.2.0"
+version = "0.2.1"
 description = "When can joint alignment be trusted? Sparse, noisy correspondences and calibrated uncertainty in many-batch GC-MS alignment"
 requires-python = ">=3.11"
 readme = "README.md"
@@ -44,7 +44,7 @@ filterwarnings = [
 source = ["trustalign", "scripts"]
 omit = [
     "scripts/__pycache__/*",
-    "scripts/make_paper_figures.py",
+    "scripts/05_paper_figures.py",
 ]
 
 [tool.coverage.report]
@@ -76,11 +76,10 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 # Sets BLAS thread limits before NumPy is imported.
-"scripts/11_draft_connectivity.py" = ["E402"]
-"scripts/13_full_sparsity.py" = ["E402"]
-"scripts/14_diagnose_lambda.py" = ["E402"]
-"scripts/15_fish_sparsity.py" = ["E402"]
-"scripts/make_paper_figures.py" = ["E402"]
+"scripts/02_full_sparsity.py" = ["E402"]
+"scripts/03_diagnose_lambda.py" = ["E402"]
+"scripts/04_fish_sparsity.py" = ["E402"]
+"scripts/05_paper_figures.py" = ["E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["trustalign"]

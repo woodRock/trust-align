@@ -1,5 +1,5 @@
 """
-make_paper_figures.py — the five IEEE TAI figures of paper two, from the per-world checkpoints behind
+05_paper_figures.py — the five IEEE TAI figures of paper two, from the per-world checkpoints behind
 the committed reports, with a verification table against the reports and the manuscript.
 
   fig1_data                 (a) one real fish oil chromatogram (sep2015, the strong hub): 2-D log
@@ -9,24 +9,24 @@ the committed reports, with a verification table against the reports and the man
                             world's K = 10, complete, budget 30, ε = 30 % cell; (c) the true drift of all
                             ten batches of that world
   fig2_graphs               the six topologies of the 114-setting grid, drawn for that same world
-                            (density 0.4 and the weak hub exactly as script 13 drew them)
+                            (density 0.4 and the weak hub exactly as script 02 drew them)
   fig3_synthetic_results    (a) per-world median map error, K = 5, budget 30, ε = 30 %, four topologies
                             × Joint / Star / Composed pairwise; (b) per-world Joint − Composed pairwise
-                            vs K at budget 30, ε = 15 %, with script 13's log2 K regression and its
-                            bootstrap band (script 13's own resampling, replayed exactly)
+                            vs K at budget 30, ε = 15 %, with script 02's log2 K regression and its
+                            bootstrap band (script 02's own resampling, replayed exactly)
   fig4_breakdown_diagnosis  (a) one broken K = 5 chain world (budget 30, ε = 30 %), refitted: pairwise
                             drift of its worst chain edge under Joint (CV λ), Joint (λ = 10) and
                             Composed pairwise, with the clean and corrupted anchors; (b) broken test
-                            worlds over script 14's 48 corrupted settings under three λ rules
+                            worlds over script 03's 48 corrupted settings under three λ rules
   fig5_fish_results         held-out anchor error on the fish oil data, complete graph, budgets 10 and
                             100, ε ∈ {0, 15, 30} %: median and IQR over the 20 draws
 
 Sources (never the superseded pilot or draft runs):
-  results/full_sparsity_cache/   script 13 at trustalign 651749e (results/full_sparsity.txt): tuning
+  results/full_sparsity_cache/   script 02 at trustalign 651749e (results/full_sparsity.txt): tuning
                                  seeds 0–2, test seeds 3–22, drift family (i)
-  results/diagnose_lambda_cache/ script 14 (results/diagnose_lambda.txt): refits of script 13's exact
-                                 test cells; its Section 0 checks them against script 13
-  results/fish_sparsity_cache/   script 15 at trustalign f320eae (results/fish_sparsity.txt), 20 draws
+  results/diagnose_lambda_cache/ script 03 (results/diagnose_lambda.txt): refits of script 02's exact
+                                 test cells; its Section 0 checks them against script 02
+  results/fish_sparsity_cache/   script 04 at trustalign f320eae (results/fish_sparsity.txt), 20 draws
   results/fish_anchors.npz, and the fish oil data read in place from data/fish_oil (fig1 a)
 
 Every plotted number is computed from those checkpoints (or from a refit that is checked against
@@ -34,7 +34,7 @@ them); the script stops if any recomputed median differs from the committed repo
 arrays it plots are written to results/cache_plot_data.npz (git-ignored), captions with computed
 numbers to figs/paper/captions_tai.md.
 
-Usage: python3.11 scripts/make_paper_figures.py [--out figs/paper]
+Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper]
 """
 from __future__ import annotations
 
@@ -207,7 +207,7 @@ def batch_colors(K: int):
 # ── data: the checkpoints behind the reports ──────────────────────────────────
 
 def load_s13(cache: Path, s13) -> dict:
-    """Script 13's tuning and test checkpoints for its full grid (every one must exist)."""
+    """Script 02's tuning and test checkpoints for its full grid (every one must exist)."""
     grid = s13.full_grid()
     out: dict[str, Any] = {}
     for phase, seeds in (('tune', s13.TUNE_SEEDS), ('test', s13.TEST_SEEDS)):
@@ -215,7 +215,7 @@ def load_s13(cache: Path, s13) -> dict:
         for K, seed, topo, cells in s13.tasks_for(grid, seeds):
             f = cache / f'{phase}_K{K}_s{seed}_{topo}.pkl'
             if not f.exists():
-                raise FileNotFoundError(f'{f} missing: run scripts/13_full_sparsity.py first')
+                raise FileNotFoundError(f'{f} missing: run scripts/02_full_sparsity.py first')
             r = pickle.loads(f.read_bytes())
             if set(r['cells']) != set(cells):
                 raise ValueError(f'{f} does not hold the full grid\'s cells')
@@ -232,8 +232,8 @@ def stat13(d13, setting, method, key='median_all', tag='cv') -> np.ndarray:
 
 
 def replay_rq1c(d13, s13) -> dict:
-    """Script 13's report, rerun on its checkpoints with slope_ci recording every bootstrap replicate
-    (intercept and slopes). The resampling is script 13's own: same generator, same order of draws,
+    """Script 02's report, rerun on its checkpoints with slope_ci recording every bootstrap replicate
+    (intercept and slopes). The resampling is script 02's own: same generator, same order of draws,
     so the slopes and CIs are exactly those of results/full_sparsity.txt."""
     rec: dict = {}
 
@@ -273,7 +273,7 @@ def load_s14(cache: Path, s13, s14, d13) -> dict:
     for K, seed, topo, _cells in s13.tasks_for(grid, s13.TEST_SEEDS):
         f = cache / f'sweep_K{K}_s{seed}_{topo}.pkl'
         if not f.exists():
-            raise FileNotFoundError(f'{f} missing: run scripts/14_diagnose_lambda.py first')
+            raise FileNotFoundError(f'{f} missing: run scripts/03_diagnose_lambda.py first')
         r = pickle.loads(f.read_bytes())
         sweep.update({(s, r['seed']): c for s, c in r['cells'].items()})
     tuned = [r for r in d13['tune'] if any(s in grid for s in r['cells'])]
@@ -288,7 +288,7 @@ def load_s15(cache: Path, s15) -> dict:
         for d in s15.DRAWS:
             f = cache / f'fish_{topo}_d{d}.pkl'
             if not f.exists():
-                raise FileNotFoundError(f'{f} missing: run scripts/15_fish_sparsity.py first')
+                raise FileNotFoundError(f'{f} missing: run scripts/04_fish_sparsity.py first')
             r = pickle.loads(f.read_bytes())
             cells.update({(s, r['draw']): c for s, c in r['cells'].items()})
     return cells
@@ -643,7 +643,7 @@ def fig3(out: Path, d13, rec, s13) -> tuple[Path, str, dict]:
         f'**fig3_synthetic_results.** (a) World-level median map error over the {len(d13["seeds"])} test worlds '
         f'(boxes: quartiles, whiskers: range). Stars are scored on the pairs they reach. (b) Paired per-world '
         f'difference; large markers: medians; lines: least-squares fit on log2 K with 95 % bands from '
-        f'resampling test worlds within each K (script 13). Density 0.4 slope {dt[0][1]:+.4f} min per '
+        f'resampling test worlds within each K (script 02). Density 0.4 slope {dt[0][1]:+.4f} min per '
         f'doubling [{dt[1]:+.4f}, {dt[2]:+.4f}].'
     )
     return p, cap, arrays
@@ -676,7 +676,7 @@ def refit_broken_world(d13, s13) -> dict:
         fits[key] = fit[m](kept, lam[key])
         err = metrics.summarise(metrics.map_errors(world, fits[key].map), edges)['median_all']
         if abs(err - cell[(m, tag)]['median_all']) > 1e-8:
-            raise AssertionError(f'refit of {key} gives {err}, script 13 has {cell[(m, tag)]["median_all"]}')
+            raise AssertionError(f'refit of {key} gives {err}, script 02 has {cell[(m, tag)]["median_all"]}')
     errs = metrics.map_errors(world, fits['Joint cv'].map, sorted(edges))
     edge = max(sorted(edges), key=lambda e: float(np.median(errs[e])))
     return {'world': world, 'seed': seed, 'edges': edges, 'kept': kept, 'bad': bad, 'fits': fits, 'lam': lam,
@@ -685,7 +685,7 @@ def refit_broken_world(d13, s13) -> dict:
 
 
 def lambda_counts(d14, s13, s14) -> dict:
-    """Broken test worlds per topology and λ rule over the corrupted settings of script 14."""
+    """Broken test worlds per topology and λ rule over the corrupted settings of script 03."""
     out: dict = {}
     for s in d14['grid']:
         if s[3] == 0:
@@ -761,11 +761,11 @@ def fig4(out: Path, bw: dict, counts: dict, s13) -> tuple[Path, str, dict]:
     cap = (
         f'**fig4_breakdown_diagnosis.** (a) Test world {bw["seed"]} of K = {F4A[0]}, chain, budget {F4A[2]}, '
         f'ε = {F4A[3]:.0%} (the broken world closest to the setting median {bw["median"]:.3f} min; '
-        f'{bw["n_broken"]}/{len(range(3, 23))} worlds broken), refitted on script 13\'s anchors. '
+        f'{bw["n_broken"]}/{len(range(3, 23))} worlds broken), refitted on script 02\'s anchors. '
         f'Edge {a}–{b} is the chain edge with the largest joint error. World median map error: '
         f'Joint (CV) {e["Joint cv"]:.3f}, Joint (λ = 10) {e["Joint fixed"]:.3f}, '
         f'Pairwise {e["Pairwise cv"]:.3f} min. (b) Broken test worlds '
-        f'(> {s13.BREAK_MIN} min) over script 14\'s corrupted settings ({len(order)} topologies × K ∈ {{5, 10}} × '
+        f'(> {s13.BREAK_MIN} min) over script 03\'s corrupted settings ({len(order)} topologies × K ∈ {{5, 10}} × '
         f'3 budgets × 2 ε): ' + '; '.join(f'{lab} {tot[r][0]}/{tot[r][1]}' for r, lab, _ in F4B_RULES)
         + '. The oracle uses the truth: a bound, not a rule.'
     )
@@ -886,10 +886,10 @@ def verify(d13, rec, tot4, fish_cells, s13, s15) -> list[str]:
 
 def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
     out.mkdir(parents=True, exist_ok=True)
-    s13, s14, s15 = (_script(n) for n in ('13_full_sparsity.py', '14_diagnose_lambda.py', '15_fish_sparsity.py'))
-    print('loading script 13 checkpoints …', flush=True)
+    s13, s14, s15 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py', '04_fish_sparsity.py'))
+    print('loading script 02 checkpoints …', flush=True)
     d13 = load_s13(results / 'full_sparsity_cache', s13)
-    print('replaying script 13\'s report (exact bootstrap) …', flush=True)
+    print('replaying script 02\'s report (exact bootstrap) …', flush=True)
     rec = replay_rq1c(d13, s13)
     d14 = load_s14(results / 'diagnose_lambda_cache', s13, s14, d13)
     fish_cells = load_s15(results / 'fish_sparsity_cache', s15)
@@ -922,7 +922,7 @@ def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
     arrays.update(a)
 
     np.savez(results / 'cache_plot_data.npz', **arrays)
-    (out / 'captions_tai.md').write_text('# IEEE TAI figures (scripts/make_paper_figures.py)\n\n'
+    (out / 'captions_tai.md').write_text('# IEEE TAI figures (scripts/05_paper_figures.py)\n\n'
                                          + '\n\n'.join(caps) + '\n')
     print()
     table = verify(d13, rec, r4['totals'], fish_cells, s13, s15)

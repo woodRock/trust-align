@@ -1,5 +1,5 @@
 """
-13_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
+02_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
 pairwise fits, and does its advantage grow as anchors thin, corruption rises and K grows?
 
 Research question (README, Experiment 1): when does joint fitting beat a star design and composed
@@ -596,7 +596,7 @@ def timing_main(workers: int = 6, results: Path = RESULTS, lambdas=metrics.LAMBD
         frac = (n_edges_of(K, topology) - e0) / (e1 - e0)
         return src[lo]['seconds'] + (src[hi]['seconds'] - src[lo]['seconds']) * frac
 
-    L = ['13_full_sparsity.py --timing — run-time sample for the Experiment 1 full grid', '', *header(), '',
+    L = ['02_full_sparsity.py --timing — run-time sample for the Experiment 1 full grid', '', *header(), '',
          f'One tuning world (seed {TUNE_SEEDS[0]}) and one test world (seed {TEST_SEEDS[0]}) per probe, ε = 0.15; '
          f'{workers} workers; wall time {wall:.0f} s; peak worker memory {rss:.0f} MB.', '',
          '1. Measured',
