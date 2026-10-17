@@ -195,8 +195,12 @@ function setupHero(world) {
 
   function draw() {
     const L = layout();
-    const svg = svgIn(box, L.W, L.H);
-    const g = svg.append('g');
+    const svg = svgIn(box, L.W, L.H).style('overflow', 'hidden');
+    // Clip the drifted traces and anchors to the plot: on its own clock a batch can run past 0 or 45 min.
+    const clipId = 'hero-clip';
+    svg.append('clipPath').attr('id', clipId).append('rect')
+      .attr('x', L.m.l).attr('y', 0).attr('width', L.W - L.m.l - L.m.r).attr('height', L.H - L.m.b);
+    const g = svg.append('g').attr('clip-path', `url(#${clipId})`);
     svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${L.H - L.m.b})`).call(d3.axisBottom(L.x).ticks(9));
     svg.append('text').attr('class', 'label').attr('x', (L.m.l + L.W - L.m.r) / 2).attr('y', L.H - 4).attr('text-anchor', 'middle')
       .text(L.W < 560 ? 'retention time (min)' : 'retention time (min): each batch on its own clock → the shared latent clock');
@@ -290,6 +294,126 @@ function interp(xs, ys, x, monotoneX = false) {
   while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (xs[mid] <= x) lo = mid; else hi = mid; }
   const f = (x - xs[lo]) / (xs[hi] - xs[lo] || 1);
   return ys[lo] + f * (ys[hi] - ys[lo]);
+}
+
+// ── 01 one real run (fig 1 a) ───────────────────────────────────────────────
+
+function setupSample(sample) {
+  const d3 = window.d3;
+  const box = $('#sample-chart');
+  const T = sample.time_min, rows = sample.log_intensity.rows;
+  const nT = T.length, nM = rows[0].length, mz0 = sample.mz_range[0];
+  const { log10_min: lo, log10_max: hi, levels } = sample.log_intensity;
+  // Spectrum of any bin, from the display matrix (undo the log and the 1e-4 floor; normalise to 100).
+  const floor = 10 ** hi * 1e-4;
+  const spectrum = (i) => {
+    const v = rows[i].map((q) => Math.max(0, 10 ** (lo + (q / levels) * (hi - lo)) - floor));
+    const m = Math.max(...v) || 1;
+    return v.map((x) => (100 * x) / m);
+  };
+  let idx = sample.apex_index;
+  let parts = null;
+
+  function draw() {
+    box.innerHTML = '';
+    const wrap = document.createElement('div'); wrap.className = 'sample';
+    const ticEl = document.createElement('div'); ticEl.className = 'tic';
+    const heat = document.createElement('div'); heat.className = 'heat'; heat.tabIndex = 0;
+    heat.setAttribute('role', 'slider'); heat.setAttribute('aria-label', 'Retention time');
+    heat.setAttribute('aria-valuemin', String(T[0])); heat.setAttribute('aria-valuemax', String(T[nT - 1]));
+    const canvas = document.createElement('canvas');
+    const play = document.createElement('div'); play.className = 'playhead';
+    heat.append(canvas, play);
+    const ax = document.createElement('div'); ax.className = 'ax';
+    ax.innerHTML = `<span>${T[0].toFixed(0)} min</span><span>retention time → · m/z ${mz0}–${mz0 + nM - 1} upwards</span><span>${T[nT - 1].toFixed(0)} min</span>`;
+    const heatCol = document.createElement('div'); heatCol.style.gridColumn = '1'; heatCol.append(heat, ax);
+    const specEl = document.createElement('div'); specEl.className = 'spec';
+    wrap.append(ticEl, heatCol, specEl);
+    box.appendChild(wrap);
+
+    // Heatmap: one pixel per (bin, m/z), m/z upwards, ink on the page colour.
+    canvas.width = nT; canvas.height = nM;
+    const ctx = canvas.getContext('2d');
+    const img = ctx.createImageData(nT, nM);
+    // Page colour → accent → ink, with a gamma that lifts the faint ions without flattening the peaks.
+    const toAccent = d3.interpolateLab(css('--surface'), css('--accent')), toInk = d3.interpolateLab(css('--accent'), css('--ink'));
+    const ramp = d3.range(levels + 1).map((q) => {
+      const u = Math.pow(q / levels, 0.75);
+      return d3.rgb(u < 0.6 ? toAccent(u / 0.6) : toInk((u - 0.6) / 0.4));
+    });
+    for (let i = 0; i < nT; i++) {
+      for (let m = 0; m < nM; m++) {
+        const c = ramp[rows[i][m]], p = 4 * ((nM - 1 - m) * nT + i);
+        img.data[p] = c.r; img.data[p + 1] = c.g; img.data[p + 2] = c.b; img.data[p + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+
+    // TIC above, aligned with the heatmap's width.
+    const W = Math.max(200, heat.clientWidth), H = 70;
+    const x = d3.scaleLinear().domain([0, nT - 1]).range([0, W]);
+    const y = d3.scaleLinear().domain([0, 1]).range([H - 2, 6]);
+    const tsvg = svgIn(ticEl, W, H);
+    const tline = tsvg.append('path').datum(sample.tic).attr('fill', 'none').attr('stroke', css('--ink')).attr('stroke-width', 1.2)
+      .attr('d', d3.line().x((d, i) => x(i)).y((d) => y(d)).curve(d3.curveMonotoneX));
+    tsvg.append('path').datum(sample.tic).attr('fill', css('--accent')).attr('fill-opacity', 0.12)
+      .attr('d', d3.area().x((d, i) => x(i)).y0(H - 2).y1((d) => y(d)).curve(d3.curveMonotoneX));
+    drawIn(tline, 1400);
+    const tmark = tsvg.append('circle').attr('r', 3.5).attr('fill', css('--bad'));
+    tsvg.append('text').attr('class', 'label').attr('x', 2).attr('y', 11).text('TIC');
+
+    // Spectrum panel.
+    const SW = Math.max(200, specEl.clientWidth || 230), SH = 300;
+    const ssvg = svgIn(specEl, SW, SH);
+    const sm = { t: 22, r: 8, b: 30, l: 8 };
+    const sx = d3.scaleLinear().domain([mz0, mz0 + nM - 1]).range([sm.l, SW - sm.r]);
+    const sy = d3.scaleLinear().domain([0, 118]).range([SH - sm.b, sm.t]);
+    ssvg.append('g').attr('class', 'axis').attr('transform', `translate(0,${SH - sm.b})`).call(d3.axisBottom(sx).ticks(5));
+    ssvg.append('text').attr('class', 'label').attr('x', (sm.l + SW - sm.r) / 2).attr('y', SH - 2).attr('text-anchor', 'middle').text('m/z');
+    const stitle = ssvg.append('text').attr('class', 'title').attr('x', sm.l).attr('y', 13);
+    const bars = ssvg.append('g').selectAll('line').data(d3.range(nM)).join('line')
+      .attr('x1', (m) => sx(mz0 + m)).attr('x2', (m) => sx(mz0 + m)).attr('y1', sy(0)).attr('y2', sy(0))
+      .attr('stroke', css('--ink')).attr('stroke-width', 1);
+    const labels = ssvg.append('g');
+    parts = { W, x, y, play, tmark, stitle, bars, labels, sx, sy, heat };
+
+    const setFromEvent = (ev) => {
+      const r = heat.getBoundingClientRect();
+      const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+      idx = Math.max(0, Math.min(nT - 1, Math.round((cx / r.width) * (nT - 1))));
+      render(false);
+    };
+    heat.addEventListener('pointermove', setFromEvent);
+    heat.addEventListener('pointerdown', setFromEvent);
+    ticEl.addEventListener('pointermove', setFromEvent);
+    heat.addEventListener('keydown', (ev) => {
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        idx = Math.max(0, Math.min(nT - 1, idx + (ev.key === 'ArrowRight' ? 1 : -1)));
+        render(false);
+      }
+    });
+    render(true);
+  }
+
+  function render(animate) {
+    if (!parts) return;
+    const { W, x, y, play, tmark, stitle, bars, labels, sx, sy, heat } = parts;
+    play.style.left = `${(idx / (nT - 1)) * 100}%`;
+    tmark.attr('cx', x(idx)).attr('cy', y(sample.tic[idx]));
+    heat.setAttribute('aria-valuenow', String(T[idx]));
+    heat.setAttribute('aria-valuetext', `${T[idx].toFixed(2)} minutes`);
+    const sp = spectrum(idx);
+    stitle.text(`spectrum at ${T[idx].toFixed(2)} min`);
+    bars.transition().duration(animate && !reduceMotion ? 700 : 0).attr('y2', (m) => sy(sp[m]));
+    const top = d3.range(sp.length).sort((a, b) => sp[b] - sp[a]).slice(0, 3);
+    labels.selectAll('text').data(top).join('text').attr('class', 'axis').attr('text-anchor', 'middle').style('font-size', '10px')
+      .attr('x', (m) => sx(mz0 + m)).attr('y', (m) => sy(sp[m]) - 4).text((m) => mz0 + m);
+    void W;
+  }
+
+  $('#sample-apex').addEventListener('click', () => { idx = sample.apex_index; render(true); });
+  register(box, draw);
 }
 
 // ── 01 the graph zoo and the true drift ─────────────────────────────────────
@@ -929,10 +1053,11 @@ function setupLegend(meta) {
 async function main() {
   setupChrome();
   if (!window.d3) { root.classList.remove('has-js'); return; }   // CDN blocked: the static page stands
-  const [meta, grid, graphs, breakdown, lam, scaling, fig4a, fish, world, numbers] = await Promise.all(
-    ['meta', 'grid', 'graphs', 'breakdown', 'lambda', 'scaling', 'fig4a', 'fish', 'world', 'numbers'].map(loadJSON));
+  const [meta, grid, graphs, breakdown, lam, scaling, fig4a, fish, world, sample, numbers] = await Promise.all(
+    ['meta', 'grid', 'graphs', 'breakdown', 'lambda', 'scaling', 'fig4a', 'fish', 'world', 'sample', 'numbers'].map(loadJSON));
   setupCounters(numbers);
   setupHero(world);
+  setupSample(sample);
   setupZoo(meta, graphs);
   setupDrift(world);
   setupLegend(meta);

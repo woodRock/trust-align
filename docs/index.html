@@ -103,12 +103,24 @@
 <!-- 01 ─────────────────────────────────────────────────────────────────── -->
 <section class="chapter" id="graphs">
   <div class="chapter-head reveal">
-    <div class="kicker">01 — THE ANCHOR GRAPH</div>
+    <div class="kicker">01 — THE DATA AND THE ANCHOR GRAPH</div>
     <h2>Six ways to connect <var>K</var> batches, three budgets, three doses of corruption</h2>
     <p class="intro">A spectral anchor is one compound seen in two batches: one pair of retention times. Anchors turn the batches
       into a graph, and a method is a rule for turning that graph into a map <var>g</var><sub><var>k</var>→<var>l</var></sub> for
       every ordered pair, anchors or not. Each connected pair keeps <var>B</var> anchors; a share <var>ε</var> of them is moved by
       a fixed, large amount, as a wrong spectral match would be.</p>
+  </div>
+  <div class="card reveal sample-card">
+    <div class="card-head">
+      <div>
+        <h3>One real GC–MS run</h3>
+        <p class="sub">Fish oil sample <data data-key="sample|id">1___SNA1_Liver_Male_A</data> (batch <data data-key="sample|batch">sep2015</data>), <data data-key="sample|window">10–30</data> min, <var>m/z</var> <data data-key="sample|mz">40–400</data>. Every retention-time slice holds a whole mass spectrum; an anchor is the same spectrum found in two batches.</p>
+      </div>
+      <button class="small-btn js-only" id="sample-apex" type="button">Jump to the tallest peak</button>
+    </div>
+    <div class="chart" id="sample-chart" role="img" aria-label="A real fish oil GC-MS run: the total ion chromatogram above a heatmap of log intensity over retention time and m/z, with the mass spectrum at the selected retention time to the right. Move the pointer across the heatmap to scrub through retention time."></div>
+    <noscript><p class="caption">The interactive view needs JavaScript; its data is in <a href="data/sample.json">sample.json</a>.</p></noscript>
+    <p class="caption">Hover or drag across the run to scrub; arrow keys step one bin. Top: total ion chromatogram; middle: log intensity, retention time across and <var>m/z</var> up; right: the spectrum under the playhead, normalised to its largest ion. The tallest apex, at <data data-key="sample|apex_min">14.40</data> min, is dominated by <var>m/z</var> <data data-key="sample|top_ions">55, 74, 87</data>. The display matrix is quantised to 8 bits. <a class="data-link" href="data/sample.json">Data</a></p>
   </div>
   <div class="grid-2 wide-left">
     <div class="card reveal">
