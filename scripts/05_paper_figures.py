@@ -35,7 +35,11 @@ them); the script stops if any recomputed median differs from the committed repo
 arrays it plots are written to results/cache_plot_data.npz (git-ignored), captions with computed
 numbers to figs/paper/captions_tai.md.
 
-Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper]
+With --site, panels (b) and (c) of fig 1 and fig 2 are also written as SVG, in a light and a dark
+variant, to docs/assets/ for the project website (never panel (a): a figure of a real fish oil sample
+is shown only after the collaborators agree). Site data itself is scripts/06_site_data.py's.
+
+Usage: python3.11 scripts/05_paper_figures.py [--out figs/paper] [--site [docs/assets]]
 """
 from __future__ import annotations
 
@@ -196,6 +200,24 @@ def _despine(ax) -> None:
 def _save(fig, out: Path, name: str) -> Path:
     path = out / f'{name}.pdf'
     fig.savefig(path, bbox_inches='tight', pad_inches=0.04, dpi=300)
+    return path
+
+
+# The website's two colour themes: ink (text, axes, neutral lines) and the panel background that
+# labels and legends sit on. The data colours (C, viridis) are the same in both.
+SITE_THEMES = {'light': ('#1f1f1f', '#ffffff'), 'dark': ('#d9d9d4', '#161616')}
+
+
+def _site_rc(ink: str) -> dict:
+    return {'text.color': ink, 'axes.labelcolor': ink, 'axes.edgecolor': ink, 'xtick.color': ink,
+            'ytick.color': ink, 'svg.fonttype': 'none', 'font.family': 'sans-serif',
+            'font.sans-serif': ['Helvetica Neue', 'Helvetica', 'Arial', 'DejaVu Sans']}
+
+
+def _save_svg(fig, out: Path, name: str) -> Path:
+    path = out / f'{name}.svg'
+    fig.savefig(path, format='svg', bbox_inches='tight', pad_inches=0.04, transparent=True,
+                metadata={'Date': None})
     return path
 
 
@@ -370,7 +392,7 @@ def fish_sample(data: Path):
 
 def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
     plt = _plt()
-    from jointalign.synthetic import BIN_MIN, TIME_AXIS
+    from jointalign.synthetic import BIN_MIN
     from matplotlib.gridspec import GridSpec
     cols = batch_colors(world.K)
     fig = plt.figure(figsize=(DOUBLE, 2.4))
@@ -424,55 +446,11 @@ def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
 
     # (b) four batch TICs of the test world, one anchor chain and one corrupted anchor
     ax = fig.add_subplot(gs[1])
-    gap = 1.25
-    off = {k: (len(SHOW) - 1 - r) * gap for r, k in enumerate(SHOW)}
-    tics = {k: world.tic_raws[k][0] / world.tic_raws[k][0].max() for k in SHOW}
-    lvl = lambda k, t: off[k] + np.interp(t, TIME_AXIS, tics[k])
-    for k in SHOW:
-        ax.plot(TIME_AXIS, tics[k] + off[k], color=cols[k], lw=0.7)
-        ax.text(44.5, off[k] + 0.15, f'batch {k}', color=cols[k], fontsize=6.8, va='bottom', ha='right',
-                bbox=dict(facecolor='white', alpha=0.75, edgecolor='none', pad=0.5))
-    tau = np.asarray(world.truth['compound_tau_min'])
-    h0 = np.interp(tau + world.specs[SHOW[0]].drift(tau), TIME_AXIS, tics[SHOW[0]])
-    sel = (tau > 15) & (tau < 25)
-    tc = float(tau[sel][np.argmax(h0[sel])])                 # tallest batch-0 compound, 15–25 min latent
-    xs = [tc + world.specs[k].drift(tc) for k in SHOW]
-    ys = [lvl(k, x) + 0.1 for k, x in zip(SHOW, xs)]
-    ax.plot(xs, ys, ls=':', color='k', lw=0.9)
-    ax.plot(xs, ys, 'v', color='k', ms=3.5, label='valid chain')
-    a, b, ta, tb_true, tb_bad = cell_bad
-    ya = lvl(a, ta * BIN_MIN) + 0.1
-    yb_true = lvl(b, tb_true * BIN_MIN) + 0.1
-    yb_bad = lvl(b, tb_bad * BIN_MIN) + 0.1
-    ax.plot([ta * BIN_MIN, tb_true * BIN_MIN], [ya, yb_true], ls=':', color='0.45', lw=0.8)
-    ax.plot([ta * BIN_MIN, tb_bad * BIN_MIN], [ya, yb_bad], ls='--', color=C['bad'], lw=0.9)
-    ax.plot(ta * BIN_MIN, ya, 'v', color=C['bad'], ms=3.5)
-    ax.plot(tb_true * BIN_MIN, yb_true, 'v', color='0.45', ms=3.5)
-    ax.plot(tb_bad * BIN_MIN, yb_bad, 'x', color=C['bad'], ms=4.5, mew=1.2,
-            label=f'corrupted ({tb_bad - tb_true:+.0f} bins)')
-    ax.set_xlim(0, 45)
-    ax.set_ylim(-0.1, off[SHOW[0]] + 1.85)
-    ax.set_yticks([])
-    ax.spines['left'].set_visible(False)
-    ax.set_xlabel('retention time in each batch (min)')
-    ax.legend(loc='upper left', fontsize=7.0, handlelength=1.2, borderaxespad=0.2, ncol=1,
-              frameon=True, facecolor='white', framealpha=0.85, edgecolor='none')
-    _title(ax, 'b', f'Multi-batch TICs (K = {world.K})')
-    _despine(ax)
+    tc, a, b, tb_true, tb_bad = panel_1b(ax, world, cell_bad, cols)
 
     # (c) true drift of every batch
     ax = fig.add_subplot(gs[2])
-    drifts = np.array([s.drift(TIME_AXIS) for s in world.specs])
-    for k in range(world.K):
-        ax.plot(TIME_AXIS, drifts[k], color=cols[k], lw=1.0)
-    ax.axhline(0, color='0.75', lw=0.5, zorder=0)
-    ax.set_xlim(0, 45)
-    ax.set_ylim(-3.5, 3.5)
-    ax.set_yticks([-3, -2, -1, 0, 1, 2, 3])
-    ax.set_xlabel('latent retention time (min)')
-    ax.set_ylabel(r'true drift $d_k^*(t)$ (min)')
-    _title(ax, 'c', f'True drift (K = {world.K})')
-    _despine(ax)
+    drifts = panel_1c(ax, world, cols)
 
     p = _save(fig, out, 'fig1_data')
     plt.close(fig)
@@ -486,6 +464,65 @@ def fig1(out: Path, world, cell_bad, fish) -> tuple[Path, str]:
            f'ε = {CORRUPT_CELL[3]:.0%} cell, moved {tb_bad - tb_true:+.1f} bins. (c) True drifts span '
            f'{drifts.min():+.2f} to {drifts.max():+.2f} min.')
     return p, cap
+
+
+def panel_1b(ax, world, cell_bad, cols, ink: str = 'k', bg: str = 'white') -> tuple:
+    """Fig 1 (b): four batch TICs, one compound's anchor chain and one corrupted anchor. Returns the
+    chain compound's latent time, the corrupted pair and its true and corrupted times (bins)."""
+    from jointalign.synthetic import BIN_MIN, TIME_AXIS
+    gap = 1.25
+    off = {k: (len(SHOW) - 1 - r) * gap for r, k in enumerate(SHOW)}
+    tics = {k: world.tic_raws[k][0] / world.tic_raws[k][0].max() for k in SHOW}
+    lvl = lambda k, t: off[k] + np.interp(t, TIME_AXIS, tics[k])
+    for k in SHOW:
+        ax.plot(TIME_AXIS, tics[k] + off[k], color=cols[k], lw=0.7)
+        ax.text(44.5, off[k] + 0.15, f'batch {k}', color=cols[k], fontsize=6.8, va='bottom', ha='right',
+                bbox=dict(facecolor=bg, alpha=0.75, edgecolor='none', pad=0.5))
+    tau = np.asarray(world.truth['compound_tau_min'])
+    h0 = np.interp(tau + world.specs[SHOW[0]].drift(tau), TIME_AXIS, tics[SHOW[0]])
+    sel = (tau > 15) & (tau < 25)
+    tc = float(tau[sel][np.argmax(h0[sel])])                 # tallest batch-0 compound, 15–25 min latent
+    xs = [tc + world.specs[k].drift(tc) for k in SHOW]
+    ys = [lvl(k, x) + 0.1 for k, x in zip(SHOW, xs)]
+    ax.plot(xs, ys, ls=':', color=ink, lw=0.9)
+    ax.plot(xs, ys, 'v', color=ink, ms=3.5, label='valid chain')
+    a, b, ta, tb_true, tb_bad = cell_bad
+    ya = lvl(a, ta * BIN_MIN) + 0.1
+    yb_true = lvl(b, tb_true * BIN_MIN) + 0.1
+    yb_bad = lvl(b, tb_bad * BIN_MIN) + 0.1
+    ax.plot([ta * BIN_MIN, tb_true * BIN_MIN], [ya, yb_true], ls=':', color='0.55', lw=0.8)
+    ax.plot([ta * BIN_MIN, tb_bad * BIN_MIN], [ya, yb_bad], ls='--', color=C['bad'], lw=0.9)
+    ax.plot(ta * BIN_MIN, ya, 'v', color=C['bad'], ms=3.5)
+    ax.plot(tb_true * BIN_MIN, yb_true, 'v', color='0.55', ms=3.5)
+    ax.plot(tb_bad * BIN_MIN, yb_bad, 'x', color=C['bad'], ms=4.5, mew=1.2,
+            label=f'corrupted ({tb_bad - tb_true:+.0f} bins)')
+    ax.set_xlim(0, 45)
+    ax.set_ylim(-0.1, off[SHOW[0]] + 1.85)
+    ax.set_yticks([])
+    ax.spines['left'].set_visible(False)
+    ax.set_xlabel('retention time in each batch (min)')
+    ax.legend(loc='upper left', fontsize=7.0, handlelength=1.2, borderaxespad=0.2, ncol=1,
+              frameon=True, facecolor=bg, framealpha=0.85, edgecolor='none')
+    _title(ax, 'b', f'Multi-batch TICs (K = {world.K})')
+    _despine(ax)
+    return tc, a, b, tb_true, tb_bad
+
+
+def panel_1c(ax, world, cols) -> np.ndarray:
+    """Fig 1 (c): the true drift of every batch. Returns the drift curves (batches × time)."""
+    from jointalign.synthetic import TIME_AXIS
+    drifts = np.array([s.drift(TIME_AXIS) for s in world.specs])
+    for k in range(world.K):
+        ax.plot(TIME_AXIS, drifts[k], color=cols[k], lw=1.0)
+    ax.axhline(0, color='0.6', lw=0.5, zorder=0)
+    ax.set_xlim(0, 45)
+    ax.set_ylim(-3.5, 3.5)
+    ax.set_yticks([-3, -2, -1, 0, 1, 2, 3])
+    ax.set_xlabel('latent retention time (min)')
+    ax.set_ylabel(r'true drift $d_k^*(t)$ (min)')
+    _title(ax, 'c', f'True drift (K = {world.K})')
+    _despine(ax)
+    return drifts
 
 
 def corrupted_anchor(world, anchors, s02) -> tuple:
@@ -513,32 +550,35 @@ def corrupted_anchor(world, anchors, s02) -> tuple:
 
 # ── Figure 2 ──────────────────────────────────────────────────────────────────
 
-def fig2(out: Path, world, anchors, s02) -> tuple[Path, str]:
-    plt = _plt()
+def graph_panels(world, anchors, s02) -> tuple:
+    """Fig 2's six (name, edges, hub) panels for the representative world: density 0.4 and the weak hub
+    exactly as script 02 drew them in DENSITY_CELL."""
     from trustalign import graphs
     K = world.K
-    cols = batch_colors(K)
     dens_edges = s02.prepare(world, anchors, DENSITY_CELL, WORLD_SEED)[0]
     weak = graphs.weak_hub(world.sizes)
-    panels = (('complete', graphs.edges_for('complete', K, world.sizes), None),
-              ('density 0.4', dens_edges, None),
-              ('ring', graphs.edges_for('ring', K, world.sizes), None),
-              ('chain', graphs.edges_for('chain', K, world.sizes), None),
-              ('star', graphs.edges_for('star', K, world.sizes), 0),
-              ('weak-star', graphs.edges_for('weak_star', K, world.sizes), weak))
+    return (('complete', graphs.edges_for('complete', K, world.sizes), None),
+            ('density 0.4', dens_edges, None),
+            ('ring', graphs.edges_for('ring', K, world.sizes), None),
+            ('chain', graphs.edges_for('chain', K, world.sizes), None),
+            ('star', graphs.edges_for('star', K, world.sizes), 0),
+            ('weak-star', graphs.edges_for('weak_star', K, world.sizes), weak))
+
+
+def draw_graphs(fig, axes, world, panels, cols, ink: str = 'k') -> None:
+    K = world.K
     ang = np.pi / 2 - 2 * np.pi * np.arange(K) / K               # batch 0 (the reference) at the top
     xy = np.c_[np.cos(ang), np.sin(ang)]
-    fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
     for i, (ax, (name, edges, hub)) in enumerate(zip(axes, panels)):
         for a, b in sorted(edges):
-            ax.plot(*xy[[a, b]].T, color='0.4', lw=0.55, zorder=1)
-        ax.scatter(*xy.T, s=16, c=cols, zorder=3, edgecolor='k', linewidth=0.3)
+            ax.plot(*xy[[a, b]].T, color='0.5', lw=0.55, zorder=1)
+        ax.scatter(*xy.T, s=16, c=cols, zorder=3, edgecolor=ink, linewidth=0.3)
         if hub is not None:
             strong = name == 'star'
             halo_col = C['Star'] if strong else C['Weak-Star']
             ax.scatter(*xy[hub], s=95, facecolor='none', zorder=2, linewidth=1.3,
                        edgecolor=halo_col, linestyle='-' if strong else (0, (1.5, 1)))
-            ax.scatter(*xy[hub], s=35, c=[cols[hub]], zorder=4, edgecolor='k', linewidth=0.4)
+            ax.scatter(*xy[hub], s=35, c=[cols[hub]], zorder=4, edgecolor=ink, linewidth=0.4)
             if strong:
                 note = f'hub: batch {hub} ({world.sizes[hub]} samples)'
             else:
@@ -550,6 +590,16 @@ def fig2(out: Path, world, anchors, s02) -> tuple[Path, str]:
         ax.set_aspect('equal')
         ax.axis('off')
     fig.subplots_adjust(wspace=0.05, left=0.0, right=1.0)
+
+
+def fig2(out: Path, world, anchors, s02) -> tuple[Path, str]:
+    plt = _plt()
+    K = world.K
+    cols = batch_colors(K)
+    panels = graph_panels(world, anchors, s02)
+    weak = panels[-1][2]
+    fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
+    draw_graphs(fig, axes, world, panels, cols)
     p = _save(fig, out, 'fig2_graphs')
     plt.close(fig)
     cap = (
@@ -772,6 +822,13 @@ def fig4(out: Path, bw: dict, counts: dict, s02) -> tuple[Path, str, dict]:
     )
     arrays = {f'fig4a|{k}': v for k, v in curves.items()}
     arrays['fig4a|t'] = t
+    arrays['fig4a|anchors_ta'] = ta                                  # min, batch a
+    arrays['fig4a|anchors_dt'] = tb - ta                             # min, anchor drift t_b − t_a
+    arrays['fig4a|anchors_bad'] = bad[m].astype(int)
+    arrays['fig4a|edge_seed'] = np.array([a, b, bw['seed']])
+    arrays['fig4a|lams'] = np.array([bw['lam'][k] for k in ('Joint cv', 'Joint fixed', 'Pairwise cv')])
+    arrays['fig4a|world_errors'] = np.array([e[k] for k in ('Joint cv', 'Joint fixed', 'Pairwise cv')])
+    arrays['fig4a|setting_median_nbroken'] = np.array([bw['median'], bw['n_broken']])
     arrays.update({f'fig4b|{tp}|{r}': np.array(counts[(tp, r)]) for tp in order for r, _, _ in F4B_RULES})
     return p, cap, {'arrays': arrays, 'totals': tot}
 
@@ -818,6 +875,32 @@ def fig5(out: Path, fish_cells, s04) -> tuple[Path, str, dict]:
     cap = (f'**fig5_fish_results.** Fish oil data (K = 5, complete graph): held-out spectral-anchor error, median '
            f'and interquartile range over {len(s04.DRAWS)} thinning/corruption draws per condition.')
     return p, cap, arrays
+
+
+# ── website figures ───────────────────────────────────────────────────────────
+
+def site_figures(site: Path, world, anchors, cell_bad, s02) -> list[Path]:
+    """Fig 1 (b, c) and fig 2 as SVG for docs/assets/, one file per colour theme (fig1_bc.svg,
+    fig1_bc_dark.svg, fig2_graphs.svg, fig2_graphs_dark.svg). Panel (a) of fig 1 is never exported."""
+    plt = _plt()
+    site.mkdir(parents=True, exist_ok=True)
+    cols = batch_colors(world.K)
+    panels = graph_panels(world, anchors, s02)
+    paths = []
+    for theme, (ink, bg) in SITE_THEMES.items():
+        suffix = '' if theme == 'light' else '_dark'
+        with plt.rc_context(_site_rc(ink)):
+            fig, (ax_b, ax_c) = plt.subplots(1, 2, figsize=(DOUBLE, 2.5), gridspec_kw={'width_ratios': [1.3, 1]})
+            panel_1b(ax_b, world, cell_bad, cols, ink=ink, bg=bg)
+            panel_1c(ax_c, world, cols)
+            fig.tight_layout(w_pad=2.0)
+            paths.append(_save_svg(fig, site, f'fig1_bc{suffix}'))
+            plt.close(fig)
+            fig, axes = plt.subplots(1, len(panels), figsize=(DOUBLE, 1.35))
+            draw_graphs(fig, axes, world, panels, cols, ink=ink)
+            paths.append(_save_svg(fig, site, f'fig2_graphs{suffix}'))
+            plt.close(fig)
+    return paths
 
 
 # ── verification ──────────────────────────────────────────────────────────────
@@ -885,7 +968,7 @@ def verify(d02, rec, tot4, fish_cells, s02, s04) -> list[str]:
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
-def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
+def main(out: Path = FIGS, results: Path = RESULTS, site: Path | None = None) -> dict:
     out.mkdir(parents=True, exist_ok=True)
     s02, s03, s04 = (_script(n) for n in ('02_full_sparsity.py', '03_diagnose_lambda.py', '04_fish_sparsity.py'))
     print('loading script 02 checkpoints …', flush=True)
@@ -922,6 +1005,9 @@ def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
     caps.append(c)
     arrays.update(a)
 
+    if site is not None:
+        paths += site_figures(site, world, anchors, cell_bad, s02)
+
     np.savez(results / 'cache_plot_data.npz', **arrays)
     (out / 'captions_tai.md').write_text('# IEEE TAI figures (scripts/05_paper_figures.py)\n\n'
                                          + '\n\n'.join(caps) + '\n')
@@ -934,5 +1020,7 @@ def main(out: Path = FIGS, results: Path = RESULTS) -> dict:
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', type=Path, default=FIGS)
+    ap.add_argument('--site', type=Path, nargs='?', const=ROOT / 'docs' / 'assets', default=None,
+                    help='also write the website\'s SVG figures (fig 1 b, c and fig 2) to this folder')
     a = ap.parse_args()
-    main(out=a.out)
+    main(out=a.out, site=a.site)
