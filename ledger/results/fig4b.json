@@ -1,0 +1,20 @@
+{
+  "name": "fig4b",
+  "label": "Figure 4 (b): broken worlds, joint, CV λ, for the topologies script 03 does not diagnose (script 05, from script 02)",
+  "metrics": {
+    "complete": {
+      "broken": 5,
+      "worlds": 240
+    },
+    "star": {
+      "broken": 11,
+      "worlds": 240
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "figs/paper/captions_tai.md",
+    "hash": "sha256:f13999294ca0e25d382ada60649b48e7069f9ba3f3cdd8b9a2f72be7faf484bf"
+  }
+}

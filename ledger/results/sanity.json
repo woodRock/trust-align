@@ -1,0 +1,61 @@
+{
+  "name": "sanity",
+  "label": "Complete graph, ε = 0, joint: test worlds with max error ≤ 0.15 min",
+  "metrics": {
+    "k5-b10": {
+      "pass": 6,
+      "worlds": 20,
+      "max-median": 0.19,
+      "max-worst": 0.461
+    },
+    "k5-b30": {
+      "pass": 10,
+      "worlds": 20,
+      "max-median": 0.152,
+      "max-worst": 0.25
+    },
+    "k5-b100": {
+      "pass": 16,
+      "worlds": 20,
+      "max-median": 0.133,
+      "max-worst": 0.34
+    },
+    "k10-b10": {
+      "pass": 4,
+      "worlds": 20,
+      "max-median": 0.235,
+      "max-worst": 0.516
+    },
+    "k10-b30": {
+      "pass": 7,
+      "worlds": 20,
+      "max-median": 0.179,
+      "max-worst": 0.406
+    },
+    "k10-b100": {
+      "pass": 10,
+      "worlds": 20,
+      "max-median": 0.147,
+      "max-worst": 0.286
+    },
+    "k20-b30": {
+      "pass": 4,
+      "worlds": 20,
+      "max-median": 0.215,
+      "max-worst": 0.42
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/full_sparsity.txt",
+    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

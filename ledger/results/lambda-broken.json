@@ -1,0 +1,80 @@
+{
+  "name": "lambda-broken",
+  "label": "Broken test worlds over the corrupted settings, by λ rule",
+  "metrics": {
+    "all": {
+      "joint-tuned": 175,
+      "joint-lambda10": 160,
+      "joint-own-cv": 156,
+      "joint-best": 143,
+      "joint-per-world": 80,
+      "pairwise-tuned": 195,
+      "pairwise-lambda10": 197,
+      "pairwise-best": 175,
+      "pairwise-per-world": 108,
+      "settings": 48,
+      "worlds": 960
+    },
+    "weak-star": {
+      "joint-tuned": 27,
+      "joint-lambda10": 22,
+      "joint-own-cv": 21,
+      "joint-best": 17,
+      "joint-per-world": 7,
+      "pairwise-tuned": 39,
+      "pairwise-lambda10": 37,
+      "pairwise-best": 36,
+      "pairwise-per-world": 20,
+      "worlds": 240
+    },
+    "chain": {
+      "joint-tuned": 71,
+      "joint-lambda10": 65,
+      "joint-own-cv": 66,
+      "joint-best": 57,
+      "joint-per-world": 32,
+      "pairwise-tuned": 74,
+      "pairwise-lambda10": 71,
+      "pairwise-best": 66,
+      "pairwise-per-world": 44,
+      "worlds": 240
+    },
+    "ring": {
+      "joint-tuned": 47,
+      "joint-lambda10": 47,
+      "joint-own-cv": 43,
+      "joint-best": 41,
+      "joint-per-world": 29,
+      "pairwise-tuned": 45,
+      "pairwise-lambda10": 45,
+      "pairwise-best": 36,
+      "pairwise-per-world": 23,
+      "worlds": 240
+    },
+    "density0.4": {
+      "joint-tuned": 30,
+      "joint-lambda10": 26,
+      "joint-own-cv": 26,
+      "joint-best": 28,
+      "joint-per-world": 12,
+      "pairwise-tuned": 37,
+      "pairwise-lambda10": 44,
+      "pairwise-best": 37,
+      "pairwise-per-world": 21,
+      "worlds": 240
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/diagnose_lambda.txt",
+    "hash": "sha256:6d84764295960ee3e4ccc1fe46fc486094731c2fe1bbfc8589b22a2809d47392",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

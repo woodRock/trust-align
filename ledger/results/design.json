@@ -1,0 +1,26 @@
+{
+  "name": "design",
+  "label": "Synthetic grid design (script 02)",
+  "metrics": {
+    "settings": 114,
+    "tuning-worlds": 3,
+    "test-worlds": 20,
+    "tuning-seed-min": 0,
+    "tuning-seed-max": 2,
+    "test-seed-min": 3,
+    "test-seed-max": 22
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/full_sparsity.txt",
+    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

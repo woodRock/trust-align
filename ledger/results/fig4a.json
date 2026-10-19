@@ -1,0 +1,32 @@
+{
+  "name": "fig4a",
+  "label": "Figure 4 (a): the broken chain world (script 05)",
+  "metrics": {
+    "world-error": {
+      "joint-cv": 1.538,
+      "joint-lambda10": 0.116,
+      "pairwise": 0.073
+    },
+    "test-world": 3,
+    "anchors": {
+      "clean": 21,
+      "corrupted": 9
+    },
+    "lambda": {
+      "joint-cv": 300,
+      "pairwise-cv": 10
+    },
+    "edge-error": {
+      "above-from": 7.9,
+      "above-to": 18.9,
+      "max": 7.63,
+      "max-late": 2.38
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "figs/paper/captions_tai.md",
+    "hash": "sha256:f13999294ca0e25d382ada60649b48e7069f9ba3f3cdd8b9a2f72be7faf484bf"
+  }
+}

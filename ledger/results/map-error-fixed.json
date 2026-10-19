@@ -1,0 +1,703 @@
+{
+  "name": "map-error-fixed",
+  "label": "Median map error (min), all pairs, fixed λ = 10",
+  "metrics": {
+    "k5-complete-b10-e0": {
+      "joint": 0.037,
+      "star": 0.063,
+      "star-weak": 0.064,
+      "pairwise": 0.054
+    },
+    "k5-complete-b10-e15": {
+      "joint": 0.037,
+      "star": 0.074,
+      "star-weak": 0.072,
+      "pairwise": 0.067
+    },
+    "k5-complete-b10-e30": {
+      "joint": 0.234,
+      "star": 0.12,
+      "star-weak": 0.266,
+      "pairwise": 0.155
+    },
+    "k5-complete-b30-e0": {
+      "joint": 0.022,
+      "star": 0.036,
+      "star-weak": 0.04,
+      "pairwise": 0.032
+    },
+    "k5-complete-b30-e15": {
+      "joint": 0.025,
+      "star": 0.04,
+      "star-weak": 0.04,
+      "pairwise": 0.037
+    },
+    "k5-complete-b30-e30": {
+      "joint": 0.033,
+      "star": 0.055,
+      "star-weak": 0.068,
+      "pairwise": 0.059
+    },
+    "k5-complete-b100-e0": {
+      "joint": 0.019,
+      "star": 0.024,
+      "star-weak": 0.024,
+      "pairwise": 0.024
+    },
+    "k5-complete-b100-e15": {
+      "joint": 0.02,
+      "star": 0.025,
+      "star-weak": 0.028,
+      "pairwise": 0.026
+    },
+    "k5-complete-b100-e30": {
+      "joint": 0.025,
+      "star": 0.027,
+      "star-weak": 0.03,
+      "pairwise": 0.028
+    },
+    "k5-star-b10-e0": {
+      "joint": 0.063,
+      "star": 0.063,
+      "star-weak": 0.071,
+      "pairwise": 0.07
+    },
+    "k5-star-b10-e15": {
+      "joint": 0.08,
+      "star": 0.08,
+      "star-weak": 0.073,
+      "pairwise": 0.104
+    },
+    "k5-star-b10-e30": {
+      "joint": 0.146,
+      "star": 0.146,
+      "star-weak": 0.131,
+      "pairwise": 0.803
+    },
+    "k5-star-b30-e0": {
+      "joint": 0.037,
+      "star": 0.037,
+      "star-weak": 0.036,
+      "pairwise": 0.041
+    },
+    "k5-star-b30-e15": {
+      "joint": 0.04,
+      "star": 0.04,
+      "star-weak": 0.039,
+      "pairwise": 0.041
+    },
+    "k5-star-b30-e30": {
+      "joint": 0.043,
+      "star": 0.043,
+      "star-weak": 0.057,
+      "pairwise": 0.104
+    },
+    "k5-star-b100-e0": {
+      "joint": 0.024,
+      "star": 0.024,
+      "star-weak": 0.027,
+      "pairwise": 0.025
+    },
+    "k5-star-b100-e15": {
+      "joint": 0.024,
+      "star": 0.024,
+      "star-weak": 0.027,
+      "pairwise": 0.025
+    },
+    "k5-star-b100-e30": {
+      "joint": 0.026,
+      "star": 0.026,
+      "star-weak": 0.03,
+      "pairwise": 0.033
+    },
+    "k5-weak-star-b10-e0": {
+      "joint": 0.066,
+      "star": 0.058,
+      "star-weak": 0.066,
+      "pairwise": 0.067
+    },
+    "k5-weak-star-b10-e15": {
+      "joint": 0.082,
+      "star": 0.108,
+      "star-weak": 0.082,
+      "pairwise": 0.111
+    },
+    "k5-weak-star-b10-e30": {
+      "joint": 0.301,
+      "star": 0.403,
+      "star-weak": 0.301,
+      "pairwise": 0.876
+    },
+    "k5-weak-star-b30-e0": {
+      "joint": 0.037,
+      "star": 0.034,
+      "star-weak": 0.037,
+      "pairwise": 0.038
+    },
+    "k5-weak-star-b30-e15": {
+      "joint": 0.044,
+      "star": 0.044,
+      "star-weak": 0.044,
+      "pairwise": 0.044
+    },
+    "k5-weak-star-b30-e30": {
+      "joint": 0.055,
+      "star": 0.057,
+      "star-weak": 0.055,
+      "pairwise": 0.136
+    },
+    "k5-weak-star-b100-e0": {
+      "joint": 0.026,
+      "star": 0.025,
+      "star-weak": 0.026,
+      "pairwise": 0.028
+    },
+    "k5-weak-star-b100-e15": {
+      "joint": 0.026,
+      "star": 0.027,
+      "star-weak": 0.026,
+      "pairwise": 0.029
+    },
+    "k5-weak-star-b100-e30": {
+      "joint": 0.033,
+      "star": 0.029,
+      "star-weak": 0.033,
+      "pairwise": 0.034
+    },
+    "k5-chain-b10-e0": {
+      "joint": 0.087,
+      "star": 0.058,
+      "star-weak": 0.073,
+      "pairwise": 0.092
+    },
+    "k5-chain-b10-e15": {
+      "joint": 0.111,
+      "star": 0.079,
+      "star-weak": 0.096,
+      "pairwise": 0.123
+    },
+    "k5-chain-b10-e30": {
+      "joint": 0.585,
+      "star": 0.292,
+      "star-weak": 0.164,
+      "pairwise": 0.907
+    },
+    "k5-chain-b30-e0": {
+      "joint": 0.041,
+      "star": 0.037,
+      "star-weak": 0.042,
+      "pairwise": 0.05
+    },
+    "k5-chain-b30-e15": {
+      "joint": 0.04,
+      "star": 0.038,
+      "star-weak": 0.038,
+      "pairwise": 0.051
+    },
+    "k5-chain-b30-e30": {
+      "joint": 0.178,
+      "star": 0.067,
+      "star-weak": 0.054,
+      "pairwise": 0.14
+    },
+    "k5-chain-b100-e0": {
+      "joint": 0.03,
+      "star": 0.026,
+      "star-weak": 0.028,
+      "pairwise": 0.033
+    },
+    "k5-chain-b100-e15": {
+      "joint": 0.03,
+      "star": 0.025,
+      "star-weak": 0.028,
+      "pairwise": 0.032
+    },
+    "k5-chain-b100-e30": {
+      "joint": 0.093,
+      "star": 0.03,
+      "star-weak": 0.028,
+      "pairwise": 0.038
+    },
+    "k5-ring-b10-e0": {
+      "joint": 0.055,
+      "star": 0.069,
+      "star-weak": 0.066,
+      "pairwise": 0.069
+    },
+    "k5-ring-b10-e15": {
+      "joint": 0.063,
+      "star": 0.082,
+      "star-weak": 0.068,
+      "pairwise": 0.084
+    },
+    "k5-ring-b10-e30": {
+      "joint": 0.572,
+      "star": 0.171,
+      "star-weak": 0.131,
+      "pairwise": 0.324
+    },
+    "k5-ring-b30-e0": {
+      "joint": 0.034,
+      "star": 0.045,
+      "star-weak": 0.038,
+      "pairwise": 0.042
+    },
+    "k5-ring-b30-e15": {
+      "joint": 0.033,
+      "star": 0.038,
+      "star-weak": 0.031,
+      "pairwise": 0.039
+    },
+    "k5-ring-b30-e30": {
+      "joint": 0.048,
+      "star": 0.049,
+      "star-weak": 0.055,
+      "pairwise": 0.092
+    },
+    "k5-ring-b100-e0": {
+      "joint": 0.023,
+      "star": 0.024,
+      "star-weak": 0.026,
+      "pairwise": 0.027
+    },
+    "k5-ring-b100-e15": {
+      "joint": 0.022,
+      "star": 0.024,
+      "star-weak": 0.026,
+      "pairwise": 0.027
+    },
+    "k5-ring-b100-e30": {
+      "joint": 0.029,
+      "star": 0.029,
+      "star-weak": 0.029,
+      "pairwise": 0.033
+    },
+    "k5-density0.4-b10-e0": {
+      "joint": 0.073,
+      "star": 0.065,
+      "star-weak": 0.062,
+      "pairwise": 0.078
+    },
+    "k5-density0.4-b10-e15": {
+      "joint": 0.084,
+      "star": 0.058,
+      "star-weak": 0.085,
+      "pairwise": 0.099
+    },
+    "k5-density0.4-b10-e30": {
+      "joint": 0.562,
+      "star": 0.151,
+      "star-weak": 0.401,
+      "pairwise": 0.945
+    },
+    "k5-density0.4-b30-e0": {
+      "joint": 0.04,
+      "star": 0.045,
+      "star-weak": 0.047,
+      "pairwise": 0.042
+    },
+    "k5-density0.4-b30-e15": {
+      "joint": 0.045,
+      "star": 0.038,
+      "star-weak": 0.038,
+      "pairwise": 0.045
+    },
+    "k5-density0.4-b30-e30": {
+      "joint": 0.057,
+      "star": 0.059,
+      "star-weak": 0.056,
+      "pairwise": 0.113
+    },
+    "k5-density0.4-b100-e0": {
+      "joint": 0.026,
+      "star": 0.025,
+      "star-weak": 0.027,
+      "pairwise": 0.027
+    },
+    "k5-density0.4-b100-e15": {
+      "joint": 0.027,
+      "star": 0.026,
+      "star-weak": 0.027,
+      "pairwise": 0.029
+    },
+    "k5-density0.4-b100-e30": {
+      "joint": 0.04,
+      "star": 0.032,
+      "star-weak": 0.035,
+      "pairwise": 0.036
+    },
+    "k10-complete-b10-e0": {
+      "joint": 0.027,
+      "star": 0.063,
+      "star-weak": 0.066,
+      "pairwise": 0.055
+    },
+    "k10-complete-b10-e15": {
+      "joint": 0.028,
+      "star": 0.079,
+      "star-weak": 0.09,
+      "pairwise": 0.068
+    },
+    "k10-complete-b10-e30": {
+      "joint": 0.04,
+      "star": 0.153,
+      "star-weak": 0.357,
+      "pairwise": 0.145
+    },
+    "k10-complete-b30-e0": {
+      "joint": 0.022,
+      "star": 0.035,
+      "star-weak": 0.038,
+      "pairwise": 0.033
+    },
+    "k10-complete-b30-e15": {
+      "joint": 0.022,
+      "star": 0.039,
+      "star-weak": 0.045,
+      "pairwise": 0.036
+    },
+    "k10-complete-b30-e30": {
+      "joint": 0.031,
+      "star": 0.048,
+      "star-weak": 0.059,
+      "pairwise": 0.059
+    },
+    "k10-complete-b100-e0": {
+      "joint": 0.019,
+      "star": 0.022,
+      "star-weak": 0.026,
+      "pairwise": 0.024
+    },
+    "k10-complete-b100-e15": {
+      "joint": 0.019,
+      "star": 0.024,
+      "star-weak": 0.03,
+      "pairwise": 0.024
+    },
+    "k10-complete-b100-e30": {
+      "joint": 0.026,
+      "star": 0.025,
+      "star-weak": 0.036,
+      "pairwise": 0.029
+    },
+    "k10-star-b10-e0": {
+      "joint": 0.066,
+      "star": 0.066,
+      "star-weak": 0.066,
+      "pairwise": 0.07
+    },
+    "k10-star-b10-e15": {
+      "joint": 0.092,
+      "star": 0.092,
+      "star-weak": 0.095,
+      "pairwise": 0.117
+    },
+    "k10-star-b10-e30": {
+      "joint": 0.142,
+      "star": 0.142,
+      "star-weak": 0.24,
+      "pairwise": 0.711
+    },
+    "k10-star-b30-e0": {
+      "joint": 0.035,
+      "star": 0.035,
+      "star-weak": 0.033,
+      "pairwise": 0.037
+    },
+    "k10-star-b30-e15": {
+      "joint": 0.039,
+      "star": 0.039,
+      "star-weak": 0.039,
+      "pairwise": 0.043
+    },
+    "k10-star-b30-e30": {
+      "joint": 0.044,
+      "star": 0.044,
+      "star-weak": 0.049,
+      "pairwise": 0.183
+    },
+    "k10-star-b100-e0": {
+      "joint": 0.022,
+      "star": 0.022,
+      "star-weak": 0.024,
+      "pairwise": 0.023
+    },
+    "k10-star-b100-e15": {
+      "joint": 0.024,
+      "star": 0.024,
+      "star-weak": 0.027,
+      "pairwise": 0.026
+    },
+    "k10-star-b100-e30": {
+      "joint": 0.025,
+      "star": 0.025,
+      "star-weak": 0.025,
+      "pairwise": 0.031
+    },
+    "k10-weak-star-b10-e0": {
+      "joint": 0.073,
+      "star": 0.055,
+      "star-weak": 0.073,
+      "pairwise": 0.075
+    },
+    "k10-weak-star-b10-e15": {
+      "joint": 0.085,
+      "star": 0.048,
+      "star-weak": 0.085,
+      "pairwise": 0.116
+    },
+    "k10-weak-star-b10-e30": {
+      "joint": 0.301,
+      "star": 0.111,
+      "star-weak": 0.301,
+      "pairwise": 0.688
+    },
+    "k10-weak-star-b30-e0": {
+      "joint": 0.038,
+      "star": 0.038,
+      "star-weak": 0.038,
+      "pairwise": 0.041
+    },
+    "k10-weak-star-b30-e15": {
+      "joint": 0.047,
+      "star": 0.038,
+      "star-weak": 0.047,
+      "pairwise": 0.043
+    },
+    "k10-weak-star-b30-e30": {
+      "joint": 0.057,
+      "star": 0.052,
+      "star-weak": 0.057,
+      "pairwise": 0.097
+    },
+    "k10-weak-star-b100-e0": {
+      "joint": 0.025,
+      "star": 0.024,
+      "star-weak": 0.025,
+      "pairwise": 0.026
+    },
+    "k10-weak-star-b100-e15": {
+      "joint": 0.03,
+      "star": 0.027,
+      "star-weak": 0.03,
+      "pairwise": 0.028
+    },
+    "k10-weak-star-b100-e30": {
+      "joint": 0.038,
+      "star": 0.028,
+      "star-weak": 0.038,
+      "pairwise": 0.037
+    },
+    "k10-chain-b10-e0": {
+      "joint": 0.092,
+      "star": 0.063,
+      "star-weak": 0.066,
+      "pairwise": 0.104
+    },
+    "k10-chain-b10-e15": {
+      "joint": 0.226,
+      "star": 0.081,
+      "star-weak": 0.115,
+      "pairwise": 0.25
+    },
+    "k10-chain-b10-e30": {
+      "joint": 0.846,
+      "star": 1.296,
+      "star-weak": 0.162,
+      "pairwise": 1.687
+    },
+    "k10-chain-b30-e0": {
+      "joint": 0.062,
+      "star": 0.04,
+      "star-weak": 0.046,
+      "pairwise": 0.065
+    },
+    "k10-chain-b30-e15": {
+      "joint": 0.093,
+      "star": 0.043,
+      "star-weak": 0.045,
+      "pairwise": 0.07
+    },
+    "k10-chain-b30-e30": {
+      "joint": 0.203,
+      "star": 0.066,
+      "star-weak": 0.062,
+      "pairwise": 0.533
+    },
+    "k10-chain-b100-e0": {
+      "joint": 0.038,
+      "star": 0.028,
+      "star-weak": 0.031,
+      "pairwise": 0.044
+    },
+    "k10-chain-b100-e15": {
+      "joint": 0.049,
+      "star": 0.027,
+      "star-weak": 0.031,
+      "pairwise": 0.042
+    },
+    "k10-chain-b100-e30": {
+      "joint": 0.083,
+      "star": 0.032,
+      "star-weak": 0.033,
+      "pairwise": 0.068
+    },
+    "k10-ring-b10-e0": {
+      "joint": 0.062,
+      "star": 0.062,
+      "star-weak": 0.057,
+      "pairwise": 0.085
+    },
+    "k10-ring-b10-e15": {
+      "joint": 0.099,
+      "star": 0.077,
+      "star-weak": 0.074,
+      "pairwise": 0.145
+    },
+    "k10-ring-b10-e30": {
+      "joint": 0.671,
+      "star": 0.179,
+      "star-weak": 0.133,
+      "pairwise": 1.245
+    },
+    "k10-ring-b30-e0": {
+      "joint": 0.039,
+      "star": 0.038,
+      "star-weak": 0.039,
+      "pairwise": 0.052
+    },
+    "k10-ring-b30-e15": {
+      "joint": 0.044,
+      "star": 0.043,
+      "star-weak": 0.047,
+      "pairwise": 0.057
+    },
+    "k10-ring-b30-e30": {
+      "joint": 0.267,
+      "star": 0.052,
+      "star-weak": 0.057,
+      "pairwise": 0.318
+    },
+    "k10-ring-b100-e0": {
+      "joint": 0.028,
+      "star": 0.025,
+      "star-weak": 0.031,
+      "pairwise": 0.038
+    },
+    "k10-ring-b100-e15": {
+      "joint": 0.027,
+      "star": 0.025,
+      "star-weak": 0.032,
+      "pairwise": 0.036
+    },
+    "k10-ring-b100-e30": {
+      "joint": 0.117,
+      "star": 0.029,
+      "star-weak": 0.032,
+      "pairwise": 0.052
+    },
+    "k10-density0.4-b10-e0": {
+      "joint": 0.045,
+      "star": 0.068,
+      "star-weak": 0.076,
+      "pairwise": 0.067
+    },
+    "k10-density0.4-b10-e15": {
+      "joint": 0.048,
+      "star": 0.088,
+      "star-weak": 0.091,
+      "pairwise": 0.105
+    },
+    "k10-density0.4-b10-e30": {
+      "joint": 0.21,
+      "star": 0.129,
+      "star-weak": 0.391,
+      "pairwise": 0.666
+    },
+    "k10-density0.4-b30-e0": {
+      "joint": 0.03,
+      "star": 0.035,
+      "star-weak": 0.041,
+      "pairwise": 0.04
+    },
+    "k10-density0.4-b30-e15": {
+      "joint": 0.031,
+      "star": 0.042,
+      "star-weak": 0.043,
+      "pairwise": 0.043
+    },
+    "k10-density0.4-b30-e30": {
+      "joint": 0.042,
+      "star": 0.058,
+      "star-weak": 0.053,
+      "pairwise": 0.096
+    },
+    "k10-density0.4-b100-e0": {
+      "joint": 0.023,
+      "star": 0.027,
+      "star-weak": 0.027,
+      "pairwise": 0.027
+    },
+    "k10-density0.4-b100-e15": {
+      "joint": 0.024,
+      "star": 0.026,
+      "star-weak": 0.029,
+      "pairwise": 0.027
+    },
+    "k10-density0.4-b100-e30": {
+      "joint": 0.034,
+      "star": 0.026,
+      "star-weak": 0.031,
+      "pairwise": 0.037
+    },
+    "k20-complete-b30-e0": {
+      "joint": 0.02,
+      "star": 0.039,
+      "star-weak": 0.039,
+      "pairwise": 0.035
+    },
+    "k20-complete-b30-e15": {
+      "joint": 0.023,
+      "star": 0.041,
+      "star-weak": 0.043,
+      "pairwise": 0.037
+    },
+    "k20-chain-b30-e0": {
+      "joint": 0.074,
+      "star": 0.045,
+      "star-weak": 0.053,
+      "pairwise": 0.094
+    },
+    "k20-chain-b30-e15": {
+      "joint": 0.135,
+      "star": 0.049,
+      "star-weak": 0.055,
+      "pairwise": 0.107
+    },
+    "k20-density0.4-b30-e0": {
+      "joint": 0.024,
+      "star": 0.041,
+      "star-weak": 0.042,
+      "pairwise": 0.042
+    },
+    "k20-density0.4-b30-e15": {
+      "joint": 0.028,
+      "star": 0.044,
+      "star-weak": 0.047,
+      "pairwise": 0.044
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/full_sparsity.txt",
+    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

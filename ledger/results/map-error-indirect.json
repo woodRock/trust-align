@@ -1,0 +1,489 @@
+{
+  "name": "map-error-indirect",
+  "label": "Median map error (min), pairs without direct anchors",
+  "metrics": {
+    "k5-star-b10-e0": {
+      "joint": 0.058,
+      "pairwise": 0.063,
+      "pchip": 0.14
+    },
+    "k5-star-b10-e15": {
+      "joint": 0.082,
+      "pairwise": 0.147,
+      "pchip": 0.642
+    },
+    "k5-star-b10-e30": {
+      "joint": 0.177,
+      "pairwise": 1.286,
+      "pchip": 2.271
+    },
+    "k5-star-b30-e0": {
+      "joint": 0.035,
+      "pairwise": 0.035,
+      "pchip": 0.102
+    },
+    "k5-star-b30-e15": {
+      "joint": 0.045,
+      "pairwise": 0.041,
+      "pchip": 1.112
+    },
+    "k5-star-b30-e30": {
+      "joint": 0.073,
+      "pairwise": 0.128,
+      "pchip": 3.561
+    },
+    "k5-star-b100-e0": {
+      "joint": 0.023,
+      "pairwise": 0.024,
+      "pchip": 0.105
+    },
+    "k5-star-b100-e15": {
+      "joint": 0.023,
+      "pairwise": 0.025,
+      "pchip": 2.668
+    },
+    "k5-star-b100-e30": {
+      "joint": 0.026,
+      "pairwise": 0.042,
+      "pchip": 4.779
+    },
+    "k5-weak-star-b10-e0": {
+      "joint": 0.074,
+      "pairwise": 0.074,
+      "pchip": 0.145
+    },
+    "k5-weak-star-b10-e15": {
+      "joint": 0.08,
+      "pairwise": 0.096,
+      "pchip": 0.911
+    },
+    "k5-weak-star-b10-e30": {
+      "joint": 0.932,
+      "pairwise": 1.227,
+      "pchip": 2.514
+    },
+    "k5-weak-star-b30-e0": {
+      "joint": 0.035,
+      "pairwise": 0.035,
+      "pchip": 0.111
+    },
+    "k5-weak-star-b30-e15": {
+      "joint": 0.04,
+      "pairwise": 0.043,
+      "pchip": 0.939
+    },
+    "k5-weak-star-b30-e30": {
+      "joint": 0.125,
+      "pairwise": 0.179,
+      "pchip": 3.279
+    },
+    "k5-weak-star-b100-e0": {
+      "joint": 0.028,
+      "pairwise": 0.028,
+      "pchip": 0.097
+    },
+    "k5-weak-star-b100-e15": {
+      "joint": 0.028,
+      "pairwise": 0.021,
+      "pchip": 2.487
+    },
+    "k5-weak-star-b100-e30": {
+      "joint": 0.172,
+      "pairwise": 0.035,
+      "pchip": 4.763
+    },
+    "k5-chain-b10-e0": {
+      "joint": 0.103,
+      "pairwise": 0.084,
+      "pchip": 0.215
+    },
+    "k5-chain-b10-e15": {
+      "joint": 0.139,
+      "pairwise": 0.14,
+      "pchip": 1.327
+    },
+    "k5-chain-b10-e30": {
+      "joint": 0.93,
+      "pairwise": 1.567,
+      "pchip": 2.894
+    },
+    "k5-chain-b30-e0": {
+      "joint": 0.052,
+      "pairwise": 0.046,
+      "pchip": 0.169
+    },
+    "k5-chain-b30-e15": {
+      "joint": 0.07,
+      "pairwise": 0.049,
+      "pchip": 1.501
+    },
+    "k5-chain-b30-e30": {
+      "joint": 2.292,
+      "pairwise": 0.612,
+      "pchip": 3.903
+    },
+    "k5-chain-b100-e0": {
+      "joint": 0.038,
+      "pairwise": 0.036,
+      "pchip": 0.176
+    },
+    "k5-chain-b100-e15": {
+      "joint": 0.042,
+      "pairwise": 0.031,
+      "pchip": 1.894
+    },
+    "k5-chain-b100-e30": {
+      "joint": 0.093,
+      "pairwise": 0.044,
+      "pchip": 4.446
+    },
+    "k5-ring-b10-e0": {
+      "joint": 0.083,
+      "pairwise": 0.076,
+      "pchip": 0.152
+    },
+    "k5-ring-b10-e15": {
+      "joint": 0.082,
+      "pairwise": 0.1,
+      "pchip": 0.816
+    },
+    "k5-ring-b10-e30": {
+      "joint": 1.032,
+      "pairwise": 1.0,
+      "pchip": 2.304
+    },
+    "k5-ring-b30-e0": {
+      "joint": 0.05,
+      "pairwise": 0.044,
+      "pchip": 0.125
+    },
+    "k5-ring-b30-e15": {
+      "joint": 0.043,
+      "pairwise": 0.047,
+      "pchip": 1.018
+    },
+    "k5-ring-b30-e30": {
+      "joint": 0.049,
+      "pairwise": 0.129,
+      "pchip": 3.21
+    },
+    "k5-ring-b100-e0": {
+      "joint": 0.022,
+      "pairwise": 0.029,
+      "pchip": 0.122
+    },
+    "k5-ring-b100-e15": {
+      "joint": 0.025,
+      "pairwise": 0.026,
+      "pchip": 2.023
+    },
+    "k5-ring-b100-e30": {
+      "joint": 0.033,
+      "pairwise": 0.031,
+      "pchip": 4.49
+    },
+    "k5-density0.4-b10-e0": {
+      "joint": 0.089,
+      "pairwise": 0.071,
+      "pchip": 0.192
+    },
+    "k5-density0.4-b10-e15": {
+      "joint": 0.129,
+      "pairwise": 0.127,
+      "pchip": 0.905
+    },
+    "k5-density0.4-b10-e30": {
+      "joint": 0.735,
+      "pairwise": 1.327,
+      "pchip": 2.942
+    },
+    "k5-density0.4-b30-e0": {
+      "joint": 0.049,
+      "pairwise": 0.049,
+      "pchip": 0.144
+    },
+    "k5-density0.4-b30-e15": {
+      "joint": 0.051,
+      "pairwise": 0.049,
+      "pchip": 1.286
+    },
+    "k5-density0.4-b30-e30": {
+      "joint": 0.071,
+      "pairwise": 0.178,
+      "pchip": 3.813
+    },
+    "k5-density0.4-b100-e0": {
+      "joint": 0.027,
+      "pairwise": 0.024,
+      "pchip": 0.132
+    },
+    "k5-density0.4-b100-e15": {
+      "joint": 0.028,
+      "pairwise": 0.027,
+      "pchip": 2.764
+    },
+    "k5-density0.4-b100-e30": {
+      "joint": 0.059,
+      "pairwise": 0.04,
+      "pchip": 5.76
+    },
+    "k10-star-b10-e0": {
+      "joint": 0.064,
+      "pairwise": 0.061,
+      "pchip": 0.142
+    },
+    "k10-star-b10-e15": {
+      "joint": 0.087,
+      "pairwise": 0.106,
+      "pchip": 0.898
+    },
+    "k10-star-b10-e30": {
+      "joint": 0.349,
+      "pairwise": 1.063,
+      "pchip": 2.576
+    },
+    "k10-star-b30-e0": {
+      "joint": 0.033,
+      "pairwise": 0.033,
+      "pchip": 0.106
+    },
+    "k10-star-b30-e15": {
+      "joint": 0.04,
+      "pairwise": 0.036,
+      "pchip": 1.063
+    },
+    "k10-star-b30-e30": {
+      "joint": 0.047,
+      "pairwise": 0.114,
+      "pchip": 3.222
+    },
+    "k10-star-b100-e0": {
+      "joint": 0.021,
+      "pairwise": 0.022,
+      "pchip": 0.094
+    },
+    "k10-star-b100-e15": {
+      "joint": 0.025,
+      "pairwise": 0.024,
+      "pchip": 2.898
+    },
+    "k10-star-b100-e30": {
+      "joint": 0.022,
+      "pairwise": 0.055,
+      "pchip": 5.085
+    },
+    "k10-weak-star-b10-e0": {
+      "joint": 0.068,
+      "pairwise": 0.071,
+      "pchip": 0.138
+    },
+    "k10-weak-star-b10-e15": {
+      "joint": 0.083,
+      "pairwise": 0.107,
+      "pchip": 0.696
+    },
+    "k10-weak-star-b10-e30": {
+      "joint": 0.202,
+      "pairwise": 0.745,
+      "pchip": 2.786
+    },
+    "k10-weak-star-b30-e0": {
+      "joint": 0.037,
+      "pairwise": 0.039,
+      "pchip": 0.111
+    },
+    "k10-weak-star-b30-e15": {
+      "joint": 0.051,
+      "pairwise": 0.046,
+      "pchip": 0.84
+    },
+    "k10-weak-star-b30-e30": {
+      "joint": 0.05,
+      "pairwise": 0.109,
+      "pchip": 3.128
+    },
+    "k10-weak-star-b100-e0": {
+      "joint": 0.023,
+      "pairwise": 0.023,
+      "pchip": 0.104
+    },
+    "k10-weak-star-b100-e15": {
+      "joint": 0.031,
+      "pairwise": 0.026,
+      "pchip": 2.198
+    },
+    "k10-weak-star-b100-e30": {
+      "joint": 0.042,
+      "pairwise": 0.037,
+      "pchip": 4.533
+    },
+    "k10-chain-b10-e0": {
+      "joint": 0.105,
+      "pairwise": 0.109,
+      "pchip": 0.275
+    },
+    "k10-chain-b10-e15": {
+      "joint": 0.327,
+      "pairwise": 0.466,
+      "pchip": 2.631
+    },
+    "k10-chain-b10-e30": {
+      "joint": 0.839,
+      "pairwise": 2.111,
+      "pchip": 4.275
+    },
+    "k10-chain-b30-e0": {
+      "joint": 0.065,
+      "pairwise": 0.06,
+      "pchip": 0.227
+    },
+    "k10-chain-b30-e15": {
+      "joint": 0.09,
+      "pairwise": 0.077,
+      "pchip": 2.763
+    },
+    "k10-chain-b30-e30": {
+      "joint": 0.209,
+      "pairwise": 0.523,
+      "pchip": 5.741
+    },
+    "k10-chain-b100-e0": {
+      "joint": 0.045,
+      "pairwise": 0.054,
+      "pchip": 0.24
+    },
+    "k10-chain-b100-e15": {
+      "joint": 0.061,
+      "pairwise": 0.042,
+      "pchip": 3.459
+    },
+    "k10-chain-b100-e30": {
+      "joint": 0.114,
+      "pairwise": 0.08,
+      "pchip": 5.95
+    },
+    "k10-ring-b10-e0": {
+      "joint": 0.06,
+      "pairwise": 0.087,
+      "pchip": 0.187
+    },
+    "k10-ring-b10-e15": {
+      "joint": 0.074,
+      "pairwise": 0.179,
+      "pchip": 1.645
+    },
+    "k10-ring-b10-e30": {
+      "joint": 1.33,
+      "pairwise": 1.819,
+      "pchip": 3.941
+    },
+    "k10-ring-b30-e0": {
+      "joint": 0.042,
+      "pairwise": 0.05,
+      "pchip": 0.169
+    },
+    "k10-ring-b30-e15": {
+      "joint": 0.048,
+      "pairwise": 0.061,
+      "pchip": 2.104
+    },
+    "k10-ring-b30-e30": {
+      "joint": 0.445,
+      "pairwise": 0.643,
+      "pchip": 4.705
+    },
+    "k10-ring-b100-e0": {
+      "joint": 0.03,
+      "pairwise": 0.036,
+      "pchip": 0.178
+    },
+    "k10-ring-b100-e15": {
+      "joint": 0.031,
+      "pairwise": 0.041,
+      "pchip": 3.53
+    },
+    "k10-ring-b100-e30": {
+      "joint": 0.072,
+      "pairwise": 0.049,
+      "pchip": 5.565
+    },
+    "k10-density0.4-b10-e0": {
+      "joint": 0.044,
+      "pairwise": 0.07,
+      "pchip": 0.167
+    },
+    "k10-density0.4-b10-e15": {
+      "joint": 0.048,
+      "pairwise": 0.112,
+      "pchip": 0.816
+    },
+    "k10-density0.4-b10-e30": {
+      "joint": 0.298,
+      "pairwise": 1.286,
+      "pchip": 2.755
+    },
+    "k10-density0.4-b30-e0": {
+      "joint": 0.033,
+      "pairwise": 0.043,
+      "pchip": 0.127
+    },
+    "k10-density0.4-b30-e15": {
+      "joint": 0.035,
+      "pairwise": 0.04,
+      "pchip": 0.967
+    },
+    "k10-density0.4-b30-e30": {
+      "joint": 0.047,
+      "pairwise": 0.169,
+      "pchip": 3.62
+    },
+    "k10-density0.4-b100-e0": {
+      "joint": 0.021,
+      "pairwise": 0.027,
+      "pchip": 0.128
+    },
+    "k10-density0.4-b100-e15": {
+      "joint": 0.024,
+      "pairwise": 0.025,
+      "pchip": 2.847
+    },
+    "k10-density0.4-b100-e30": {
+      "joint": 0.035,
+      "pairwise": 0.04,
+      "pchip": 5.039
+    },
+    "k20-chain-b30-e0": {
+      "joint": 0.075,
+      "pairwise": 0.076,
+      "pchip": 0.328
+    },
+    "k20-chain-b30-e15": {
+      "joint": 0.116,
+      "pairwise": 0.098,
+      "pchip": 4.708
+    },
+    "k20-density0.4-b30-e0": {
+      "joint": 0.023,
+      "pairwise": 0.039,
+      "pchip": 0.126
+    },
+    "k20-density0.4-b30-e15": {
+      "joint": 0.026,
+      "pairwise": 0.04,
+      "pchip": 1.008
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/full_sparsity.txt",
+    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

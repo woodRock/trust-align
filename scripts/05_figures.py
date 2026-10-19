@@ -116,6 +116,8 @@ F3B_TOPOS: tuple[str, ...] = ('density0.4', 'complete')
 F3B = dict(budget=F3B_BUDGET, eps=F3B_EPS, Ks=F3B_KS, topologies=F3B_TOPOS)
 
 F4A = (5, 'chain', 30, 0.30)
+F4A_ERR_MIN = 2.5            # fig 4 (a) caption: where the CV joint fit's error on the edge exceeds this (min)
+F4B_UNDIAGNOSED = ('complete', 'star')   # not in script 03's diagnosis: broken counts under CV λ from script 02
 
 F5_BUDGETS: tuple[int, ...] = (10, 100)
 F5_EPSILONS: tuple[float, ...] = (0.0, 0.15, 0.30)
@@ -735,6 +737,18 @@ def refit_broken_world(d02, s02) -> dict:
             'n_broken': len(broken), 'bin': BIN_MIN}
 
 
+def cv_counts(d02, s02) -> dict:
+    """Broken test worlds (joint model, CV λ) for the topologies script 03 does not diagnose, over the same
+    K ∈ {5, 10} × budgets × ε > 0 settings: {topology: [broken, worlds]} (script 02's per-world errors)."""
+    out: dict = {tp: [0, 0] for tp in F4B_UNDIAGNOSED}
+    for s in d02['grid']:
+        if s[1] in out and s[0] in (5, 10) and s[3] > 0:
+            v = stat02(d02, s, 'Joint')
+            out[s[1]][0] += int(np.sum(v > s02.BREAK_MIN))
+            out[s[1]][1] += len(v)
+    return out
+
+
 def lambda_counts(d03, s02, s03) -> dict:
     """Broken test worlds per topology and λ rule over the corrupted settings of script 03."""
     out: dict = {}
@@ -749,7 +763,7 @@ def lambda_counts(d03, s02, s03) -> dict:
     return out
 
 
-def fig4(out: Path, bw: dict, counts: dict, s02) -> tuple[Path, str, dict]:
+def fig4(out: Path, bw: dict, counts: dict, cv: dict, s02) -> tuple[Path, str, dict]:
     plt = _plt()
     from jointalign.synthetic import TIME_AXIS
 
@@ -799,7 +813,9 @@ def fig4(out: Path, bw: dict, counts: dict, s02) -> tuple[Path, str, dict]:
     ax2.set_ylabel(f'broken test worlds (of {n_per})')
     ax2.set_ylim(0, max(counts[(tp, r)][0] for tp in order for r, _, _ in F4B_RULES) * 1.5)
     ax2.legend(loc='upper right', fontsize=6.8, handlelength=1.2)
-    ax2.text(0.97, 0.65, 'Complete & Star: 0/240 broken', transform=ax2.transAxes,
+    undiagnosed = ', '.join(f'{TOPO_LABEL[tp]} {k}/{n}' for tp, (k, n) in cv.items())
+    ax2.text(0.97, 0.72, 'Not diagnosed (CV λ):\n' + undiagnosed,
+             transform=ax2.transAxes,
              ha='right', va='top', fontsize=6.5, color='0.4', style='italic')
     _title(ax2, 'b', f'λ rule vs breakdown ({tot["tuned"][1]} corrupted worlds)')
     for ax in (ax1, ax2):
@@ -809,16 +825,25 @@ def fig4(out: Path, bw: dict, counts: dict, s02) -> tuple[Path, str, dict]:
     p = _save(fig, out, 'fig4_breakdown_diagnosis')
     plt.close(fig)
     e = bw['errors']
+    err = np.abs(curves['Joint cv'] - truth)
+    above = t[err > F4A_ERR_MIN]
+    half = t >= 22.5
     cap = (
         f'**fig4_breakdown_diagnosis.** (a) Test world {bw["seed"]} of K = {F4A[0]}, chain, budget {F4A[2]}, '
         f'ε = {F4A[3]:.0%} (the broken world closest to the setting median {bw["median"]:.3f} min; '
         f'{bw["n_broken"]}/{len(range(3, 23))} worlds broken), refitted on script 02\'s anchors. '
         f'Edge {a}–{b} is the chain edge with the largest joint error. World median map error: '
         f'Joint (CV) {e["Joint cv"]:.3f}, Joint (λ = 10) {e["Joint fixed"]:.3f}, '
-        f'Pairwise {e["Pairwise cv"]:.3f} min. (b) Broken test worlds '
+        f'Pairwise {e["Pairwise cv"]:.3f} min. Edge {a}–{b}: {int(np.sum(~bad[m]))} clean and '
+        f'{int(np.sum(bad[m]))} corrupted anchors; CV λ Joint {bw["lam"]["Joint cv"]:g}, '
+        f'Pairwise {bw["lam"]["Pairwise cv"]:g}; Joint (CV) error above {F4A_ERR_MIN} min from '
+        f'{above.min():.1f} to {above.max():.1f} min, at most {err.max():.2f} min '
+        f'(at most {err[half].max():.2f} min from 22.5 min on). (b) Broken test worlds '
         f'(> {s02.BREAK_MIN} min) over script 03\'s corrupted settings ({len(order)} topologies × K ∈ {{5, 10}} × '
         f'3 budgets × 2 ε): ' + '; '.join(f'{lab} {tot[r][0]}/{tot[r][1]}' for r, lab, _ in F4B_RULES)
-        + '. The oracle uses the truth: a bound, not a rule.'
+        + '. The oracle uses the truth: a bound, not a rule. '
+        + 'Not diagnosed (script 02, joint, CV λ, same settings): '
+        + '; '.join(f'{tp} {k}/{n}' for tp, (k, n) in cv.items()) + ' broken.'
     )
     arrays = {f'fig4a|{k}': v for k, v in curves.items()}
     arrays['fig4a|t'] = t
@@ -984,6 +1009,7 @@ def main(out: Path = FIGS, results: Path = RESULTS, site: Path | None = None) ->
     fish = fish_sample(s04.DATA)
     bw = refit_broken_world(d02, s02)
     counts = lambda_counts(d03, s02, s03)
+    cv = cv_counts(d02, s02)
 
     paths, caps, arrays = [], [], {}
     p, c = fig1(out, world, cell_bad, fish)
@@ -996,7 +1022,7 @@ def main(out: Path = FIGS, results: Path = RESULTS, site: Path | None = None) ->
     paths.append(p)
     caps.append(c)
     arrays.update(a)
-    p, c, r4 = fig4(out, bw, counts, s02)
+    p, c, r4 = fig4(out, bw, counts, cv, s02)
     paths.append(p)
     caps.append(c)
     arrays.update(r4['arrays'])
