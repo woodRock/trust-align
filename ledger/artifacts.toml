@@ -1,0 +1,83 @@
+# What each paper artifact is built from. Outputs land in ~/overleaf/trust-align/generated/.
+# Results come from scripts/export_ledger.py (the committed reports of scripts 02–05).
+# Keys: \res{map-error/k5-chain-b30-e30/joint}, \res{lambda-broken/all/joint-per-world}.
+
+[artifacts.results]
+kind = "macros"
+output = "generated/results.tex"
+results = ["*"]                    # every result in ledger/results/, settings included
+
+# Table I (tab:synthetic) and Table II (tab:fish). Caption, label, \footnotesize and \tabcolsep stay
+# in TAI_template.tex.
+[artifacts.table_synthetic]
+kind = "table"
+output = "generated/table_synthetic.tex"
+script = "artifacts/table_synthetic.py"
+results = ["map-error"]
+colspec = "@{}rrrlrrrr@{}"
+bold = "min"
+bold_by = "row"
+
+[artifacts.table_fish]
+kind = "table"
+output = "generated/table_fish.tex"
+script = "artifacts/table_fish.py"
+results = ["fish-error"]
+colspec = "@{}rrrrr@{}"
+bold = "min"
+bold_by = "row"
+
+[format.default]
+decimals = 3
+
+# Paired differences, slopes and their CIs are printed with four decimals and a sign.
+[format."rq1a/*/delta*"]
+decimals = 4
+sign = true
+[format."rq1a/*/ci-*"]
+decimals = 4
+sign = true
+[format."fish-rq1a/*/delta*"]
+decimals = 4
+sign = true
+[format."fish-rq1a/*/ci-*"]
+decimals = 4
+sign = true
+[format."scaling/*"]
+decimals = 4
+sign = true
+[format."fish-data/anchors/*"]
+decimals = 0
+thousands = true
+
+# Figures: written by script 05 (figs/paper/, git-ignored here); compared by content, not bytes.
+
+[artifacts.fig1_data]
+kind = "figure"
+output = "generated/fig1_data.pdf"
+source = "figs/paper/fig1_data.pdf"
+made_by = "scripts/05_figures.py"
+
+[artifacts.fig2_graphs]
+kind = "figure"
+output = "generated/fig2_graphs.pdf"
+source = "figs/paper/fig2_graphs.pdf"
+made_by = "scripts/05_figures.py"
+
+[artifacts.fig3_synthetic_results]
+kind = "figure"
+output = "generated/fig3_synthetic_results.pdf"
+source = "figs/paper/fig3_synthetic_results.pdf"
+made_by = "scripts/05_figures.py"
+
+[artifacts.fig4_breakdown_diagnosis]
+kind = "figure"
+output = "generated/fig4_breakdown_diagnosis.pdf"
+source = "figs/paper/fig4_breakdown_diagnosis.pdf"
+made_by = "scripts/05_figures.py"
+
+[artifacts.fig5_fish_results]
+kind = "figure"
+output = "generated/fig5_fish_results.pdf"
+source = "figs/paper/fig5_fish_results.pdf"
+made_by = "scripts/05_figures.py"

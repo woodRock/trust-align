@@ -1,0 +1,67 @@
+{
+  "name": "scaling",
+  "label": "RQ1c: joint − composed pairwise vs K at budget 30; slope per doubling of K",
+  "metrics": {
+    "complete-e0": {
+      "k5": -0.0075,
+      "k10": -0.0071,
+      "k20": -0.0126,
+      "slope": -0.0021,
+      "slope-ci-low": -0.0032,
+      "slope-ci-high": -0.0008
+    },
+    "complete-e15": {
+      "k5": -0.0143,
+      "k10": -0.0105,
+      "k20": -0.009,
+      "slope": 0.0026,
+      "slope-ci-low": 0.0015,
+      "slope-ci-high": 0.0039
+    },
+    "chain-e0": {
+      "k5": 0.0041,
+      "k10": 0.005,
+      "k20": 0.0058,
+      "slope": -0.0002,
+      "slope-ci-low": -0.005,
+      "slope-ci-high": 0.0042
+    },
+    "chain-e15": {
+      "k5": 0.017,
+      "k10": 0.0136,
+      "k20": 0.0089,
+      "slope": -0.0098,
+      "slope-ci-low": -0.0235,
+      "slope-ci-high": 0.0014
+    },
+    "density0.4-e0": {
+      "k5": -0.0068,
+      "k10": -0.0076,
+      "k20": -0.0133,
+      "slope": -0.0047,
+      "slope-ci-low": -0.0071,
+      "slope-ci-high": -0.0023
+    },
+    "density0.4-e15": {
+      "k5": 0.0034,
+      "k10": -0.0052,
+      "k20": -0.0118,
+      "slope": -0.0084,
+      "slope-ci-low": -0.0107,
+      "slope-ci-high": -0.0063
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/full_sparsity.txt",
+    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

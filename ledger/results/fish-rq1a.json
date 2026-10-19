@@ -1,0 +1,43 @@
+{
+  "name": "fish-rq1a",
+  "label": "Fish oil RQ1a: joint − star through sep2015, complete graph, budget 100",
+  "metrics": {
+    "e0": {
+      "delta": -0.0097,
+      "ci-low": -0.0145,
+      "ci-high": -0.0071,
+      "delta-min": -0.021,
+      "delta-max": -0.001,
+      "p": 0.001
+    },
+    "e15": {
+      "delta": -0.0079,
+      "ci-low": -0.0107,
+      "ci-high": -0.0044,
+      "delta-min": -0.0658,
+      "delta-max": 0.0027,
+      "p": 0.001
+    },
+    "e30": {
+      "delta": -0.0272,
+      "ci-low": -0.039,
+      "ci-high": -0.0105,
+      "delta-min": -0.0582,
+      "delta-max": 0.0094,
+      "p": 0.001
+    }
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "results/fish_sparsity.txt",
+    "hash": "sha256:4322b352fbeae1ac73176cca4a6b6eeec59fc71081d2f7e5b4dcf3e5b251c8f9",
+    "provenance": [
+      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
+      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
+    ]
+  }
+}

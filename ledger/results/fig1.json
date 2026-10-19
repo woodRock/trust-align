@@ -1,0 +1,16 @@
+{
+  "name": "fig1",
+  "label": "Figure 1 caption numbers (script 05)",
+  "metrics": {
+    "drift-min": -4.42,
+    "drift-max": 3.91,
+    "apex-minutes": 14.4,
+    "corrupt-shift-bins": -19.8
+  },
+  "runs": [],
+  "produced_by": "scripts/export_ledger.py",
+  "source": {
+    "path": "figs/paper/captions_tai.md",
+    "hash": "sha256:963c2fc0afa144834789f58bf3c77b9f4f62bca8c8b59ffaf507c1aeaf5ca952"
+  }
+}
