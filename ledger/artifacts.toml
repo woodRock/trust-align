@@ -81,3 +81,14 @@ kind = "figure"
 output = "generated/fig5_fish_results.pdf"
 source = "figs/paper/fig5_fish_results.pdf"
 made_by = "scripts/05_figures.py"
+
+# Settings and caption numbers the text prints with two decimals: the 0.30 min breakdown cutoff,
+# the 0.15 min tolerance, ε ∈ {0, 0.15, 0.30}, the 14.40 min apex.
+[format."settings-grid/BREAK_MIN"]
+decimals = 2
+[format."settings-grid/TOL_MIN"]
+decimals = 2
+[format."settings-fish/EPSILONS/*"]
+decimals = 2
+[format."fig1/apex-minutes"]
+decimals = 2
