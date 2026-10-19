@@ -2557,11 +2557,11 @@ result_hash = ""
 file = "TAI_template.tex"
 literal = "10"
 context = "s composed pairwise fitting ($\\lambda = 10$, solid green) and fixed-$\\lambda$ join"
-verdict = "unrecorded"
-key = ""
-reason = "\"composed pairwise fitting ($\\lambda = 10$)\" is the λ chosen by cross-validation for pairwise fitting in the fig. 4a world, and no fig4a pairwise-λ candidate is listed."
+verdict = "result"
+key = "fig4a/lambda/pairwise-cv"
+reason = "the λ cross-validation chose for composed pairwise fitting in figure 4 (a)'s world (script 05's caption)"
 by = "claude"
-decided = "2026-10-20T01:08:14+13:00"
+decided = "2026-10-20T01:19:32+13:00"
 result_hash = ""
 
 [decisions.aad2c308df]
@@ -2705,6 +2705,17 @@ key = "map-error/k10-ring-b10-e30/pairwise"
 reason = "Composed pairwise error on the same 10-batch ring, B=10, ε=30%."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
+result_hash = ""
+
+[decisions.b51dd55367]
+file = "TAI_template.tex"
+literal = "30\\%"
+context = "ive-batch chain ($B = 30, \\varepsilon = 30\\%$, test world \\res{fig4a/test-world}): \\"
+verdict = "not-a-result"
+key = ""
+reason = "a corruption rate of the design restated as a percentage, like the paper's other ε mentions; kept as typed"
+by = "claude"
+decided = "2026-10-20T01:19:33+13:00"
 result_hash = ""
 
 [decisions.b57d896697]

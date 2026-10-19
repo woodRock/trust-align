@@ -92,3 +92,9 @@ decimals = 2
 decimals = 2
 [format."fig1/apex-minutes"]
 decimals = 2
+
+# Figure 4 (a)'s edge: "errors above 2.5 min from 7.9 to 18.9 min (up to 7.6 min)"
+[format."fig4a/edge-error/*"]
+decimals = 1
+[format."settings-figures/F4A_ERR_MIN"]
+decimals = 1
