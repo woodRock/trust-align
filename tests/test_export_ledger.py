@@ -71,6 +71,10 @@ def test_sections(out):
     assert m(out, 'fish-rq1a/e30/delta') == -0.0272 and m(out, 'fish-rq1a/e30/p') == 0.001
     assert m(out, 'fish-broken/complete-b10-e30/joint-broken') == 5
     assert m(out, 'fig4a/world-error/joint-cv') == 1.538 and m(out, 'fig1/apex-minutes') == 14.4
+    assert (m(out, 'fig4a/anchors/clean'), m(out, 'fig4a/anchors/corrupted')) == (21, 9)
+    assert m(out, 'fig4a/lambda/joint-cv') == 300 and m(out, 'fig4a/edge-error/max') == 7.63
+    assert (m(out, 'fig4b/complete/broken'), m(out, 'fig4b/star/broken')) == (5, 11)
+    assert m(out, 'fig4b/star/worlds') == 240
     src = out['map-error']['source']
     assert src['path'] == 'results/full_sparsity.txt' and src['hash'].startswith('sha256:')
     assert any(line.startswith('trustalign ') for line in src['provenance'])
@@ -81,7 +85,7 @@ def test_main_writes_every_result(ex, tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(ex, 'OUT', tmp_path / 'ledger' / 'results')
     ex.main()
     files = sorted(p.stem for p in (tmp_path / 'ledger' / 'results').glob('*.json'))
-    assert len(files) == 16 and 'map-error' in files
+    assert len(files) == 17 and 'map-error' in files
     assert json.loads((tmp_path / 'ledger' / 'results' / 'rq1a.json').read_text())['name'] == 'rq1a'
 
 

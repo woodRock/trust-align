@@ -294,6 +294,18 @@ def captions() -> dict[str, dict]:
     m = re.search(r'Test world (\d+) of K = (\d+)', text)
     assert m, 'captions_tai.md: no fig 4 (a) world'
     fig4a |= {'test-world': int(m.group(1))}
+    m = re.search(rf'(\d+) clean and (\d+) corrupted anchors; CV λ Joint ({NUM}), Pairwise ({NUM}); '
+                  rf'Joint \(CV\) error above ({NUM}) min from ({NUM}) to ({NUM}) min, '
+                  rf'at most ({NUM}) min \(at most ({NUM}) min', text)
+    assert m, 'captions_tai.md: no fig 4 (a) edge numbers'
+    clean, bad, lj, lp, _, lo, hi, top, late = m.groups()
+    fig4a |= {'anchors': {'clean': int(clean), 'corrupted': int(bad)},
+              'lambda': {'joint-cv': num(lj), 'pairwise-cv': num(lp)},
+              'edge-error': {'above-from': num(lo), 'above-to': num(hi), 'max': num(top), 'max-late': num(late)}}
+    fig4b = {}
+    for topo, k, n in re.findall(r'(complete|star) (\d+)/(\d+)', text.split('Not diagnosed', 1)[-1]):
+        fig4b[topo] = {'broken': int(k), 'worlds': int(n)}
+    assert set(fig4b) == {'complete', 'star'}, 'captions_tai.md: no fig 4 (b) counts for complete and star'
     m = re.search(rf'True drifts span ({NUM}) to ({NUM}) min', text)
     assert m, 'captions_tai.md: no drift span'
     fig1 = {'drift-min': num(m.group(1)), 'drift-max': num(m.group(2))}
@@ -304,7 +316,9 @@ def captions() -> dict[str, dict]:
     assert m, 'captions_tai.md: no corrupted-anchor shift'
     fig1['corrupt-shift-bins'] = num(m.group(1))
     return {'fig1': result('fig1', 'Figure 1 caption numbers (script 05)', fig1, CAPTIONS),
-            'fig4a': result('fig4a', 'Figure 4 (a): the broken chain world (script 05)', fig4a, CAPTIONS)}
+            'fig4a': result('fig4a', 'Figure 4 (a): the broken chain world (script 05)', fig4a, CAPTIONS),
+            'fig4b': result('fig4b', 'Figure 4 (b): broken worlds, joint, CV λ, for the topologies script 03 does '
+                                     'not diagnose (script 05, from script 02)', fig4b, CAPTIONS)}
 
 
 def main() -> None:

@@ -15,3 +15,7 @@ names = ["BUDGETS", "EPSILONS", "DRIFTED_R"]
 
 [runs]
 watch = ["src/trustalign"]
+
+[settings.figures]         # script 05: the edge-error threshold its fig 4 (a) caption reports against
+path = "scripts/05_figures.py"
+names = ["F4A_ERR_MIN"]
