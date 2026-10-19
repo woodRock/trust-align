@@ -10,7 +10,7 @@ key = "map-error/k5-chain-b30-e30/joint"
 reason = "Joint breakdown on a chain graph at 30% corruption with cross-validated (tuned) λ, which is the main map-error result."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.044fbc8d1c]
 file = "TAI_template.tex"
@@ -21,7 +21,7 @@ key = "map-error/k5-chain-b30-e30/joint"
 reason = "Joint error on a five-batch chain with 30 anchors and 30% corruption, the same tuned-λ map error as the other abstract numbers."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.04ef5913e4]
 file = "TAI_template.tex"
@@ -32,7 +32,7 @@ key = "lambda-broken/all/worlds"
 reason = "The denominator in 175/960 is the total number of corrupted test worlds."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.05bbe8527d]
 file = "TAI_template.tex"
@@ -65,7 +65,7 @@ key = "map-error/k5-complete-b10-e0/pchip"
 reason = "PCHIP median error in the same K=5 complete, b10, e0 setting."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.076002fac1]
 file = "TAI_template.tex"
@@ -76,7 +76,7 @@ key = "sanity/k5-b10/worlds"
 reason = "Denominator of '6/20 for K = 5, B = 10': number of test worlds in the complete-graph, ε = 0 check for K=5, B=10."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.0875e133fa]
 file = "TAI_template.tex"
@@ -87,7 +87,7 @@ key = "rq1a/k10-e0/delta"
 reason = "K=10 complete graph, budget 100, 0% corruption, joint minus star paired difference."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.094f058606]
 file = "TAI_template.tex"
@@ -98,7 +98,7 @@ key = "lambda-broken/chain/joint-per-world"
 reason = "This is the oracle's broken-world count for chain: 32/240."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.09938f63cf]
 file = "TAI_template.tex"
@@ -131,7 +131,7 @@ key = "fish-error/complete-b10-e30/pairwise"
 reason = "Composed pairwise fitting, same fish setting."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.0b08179151]
 file = "TAI_template.tex"
@@ -153,7 +153,7 @@ key = "scaling/density0.4-e15/k20"
 reason = "The density 0.4, e15 difference at K=20."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.0c9db09008]
 file = "TAI_template.tex"
@@ -186,7 +186,7 @@ key = "map-error/k5-chain-b30-e30/joint-lambda"
 reason = "The 'cross-validated joint estimate (λ = 300)' is the λ selected for joint on the five-batch chain, B=30, ε=30%."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.0e210ea04d]
 file = "TAI_template.tex"
@@ -208,7 +208,7 @@ key = "design/test-worlds"
 reason = "'the median across the 20 test worlds' is the synthetic design's number of test worlds."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.103a934251]
 file = "TAI_template.tex"
@@ -219,7 +219,7 @@ key = "fish-data/samples/all"
 reason = "'90 fish-oil chromatograms' is the sample count that script 04 records for all fish-oil data."
 by = "claude"
 decided = "2026-10-20T01:06:01+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.10af497ee2]
 file = "TAI_template.tex"
@@ -241,7 +241,7 @@ key = "scaling/complete-e15/k10"
 reason = "Complete-graph joint-minus-pairwise difference at K = 10 in the scaling analysis, not the fish-oil CI."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.1240c72a4a]
 file = "TAI_template.tex"
@@ -252,7 +252,7 @@ key = "map-error/k5-complete-b10-e30/joint"
 reason = "Joint median error on complete graphs, b10, ε=30%, \"in simulation\"."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.1247eaee64]
 file = "TAI_template.tex"
@@ -274,7 +274,7 @@ key = "settings-fish/BUDGETS/max"
 reason = "The largest fish anchor budget in 'B ∈ {10, 30, 100}'."
 by = "claude"
 decided = "2026-10-20T00:57:01+13:00"
-result_hash = ""
+result_hash = "sha256:c107972a66ecf2ec2f28117845e874a2c6b912f361ae182313d9d1723e17ec95"
 
 [decisions.14400321b3]
 file = "TAI_template.tex"
@@ -340,7 +340,7 @@ key = "fish-data/anchors/all"
 reason = "'yield 25,011 candidate anchors' is the fish data's total anchor count."
 by = "claude"
 decided = "2026-10-20T00:57:01+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.1cd0691c2f]
 file = "TAI_template.tex"
@@ -351,7 +351,7 @@ key = "settings-grid/TOL_MIN"
 reason = "The 0.15 min maximum-error tolerance is the TOL_MIN setting in the grid script; the other candidates match by coincidence."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.1d4c2ebaec]
 file = "TAI_template.tex"
@@ -362,7 +362,7 @@ key = "lambda-broken/chain/worlds"
 reason = "'240 worlds per topology' is the per-topology world count in the λ-rule broken-world report, and it is the same for every topology."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.1dab5cf75f]
 file = "TAI_template.tex"
@@ -395,7 +395,7 @@ key = "map-error/k5-complete-b10-e30/joint"
 reason = "Joint error on K=5 complete, b10, after corruption is raised to 30%."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.1f82a39f0b]
 file = "TAI_template.tex"
@@ -417,7 +417,7 @@ key = "lambda-rules/k5-chain-b30-e30/joint-tuned"
 reason = "'cross-validated λ yielded 1.525 min median error' on the five-batch chain B = 30, ε = 30% is the tuned joint rule in the λ-rule comparison."
 by = "claude"
 decided = "2026-10-20T01:00:14+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.21e311a536]
 file = "TAI_template.tex"
@@ -439,7 +439,7 @@ key = "lambda-broken/all/settings"
 reason = "\"across all 48 corrupted settings\" is the number of corrupted settings counted in the λ-rule breakdown."
 by = "claude"
 decided = "2026-10-20T01:08:14+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.22edb81843]
 file = "TAI_template.tex"
@@ -450,7 +450,7 @@ key = "map-error/k5-complete-b10-e30/pairwise"
 reason = "Composed pairwise error on K=5 complete, b10, at 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.236568de0d]
 file = "TAI_template.tex"
@@ -472,7 +472,7 @@ key = "design/test-worlds"
 reason = "Denominator of '16/20 broken worlds': number of test worlds per configuration."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.24e214ea1b]
 file = "TAI_template.tex"
@@ -483,7 +483,7 @@ key = "settings-grid/BREAK_MIN"
 reason = "'the 0.30 min broken-world threshold' is the BREAK_MIN setting."
 by = "claude"
 decided = "2026-10-20T00:56:45+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.25d23f2c5d]
 file = "TAI_template.tex"
@@ -494,7 +494,7 @@ key = "settings-fish/BUDGETS/max"
 reason = "'100 anchors per edge' is the largest fish budget setting."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:c107972a66ecf2ec2f28117845e874a2c6b912f361ae182313d9d1723e17ec95"
 
 [decisions.25f801b4f5]
 file = "TAI_template.tex"
@@ -538,7 +538,7 @@ key = "design/test-worlds"
 reason = "'across the 20 worlds or draws' gives the number of test worlds, which equals the number of draws."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.2854f27e3c]
 file = "TAI_template.tex"
@@ -549,7 +549,7 @@ key = "design/settings"
 reason = "'114 synthetic configurations' is the size of the script-02 grid design."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.288d5c24e6]
 file = "TAI_template.tex"
@@ -560,7 +560,7 @@ key = "scaling/complete-e15/k5"
 reason = "Joint-minus-pairwise difference on complete graphs at K = 5 under the same budget and 15% corruption (RQ1c scaling), not RQ1a joint − star."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.28c88f2e80]
 file = "TAI_template.tex"
@@ -604,7 +604,7 @@ key = "lambda-broken/all/worlds"
 reason = "'960 corrupted test worlds' is the world count in the λ diagnosis."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.2e6f47d037]
 file = "TAI_template.tex"
@@ -648,7 +648,7 @@ key = "map-error/k5-complete-b10-e30/star"
 reason = "Reference-star error in the same k5 complete b10 e30 setting."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.2ecc74a0d2]
 file = "TAI_template.tex"
@@ -670,7 +670,7 @@ key = "design/test-seed-max"
 reason = "\"seeds 3--22\" gives 22 as the last test-world seed."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.2f92d6fbbf]
 file = "TAI_template.tex"
@@ -681,7 +681,7 @@ key = "breakdown/k5-chain-b30-e30/joint-broken"
 reason = "This is the joint estimator's broken-world count on the five-batch chain with 30 anchors per edge and 30% corruption: 16 of 20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:851f71e7f14afb44c82746623b30a254208cc6a24fa8d46b8cf642bb69aa4447"
 
 [decisions.2fc489c733]
 file = "TAI_template.tex"
@@ -692,7 +692,7 @@ key = "map-error/k5-ring-b30-e30/joint"
 reason = "Joint median error after closing the five-batch chain into a ring, at the same B=30, ε=30%."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.30aa0578d8]
 file = "TAI_template.tex"
@@ -714,7 +714,7 @@ key = "scaling/complete-e15/k20"
 reason = "Complete-graph joint-minus-pairwise difference at K = 20."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.338de932fc]
 file = "TAI_template.tex"
@@ -747,7 +747,7 @@ key = "map-error/k5-complete-b10-e30/pairwise"
 reason = "\"0.171 min for pairwise\" in the same simulated complete, b10, ε=30% setting."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.37de480a6b]
 file = "TAI_template.tex"
@@ -857,7 +857,7 @@ key = "lambda-broken/all/joint-per-world"
 reason = "This is the number of the 960 worlds that broke under per-world ground-truth oracle tuning (80/960)."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.3fee8044b6]
 file = "TAI_template.tex"
@@ -879,7 +879,7 @@ key = "map-error/k5-chain-b30-e30/joint-lambda"
 reason = "'the cross-validated joint fit (λ = 300)' on the five-batch chain with B = 30, ε = 30% is the tuned joint λ for k5-chain-b30-e30."
 by = "claude"
 decided = "2026-10-20T01:00:14+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.405772c551]
 file = "TAI_template.tex"
@@ -890,7 +890,7 @@ key = "scaling/density0.4-e15/slope"
 reason = "The slope per doubling of K for density 0.4 at e15."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.407b8c7bdb]
 file = "TAI_template.tex"
@@ -901,7 +901,7 @@ key = "fish-data/draws"
 reason = "\"across 20 random draws\" is the number of fish-oil draws."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.4128d60453]
 file = "TAI_template.tex"
@@ -923,7 +923,7 @@ key = "map-error/k5-chain-b30-e30/pairwise"
 reason = "'0.140 min pairwise error' is the pairwise counterpart on the same chain setting."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.433a4e3ad3]
 file = "TAI_template.tex"
@@ -934,7 +934,7 @@ key = "fish-data/draws"
 reason = "\"across 20 random draws\" is the number of fish-oil draws."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.45cf340fe0]
 file = "TAI_template.tex"
@@ -945,7 +945,7 @@ key = "lambda-rules/k5-chain-b30-e30/joint-tuned-broken"
 reason = "This is the broken-world count under cross-validated λ on the five-batch chain with B = 30 and ε = 30%: 16/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.46d6efdea4]
 file = "TAI_template.tex"
@@ -956,7 +956,7 @@ key = "map-error/k5-chain-b30-e30/pairwise"
 reason = "Composed pairwise error in the same k5 chain b30 e30 setting."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.46ebfd5398]
 file = "TAI_template.tex"
@@ -1011,7 +1011,7 @@ key = "design/settings"
 reason = "\"Across 114 synthetic settings\" is the size of the script-02 grid design."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.49dc87b992]
 file = "TAI_template.tex"
@@ -1055,7 +1055,7 @@ key = "lambda-broken/all/worlds"
 reason = "960 is the total number of corrupted test worlds across topologies."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.4cbee405f4]
 file = "TAI_template.tex"
@@ -1066,7 +1066,7 @@ key = "map-error/k5-complete-b10-e30/star"
 reason = "\"0.144 min for star\" in the same simulated complete, b10, ε=30% setting."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.4ce1dd9a46]
 file = "TAI_template.tex"
@@ -1077,7 +1077,7 @@ key = "fish-rq1a/e0/p"
 reason = "Holm-adjusted Wilcoxon p for the fish RQ1a comparison; all three p values render as 0.001."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:22c02892a3c0c963c813ce95756256d0780b8462c72933fc4261d0a6029fd446"
 
 [decisions.4ec91a8bc9]
 file = "TAI_template.tex"
@@ -1088,7 +1088,7 @@ key = "lambda-broken/all/joint-per-world"
 reason = "The text refers to 'the 80 oracle breakdowns', the per-world oracle total."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.501f2639c0]
 file = "TAI_template.tex"
@@ -1099,7 +1099,7 @@ key = "rq1a/k5-e0/delta"
 reason = "Median joint − star difference, K = 5 complete graph, 0% corruption."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.5035a0b869]
 file = "TAI_template.tex"
@@ -1121,7 +1121,7 @@ key = "fish-data/samples/all"
 reason = "'90 real fish-oil chromatograms' is the sample count that script 04 records for all fish-oil data."
 by = "claude"
 decided = "2026-10-20T01:06:01+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.5259e6f37c]
 file = "TAI_template.tex"
@@ -1132,7 +1132,7 @@ key = "lambda-rules/k5-chain-b30-e30/joint-lambda10-broken"
 reason = "This is the broken-world count with λ fixed at 10 on the same chain: 8/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.52dd0d9127]
 file = "TAI_template.tex"
@@ -1154,7 +1154,7 @@ key = "design/settings"
 reason = "\"the 114-setting grid\" is the size of the synthetic grid that script 02 records."
 by = "claude"
 decided = "2026-10-20T00:55:48+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.542ae1d83d]
 file = "TAI_template.tex"
@@ -1176,7 +1176,7 @@ key = "settings-grid/BREAK_MIN"
 reason = "The 0.30 min 'broken' threshold for synthetic test worlds is the BREAK_MIN setting of the grid script."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.549b8b00ed]
 file = "TAI_template.tex"
@@ -1198,7 +1198,7 @@ key = "fish-error/complete-b100-e0/joint"
 reason = "The joint fish-oil error on the complete graph at B = 100, ε = 0%."
 by = "claude"
 decided = "2026-10-20T01:03:57+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.5a547a9bc9]
 file = "TAI_template.tex"
@@ -1220,7 +1220,7 @@ key = "design/test-worlds"
 reason = "\"16 of 20 test worlds\": 20 is the number of test worlds per setting in the synthetic grid design."
 by = "claude"
 decided = "2026-10-20T01:08:14+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.5c4017648c]
 file = "TAI_template.tex"
@@ -1231,7 +1231,7 @@ key = "fish-rq1a/e0/delta"
 reason = "Median paired joint − star difference at 0% corruption, budget 100, fish oil."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:22c02892a3c0c963c813ce95756256d0780b8462c72933fc4261d0a6029fd446"
 
 [decisions.5d04447afe]
 file = "TAI_template.tex"
@@ -1253,7 +1253,7 @@ key = "map-error/k5-complete-b10-e30/joint"
 reason = "Joint error on a complete graph at 30% corruption; it is paired with the star error of the same setting."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.5da127a79f]
 file = "TAI_template.tex"
@@ -1264,7 +1264,7 @@ key = "lambda-broken/all/joint-lambda10"
 reason = "Broken worlds under fixed λ = 10 for joint fitting."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.5ded38c930]
 file = "TAI_template.tex"
@@ -1275,7 +1275,7 @@ key = "scaling/complete-e15/slope"
 reason = "Slope per doubling of K on complete graphs."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.5f7790917e]
 file = "TAI_template.tex"
@@ -1308,7 +1308,7 @@ key = "fish-error/complete-b10-e0/star-weak"
 reason = "Fish-oil complete graph, 10 anchors, 0% corruption, star with the weakest hub: 0.128 min."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.61bbfc1432]
 file = "TAI_template.tex"
@@ -1319,7 +1319,7 @@ key = "fish-error/complete-b10-e30/star"
 reason = "The fish-oil star comparator (\"vs. 0.410 min\") for complete, b10, ε=30%."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.61fda28820]
 file = "TAI_template.tex"
@@ -1341,7 +1341,7 @@ key = "lambda-broken/weak-star/joint-per-world"
 reason = "This is the oracle's broken-world count for weak-star: 7/240."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.63646a21c9]
 file = "TAI_template.tex"
@@ -1352,7 +1352,7 @@ key = "settings-grid/BREAK_MIN"
 reason = "The 'broken if its world-level median error exceeds 0.30 min' threshold."
 by = "claude"
 decided = "2026-10-20T00:57:01+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.63a0b00f77]
 file = "TAI_template.tex"
@@ -1374,7 +1374,7 @@ key = "fish-rq1a/e30/delta"
 reason = "Median paired difference at 30% corruption."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:22c02892a3c0c963c813ce95756256d0780b8462c72933fc4261d0a6029fd446"
 
 [decisions.63ec171fdf]
 file = "TAI_template.tex"
@@ -1385,7 +1385,7 @@ key = "design/test-worlds"
 reason = "\"evaluated on 20 disjoint test worlds\" is the number of test worlds in the synthetic grid design."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.64623567dc]
 file = "TAI_template.tex"
@@ -1429,7 +1429,7 @@ key = "fish-data/samples/all"
 reason = "\"90 chromatograms\" is the total fish-oil sample count that script 04 records."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.65a74ff365]
 file = "TAI_template.tex"
@@ -1495,7 +1495,7 @@ key = "lambda-broken/all/worlds"
 reason = "\"80 of 960 corrupted synthetic worlds\" is the total number of corrupted test worlds counted in the λ-rule breakdown."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.68acfea4a4]
 file = "TAI_template.tex"
@@ -1517,7 +1517,7 @@ key = "sanity/k5-b100/pass"
 reason = "This is the number of uncorrupted complete-graph worlds with max error ≤ 0.15 min for K = 5, B = 100: 16/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.69987308e4]
 file = "TAI_template.tex"
@@ -1528,7 +1528,7 @@ key = "lambda-broken/all/worlds"
 reason = "960 is the total number of corrupted test worlds."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.69de9fada7]
 file = "TAI_template.tex"
@@ -1539,7 +1539,7 @@ key = "design/test-worlds"
 reason = "The denominator in \"17/20\" is the number of test worlds per synthetic setting."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.6a048c64b8]
 file = "TAI_template.tex"
@@ -1561,7 +1561,7 @@ key = "fish-data/samples/jan2016"
 reason = "The third batch size, 26, is the January 2016 batch."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.6b95f50bf8]
 file = "TAI_template.tex"
@@ -1616,7 +1616,7 @@ key = "settings-grid/TOL_MIN"
 reason = "The 'maximum point error ... stays below 0.15 min' tolerance."
 by = "claude"
 decided = "2026-10-20T00:57:01+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.6f3126dc81]
 file = "TAI_template.tex"
@@ -1627,7 +1627,7 @@ key = "map-error/k5-complete-b10-e0/joint"
 reason = "Joint median error on K=5 complete graph, 10 anchors per edge, 0% corruption."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.6fa8eda79b]
 file = "TAI_template.tex"
@@ -1649,7 +1649,7 @@ key = "design/test-worlds"
 reason = "Denominator of 'broken worlds to 8/20': number of test worlds per configuration."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.71186f433d]
 file = "TAI_template.tex"
@@ -1660,7 +1660,7 @@ key = "rq1a/k5-e0/anchors-median"
 reason = "'100 anchors per edge' on K = 5 complete graphs is recorded as the RQ1a median anchors for k5."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.719b761114]
 file = "TAI_template.tex"
@@ -1671,7 +1671,7 @@ key = "rq1a/k10-e30/delta"
 reason = "The K=10 complete graph, 30% corruption paired difference is +0.0006."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.71a2ca91c4]
 file = "TAI_template.tex"
@@ -1715,7 +1715,7 @@ key = "fish-data/batches"
 reason = "\"K = 5 batches\" is the fish-oil batch count."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.72bb75c08b]
 file = "TAI_template.tex"
@@ -1726,7 +1726,7 @@ key = "design/test-worlds"
 reason = "\"across 20 held-out test worlds\" is the grid's number of test worlds."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.72fca3d5b0]
 file = "TAI_template.tex"
@@ -1737,7 +1737,7 @@ key = "design/test-worlds"
 reason = "'across 20 held-out test worlds' is the number of test worlds in the synthetic grid design."
 by = "claude"
 decided = "2026-10-20T01:06:23+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.730ae49b67]
 file = "TAI_template.tex"
@@ -1770,7 +1770,7 @@ key = "sanity/k5-b100/worlds"
 reason = "Denominator of '16/20 for K = 5, B = 100' in the complete-graph, ε = 0 check."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.769992763a]
 file = "TAI_template.tex"
@@ -1781,7 +1781,7 @@ key = "fig1/apex-minutes"
 reason = "\"the mass spectrum at 14.40 min\" is the figure 1 apex time computed by script 05."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:5a5a512999bce5617b4c3bf9b3a947175abed71ebab9d8c1719c604bcf544a5a"
 
 [decisions.78199c880e]
 file = "TAI_template.tex"
@@ -1825,7 +1825,7 @@ key = "map-error/k5-complete-b10-e0/pairwise"
 reason = "Composed pairwise median error in the same K=5 complete, b10, e0 setting."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.787547f310]
 file = "TAI_template.tex"
@@ -1891,7 +1891,7 @@ key = "fish-error/complete-b10-e30/joint"
 reason = "Joint fitting, fish oil, complete graph, 10 anchors, 30% corruption."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.7ba0f18092]
 file = "TAI_template.tex"
@@ -1902,7 +1902,7 @@ key = "lambda-broken/density0.4/worlds"
 reason = "Denominator of 'density 0.4 (12/240)': corrupted density-0.4 test worlds."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.7c4bdce6d3]
 file = "TAI_template.tex"
@@ -1913,7 +1913,7 @@ key = "lambda-broken/density0.4/joint-per-world"
 reason = "This is the oracle's broken-world count for density 0.4: 12/240."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.7d2c063536]
 file = "TAI_template.tex"
@@ -1935,7 +1935,7 @@ key = "map-error/k5-complete-b10-e30/joint"
 reason = "Joint median map error for five batches, complete graph, 10 anchors, 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.7d95bdaf27]
 file = "TAI_template.tex"
@@ -1946,7 +1946,7 @@ key = "lambda-broken/all/joint-per-world"
 reason = "The text says the per-world ground-truth oracle still broke in 80 worlds."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.7db041d3fa]
 file = "TAI_template.tex"
@@ -1968,7 +1968,7 @@ key = "map-error/k5-complete-b10-e0/star"
 reason = "Reference-star median error in the same K=5 complete, b10, e0 setting."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.7ea67db56d]
 file = "TAI_template.tex"
@@ -2012,7 +2012,7 @@ key = "fish-data/samples/all"
 reason = "\"90 real fish-oil chromatograms\" is the total sample count that script 04 records as fish-data/samples/all."
 by = "claude"
 decided = "2026-10-20T01:09:34+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.7f8b860b3d]
 file = "TAI_template.tex"
@@ -2056,7 +2056,7 @@ key = "fish-error/complete-b10-e30/star"
 reason = "Fish-oil reference-star error in the same complete b10 e30 setting."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.854bc7090e]
 file = "TAI_template.tex"
@@ -2078,7 +2078,7 @@ key = "rq1a/k5-e30/delta"
 reason = "Median joint − star difference, K = 5 complete graph, 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.869328ccd4]
 file = "TAI_template.tex"
@@ -2111,7 +2111,7 @@ key = "design/settings"
 reason = "\"the 114-configuration benchmark\" is the size of the synthetic grid that script 02 records."
 by = "claude"
 decided = "2026-10-20T00:55:48+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.885b42f284]
 file = "TAI_template.tex"
@@ -2133,7 +2133,7 @@ key = "fish-data/samples/apr2016"
 reason = "The fourth of the batch sizes listed in date order from August 2015 to July 2016 is the April 2016 batch's sample count."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.88bf21f018]
 file = "TAI_template.tex"
@@ -2155,7 +2155,7 @@ key = "map-error/k5-chain-b30-e30/joint"
 reason = "Joint median error on the five-batch chain with 30 anchors per edge and 30% corruption, using tuned λ."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.8be4286862]
 file = "TAI_template.tex"
@@ -2166,7 +2166,7 @@ key = "fig4a/test-world"
 reason = "\"test world 3\" is the broken chain world that script 05 picks for fig. 4 (a)."
 by = "claude"
 decided = "2026-10-20T01:08:14+13:00"
-result_hash = ""
+result_hash = "sha256:a41631fce878430dd3af1540f137c9d5a8e48043eca96e4faa400d9b255712fd"
 
 [decisions.8d5a5be7cb]
 file = "TAI_template.tex"
@@ -2188,7 +2188,7 @@ key = "settings-grid/BREAK_MIN"
 reason = "The text calls it the '0.30 min breakdown cutoff', which is the grid's BREAK_MIN setting."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.8e7f3ed3c9]
 file = "TAI_template.tex"
@@ -2232,7 +2232,7 @@ key = "lambda-broken/weak-star/worlds"
 reason = "Denominator of 'weak-star (7/240)': corrupted weak-star test worlds."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.90382b5acb]
 file = "TAI_template.tex"
@@ -2243,7 +2243,7 @@ key = "fish-error/complete-b10-e0/joint"
 reason = "Joint fitting on the same fish-oil complete graph, b10, e0: 0.079 min."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.90e18d4435]
 file = "TAI_template.tex"
@@ -2254,7 +2254,7 @@ key = "design/settings"
 reason = "'The complete experimental grid comprises 114 configurations' matches the synthetic grid design count from script 02."
 by = "claude"
 decided = "2026-10-20T00:56:25+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.90ea0a1cb2]
 file = "TAI_template.tex"
@@ -2276,7 +2276,7 @@ key = "sanity/k20-b30/pass"
 reason = "This is the number of uncorrupted complete-graph worlds with max error ≤ 0.15 min for K = 20, B = 30: 4/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.95570fa69b]
 file = "TAI_template.tex"
@@ -2320,7 +2320,7 @@ key = "lambda-broken/all/worlds"
 reason = "960 is the total number of corrupted test worlds."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.9c64575798]
 file = "TAI_template.tex"
@@ -2353,7 +2353,7 @@ key = "scaling/density0.4-e15/k5"
 reason = "The density 0.4, 15% corruption joint minus pairwise difference at K=5 is +0.0034."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.9f62892b8c]
 file = "TAI_template.tex"
@@ -2397,7 +2397,7 @@ key = "fish-data/batches"
 reason = "\"K = 5 batches\" is the fish-oil batch count that script 04 records."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.a1945f99bf]
 file = "TAI_template.tex"
@@ -2562,7 +2562,7 @@ key = "fig4a/lambda/pairwise-cv"
 reason = "the λ cross-validation chose for composed pairwise fitting in figure 4 (a)'s world (script 05's caption)"
 by = "claude"
 decided = "2026-10-20T01:19:32+13:00"
-result_hash = ""
+result_hash = "sha256:a41631fce878430dd3af1540f137c9d5a8e48043eca96e4faa400d9b255712fd"
 
 [decisions.aad2c308df]
 file = "TAI_template.tex"
@@ -2584,7 +2584,7 @@ key = "sanity/k5-b10/pass"
 reason = "This is the number of uncorrupted complete-graph worlds with max error ≤ 0.15 min for K = 5, B = 10: 6/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.ac97875c23]
 file = "TAI_template.tex"
@@ -2617,7 +2617,7 @@ key = "fish-data/samples/all"
 reason = "'90 real fish-oil chromatograms' is the sample count that script 04 records for all fish-oil data."
 by = "claude"
 decided = "2026-10-20T01:06:01+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.aeb96cd23e]
 file = "TAI_template.tex"
@@ -2628,7 +2628,7 @@ key = "sanity/k5-b10/worlds"
 reason = "Ambiguous: the sentence has several 20s (6/20, 16/20, 4/20, K = 20); assuming this is the first, the denominator of \"6/20 for K = 5, B = 10\" in the sanity count of complete ε = 0 worlds."
 by = "claude"
 decided = "2026-10-20T01:08:32+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.af395218d9]
 file = "TAI_template.tex"
@@ -2661,7 +2661,7 @@ key = "fish-data/samples/sep2015"
 reason = "The second batch size, 36, is the September 2015 batch."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.b1f4486728]
 file = "TAI_template.tex"
@@ -2672,7 +2672,7 @@ key = "lambda-rules/k5-ring-b10-e30/joint-lambda10"
 reason = "Median error with λ fixed at 10 on the five-batch ring, B = 10, ε = 30%."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.b32919d606]
 file = "TAI_template.tex"
@@ -2705,7 +2705,7 @@ key = "map-error/k10-ring-b10-e30/pairwise"
 reason = "Composed pairwise error on the same 10-batch ring, B=10, ε=30%."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.b51dd55367]
 file = "TAI_template.tex"
@@ -2727,7 +2727,7 @@ key = "fish-data/batches"
 reason = "\"across $K = 5$ batches\" is the fish-oil batch count from script 04."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.b5edbfcd81]
 file = "TAI_template.tex"
@@ -2738,7 +2738,7 @@ key = "lambda-broken/all/joint-lambda10"
 reason = "'Fixed λ = 10 broke in 160 worlds' is the joint model's count with λ = 10 over all corrupted settings."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.b6b2ae7b4c]
 file = "TAI_template.tex"
@@ -2760,7 +2760,7 @@ key = "fish-data/samples/all"
 reason = "\"90 GC--MS ... profiles of fish oil\" is the total fish-oil sample count from script 04."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.b7227b0de3]
 file = "TAI_template.tex"
@@ -2782,7 +2782,7 @@ key = "map-error/k5-complete-b10-e30/star"
 reason = "'0.144 min star error at 30% corruption' on a complete graph; same setting as the joint value."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.b85df66e06]
 file = "TAI_template.tex"
@@ -2826,7 +2826,7 @@ key = "design/test-worlds"
 reason = "The denominator in \"14/20\" is the number of test worlds per synthetic setting."
 by = "claude"
 decided = "2026-10-20T01:09:20+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.ba80b2177e]
 file = "TAI_template.tex"
@@ -2859,7 +2859,7 @@ key = "settings-grid/BREAK_MIN"
 reason = "\"median error > 0.30 min\" states the breakdown threshold, which is the BREAK_MIN setting."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.bcee563cc6]
 file = "TAI_template.tex"
@@ -2870,7 +2870,7 @@ key = "design/settings"
 reason = "\"114 synthetic settings\" is the size of the synthetic grid design."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.bf9b2a2320]
 file = "TAI_template.tex"
@@ -2881,7 +2881,7 @@ key = "fish-rq1a/e15/delta"
 reason = "Median paired difference at 15% corruption."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:22c02892a3c0c963c813ce95756256d0780b8462c72933fc4261d0a6029fd446"
 
 [decisions.bff7b912ba]
 file = "TAI_template.tex"
@@ -2925,7 +2925,7 @@ key = "settings-fish/EPSILONS/max"
 reason = "The largest fish corruption rate in 'ε ∈ {0, 0.15, 0.30}'."
 by = "claude"
 decided = "2026-10-20T00:57:01+13:00"
-result_hash = ""
+result_hash = "sha256:c107972a66ecf2ec2f28117845e874a2c6b912f361ae182313d9d1723e17ec95"
 
 [decisions.c146c8db94]
 file = "TAI_template.tex"
@@ -2947,7 +2947,7 @@ key = "fish-error/complete-b10-e30/joint"
 reason = "Fish-oil held-out anchor error for joint fitting, complete graph, 10 anchors, 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.c4e51f8fdb]
 file = "TAI_template.tex"
@@ -2980,7 +2980,7 @@ key = "fish-error/complete-b100-e0/pairwise"
 reason = "The composed pairwise fish-oil error on the complete graph at B = 100, ε = 0%."
 by = "claude"
 decided = "2026-10-20T01:03:57+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.c9d23412c8]
 file = "TAI_template.tex"
@@ -2991,7 +2991,7 @@ key = "lambda-broken/chain/worlds"
 reason = "Denominator of 'chain (32/240)': the number of corrupted chain test worlds."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.ca1330df71]
 file = "TAI_template.tex"
@@ -3002,7 +3002,7 @@ key = "fish-error/complete-b10-e30/star"
 reason = "Strong-hub star, same fish setting (complete, b10, ε=0.3)."
 by = "claude"
 decided = "2026-10-20T01:01:01+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.ca8c36da91]
 file = "TAI_template.tex"
@@ -3024,7 +3024,7 @@ key = "lambda-rules/k5-ring-b10-e30/joint-tuned-broken"
 reason = "This is the broken-world count under cross-validated λ on the five-batch ring with B = 10 and ε = 30%: 14/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.cc001fb0f5]
 file = "TAI_template.tex"
@@ -3035,7 +3035,7 @@ key = "lambda-broken/ring/joint-per-world"
 reason = "This is the oracle's broken-world count for ring: 29/240."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.cc842c6028]
 file = "TAI_template.tex"
@@ -3046,7 +3046,7 @@ key = "lambda-broken/all/joint-per-world"
 reason = "The sentence gives the joint model's broken worlds, out of 960 corrupted ones, when λ is chosen by the truth separately for each test world. That is the 'per world' column of section 3 in results/diagnose_lambda.txt."
 by = "claude"
 decided = "2026-10-20T01:05:43+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.cdbf20fbcd]
 file = "TAI_template.tex"
@@ -3057,7 +3057,7 @@ key = "settings-grid/TUNE_SEEDS/max"
 reason = "'random seeds 0--2' states the largest tuning seed, which is TUNE_SEEDS max in script 02."
 by = "claude"
 decided = "2026-10-20T01:07:10+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.ce18c8e9b1]
 file = "TAI_template.tex"
@@ -3068,7 +3068,7 @@ key = "scaling/density0.4-e15/slope-ci-low"
 reason = "The lower bound of the slope's bootstrap confidence interval for density 0.4 at e15."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.ce78fe2663]
 file = "TAI_template.tex"
@@ -3079,7 +3079,7 @@ key = "lambda-broken/all/joint-tuned"
 reason = "'Cross-validated λ broke in 175 worlds' is the joint model's count with tuned λ over all corrupted settings."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.cef61f8ad5]
 file = "TAI_template.tex"
@@ -3112,7 +3112,7 @@ key = "lambda-broken/all/joint-per-world"
 reason = "The caption gives the per-world ground-truth oracle λ total as 80/960."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.cf46ff8e88]
 file = "TAI_template.tex"
@@ -3123,7 +3123,7 @@ key = "scaling/density0.4-e15/slope-ci-high"
 reason = "Upper bound of the 95% bootstrap CI for the slope on density 0.4 graphs at 15% corruption."
 by = "claude"
 decided = "2026-10-20T00:59:49+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.cf877facd5]
 file = "TAI_template.tex"
@@ -3145,7 +3145,7 @@ key = "map-error/k5-chain-b30-e30/joint"
 reason = "'1.525 min joint error' on sparse chains matches joint on k5-chain-b30-e30."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.cfed14e1c6]
 file = "TAI_template.tex"
@@ -3189,7 +3189,7 @@ key = "lambda-broken/chain/worlds"
 reason = "The first /240 in the sentence is the chain world count, '(32/240)'."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.d4244a4bd7]
 file = "TAI_template.tex"
@@ -3222,7 +3222,7 @@ key = "lambda-broken/all/settings"
 reason = "'all 48 corrupted synthetic configurations' is the count of corrupted settings in the λ-rule comparison."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.d5a4f48552]
 file = "TAI_template.tex"
@@ -3233,7 +3233,7 @@ key = "map-error/k5-complete-b10-e30/star"
 reason = "Reference-star error on K=5 complete, b10, at 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:57:52+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.d69698a375]
 file = "TAI_template.tex"
@@ -3244,7 +3244,7 @@ key = "sanity/k20-b30/worlds"
 reason = "Denominator of '4/20 for K = 20, B = 30' in the complete-graph, ε = 0 check."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
 [decisions.d6eaa704a2]
 file = "TAI_template.tex"
@@ -3277,7 +3277,7 @@ key = "fig4a/test-world"
 reason = "'test world 3' is the broken chain world shown in Fig. breakdown(a)."
 by = "claude"
 decided = "2026-10-20T01:08:56+13:00"
-result_hash = ""
+result_hash = "sha256:a41631fce878430dd3af1540f137c9d5a8e48043eca96e4faa400d9b255712fd"
 
 [decisions.d9b5f751ca]
 file = "TAI_template.tex"
@@ -3299,7 +3299,7 @@ key = "rq1a/k10-e0/anchors-median"
 reason = "'100 anchors per edge' on K = 10 complete graphs is recorded as the RQ1a median anchors for k10."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:b2e1ccdaa7418ff0eca986a24040e798aebcb9a00b6b440a70578ccd67416974"
 
 [decisions.dbef976286]
 file = "TAI_template.tex"
@@ -3310,7 +3310,7 @@ key = "design/test-worlds"
 reason = "'locked prior to running the 20 test worlds' is the synthetic design's number of test worlds."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.dc85599bcb]
 file = "TAI_template.tex"
@@ -3354,7 +3354,7 @@ key = "map-error/k10-ring-b10-e30/joint"
 reason = "Joint error on the 10-batch ring with 10 anchors per edge and 30% corruption."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.def174366c]
 file = "TAI_template.tex"
@@ -3431,7 +3431,7 @@ key = "fish-data/samples/jul2016"
 reason = "The last batch size, 16, is the July 2016 batch's sample count."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.e300670327]
 file = "TAI_template.tex"
@@ -3442,7 +3442,7 @@ key = "lambda-broken/all/worlds"
 reason = "The denominator in 80/960 is the total number of corrupted test worlds."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.e34fec4984]
 file = "TAI_template.tex"
@@ -3453,7 +3453,7 @@ key = "fish-data/draws"
 reason = "'20 random draws per configuration' for the fish-oil arm is the recorded number of draws."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.e477dae97b]
 file = "TAI_template.tex"
@@ -3475,7 +3475,7 @@ key = "settings-grid/TUNE_SEEDS/count"
 reason = "'the 3 tuning worlds' is the count of tuning seeds set in script 02."
 by = "claude"
 decided = "2026-10-20T01:07:51+13:00"
-result_hash = ""
+result_hash = "sha256:5cc405894e7a735fcf85d77f2f62f2fec7a019b285f53b1a3bde7cb2455f4fe2"
 
 [decisions.e63281b91c]
 file = "TAI_template.tex"
@@ -3497,7 +3497,7 @@ key = "lambda-broken/all/worlds"
 reason = "'960 test worlds total' over the corrupted settings in the λ-rule comparison is the worlds count in lambda-broken/all."
 by = "claude"
 decided = "2026-10-20T01:00:14+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.e73d05dc47]
 file = "TAI_template.tex"
@@ -3530,7 +3530,7 @@ key = "fish-data/samples/aug2015"
 reason = "The first batch size, 2, is the August 2015 batch."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:93e4c221b5ad6eb79750e42f9bfdd8c28c7adb33ec76a983f3a5daeceaba9194"
 
 [decisions.e7a4b0b7a6]
 file = "TAI_template.tex"
@@ -3552,7 +3552,7 @@ key = "lambda-broken/all/joint-tuned"
 reason = "'cross-validated smoothness selection (175/960 broken worlds)' is the count of broken worlds for joint with tuned λ."
 by = "claude"
 decided = "2026-10-20T00:55:28+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.e83123486f]
 file = "TAI_template.tex"
@@ -3563,7 +3563,7 @@ key = "scaling/density0.4-e15/k10"
 reason = "The density 0.4, e15 difference at K=10."
 by = "claude"
 decided = "2026-10-20T00:59:28+13:00"
-result_hash = ""
+result_hash = "sha256:d94b10774601b4481d5c3045d85b5880c3209f6b9b20cb09436d08697081061a"
 
 [decisions.e8e4e9419b]
 file = "TAI_template.tex"
@@ -3574,7 +3574,7 @@ key = "lambda-rules/k5-ring-b10-e30/joint-lambda10-broken"
 reason = "This is the broken-world count with λ fixed at 10 on the same ring: 17/20."
 by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.eb184ac18d]
 file = "TAI_template.tex"
@@ -3585,7 +3585,7 @@ key = "map-error/k5-ring-b30-e30/pairwise"
 reason = "Composed pairwise median error on the same five-batch ring, B=30, ε=30%."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.eb558ca033]
 file = "TAI_template.tex"
@@ -3596,7 +3596,7 @@ key = "map-error/k5-chain-b30-e30/pairwise"
 reason = "Composed pairwise median error on the five-batch chain, 30 anchors, 30% corruption, in Table tab:synthetic (tuned λ)."
 by = "claude"
 decided = "2026-10-20T00:58:13+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.edacd50588]
 file = "TAI_template.tex"
@@ -3629,7 +3629,7 @@ key = "map-error/k5-complete-b10-e30/pairwise"
 reason = "Composed pairwise error in the same k5 complete b10 e30 setting."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:166deec3133c9e55d0f337ad1d941ab35f6feb8fca44ef4cc50640e4a0af5d9b"
 
 [decisions.eef03f5c1d]
 file = "TAI_template.tex"
@@ -3695,7 +3695,7 @@ key = "lambda-broken/all/worlds"
 reason = "'All 960 corrupted test worlds' is the recorded world count in the broken-worlds-by-λ-rule report."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.f47904907b]
 file = "TAI_template.tex"
@@ -3728,7 +3728,7 @@ key = "fish-error/complete-b10-e30/joint"
 reason = "Joint error \"on real fish-oil data\" for complete graphs, b10, ε=30%."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.f54c64c59b]
 file = "TAI_template.tex"
@@ -3761,7 +3761,7 @@ key = "design/tuning-worlds"
 reason = "\"tuned on 3 independent tuning worlds\" is the number of tuning worlds in the grid design."
 by = "claude"
 decided = "2026-10-20T01:07:29+13:00"
-result_hash = ""
+result_hash = "sha256:d0dd43ef5675e6c0dbc3a9ff3f7e0f1e69feab260c873cdc28cb92c8bece84af"
 
 [decisions.facc8fa591]
 file = "TAI_template.tex"
@@ -3772,7 +3772,7 @@ key = "fish-error/complete-b10-e30/pairwise"
 reason = "The fish-oil pairwise comparator (\"and 0.284 min\") for complete, b10, ε=30%."
 by = "claude"
 decided = "2026-10-20T01:01:23+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
 
 [decisions.fc8a36616a]
 file = "TAI_template.tex"
@@ -3783,7 +3783,7 @@ key = "lambda-broken/all/joint-tuned"
 reason = "Broken worlds under cross-validated (tuned) λ for joint fitting, out of 960 in total."
 by = "claude"
 decided = "2026-10-20T00:58:55+13:00"
-result_hash = ""
+result_hash = "sha256:062da0bd6711003cca0b3f7acc0540ebbe42912c3c8de44fe78a0e2f74485308"
 
 [decisions.fcdbc25369]
 file = "TAI_template.tex"
@@ -3805,7 +3805,7 @@ key = "lambda-rules/k5-ring-b10-e30/joint-tuned"
 reason = "Median error with cross-validated λ on the five-batch ring, B = 10, ε = 30%, before λ was fixed at 10."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.fd7459162a]
 file = "TAI_template.tex"
@@ -3816,7 +3816,7 @@ key = "lambda-rules/k5-chain-b30-e30/joint-lambda10"
 reason = "Median error on the five-batch chain with B = 30 and ε = 30% when λ is fixed at 10, from the λ-rule comparison."
 by = "claude"
 decided = "2026-10-20T01:00:35+13:00"
-result_hash = ""
+result_hash = "sha256:9c6bb59607bcb973bbe15a5e0af20612132f7d23c34e21b4ef680aa340ff4b5c"
 
 [decisions.fefe700fbb]
 file = "TAI_template.tex"
@@ -3838,4 +3838,4 @@ key = "fish-error/complete-b10-e30/pairwise"
 reason = "Fish-oil composed pairwise error in the same complete b10 e30 setting."
 by = "claude"
 decided = "2026-10-20T00:55:08+13:00"
-result_hash = ""
+result_hash = "sha256:65fc640202ae2b08435bb39663044a7b4ef8ca604b55e6f8e2ece5c5ba1c01ac"
