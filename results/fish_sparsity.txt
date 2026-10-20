@@ -1,211 +1,211 @@
 04_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
 
-trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align
+trustalign 0.2.1 @ 4aa259b (src clean) from ~/Desktop/trust-align
 alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench
-joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align
-warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align
+joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align
+warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align
 environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0
 
-1. Data: batches apr2016 (n=10), aug2015 (n=2), jan2016 (n=26), jul2016 (n=16), sep2015 (n=36); 25,011 anchors. Strong hub sep2015, weak hub aug2015; chain order aug2015 – sep2015 – jan2016 – apr2016 – jul2016.
-   Anchors per pair (unaligned TIC r; drifted if < 0.5): apr2016×aug2015=138 (0.00*)  apr2016×jan2016=1891 (0.13*)  apr2016×jul2016=1463 (0.90)  apr2016×sep2015=2475 (0.04*)  aug2015×jan2016=322 (0.58)  aug2015×jul2016=228 (0.04*)  aug2015×sep2015=497 (0.73)  jan2016×jul2016=3374 (0.13*)  jan2016×sep2015=10227 (0.81)  jul2016×sep2015=4396 (0.05*)
+1. Data: batches apr2016 (n=10), aug2015 (n=2), jan2016 (n=39), jul2016 (n=16), sep2015 (n=36); 32,325 anchors. Strong hub jan2016, weak hub aug2015; chain order aug2015 – sep2015 – jan2016 – apr2016 – jul2016.
+   Anchors per pair (unaligned TIC r; drifted if < 0.5): apr2016×aug2015=138 (0.00*)  apr2016×jan2016=2718 (0.11*)  apr2016×jul2016=1463 (0.90)  apr2016×sep2015=2475 (0.04*)  aug2015×jan2016=477 (0.59)  aug2015×jul2016=228 (0.04*)  aug2015×sep2015=497 (0.73)  jan2016×jul2016=4848 (0.11*)  jan2016×sep2015=15085 (0.83)  jul2016×sep2015=4396 (0.05*)
    20 draws per setting. Held-out error = median over batch pairs of the median |ĝ(t_a) − t_b| (min) over the real anchors the draw did not keep; tables give the median over draws. Stars: only the pairs they reach. A draw is "broken" if its error exceeds 0.3 min.
 
 ============================================================================================================================
 2. Held-out anchor error (min), all scored pairs [median λ over draws]
    topology   budget     ε               Joint                Star     Star (weak hub)   Composed pairwise      Composed PCHIP
-   complete       10   0.0         0.079 [100]         0.097 [300]        0.128 [1000]         0.077 [300]               0.070
-   complete       10  0.15        0.092 [2000]         0.124 [100]         0.163 [100]         0.086 [300]               0.145
-   complete       10   0.3         0.133 [200]          0.410 [10]          0.510 [10]        0.284 [1000]               0.543
-   complete       30   0.0          0.065 [30]          0.075 [30]          0.089 [65]         0.063 [100]               0.047
-   complete       30  0.15          0.070 [30]         0.082 [100]          0.098 [30]         0.075 [300]               0.071
-   complete       30   0.3         0.093 [300]          0.106 [30]          0.256 [10]         0.100 [300]               0.119
-   complete      100   0.0          0.059 [10]          0.069 [10]          0.078 [10]          0.056 [30]               0.038
-   complete      100  0.15          0.063 [30]          0.071 [30]          0.084 [20]         0.062 [100]               0.041
-   complete      100   0.3         0.077 [100]           0.113 [1]          0.127 [10]         0.080 [300]               0.047
-   star           10   0.0         0.098 [300]         0.098 [300]         0.084 [0.1]        0.099 [1000]               0.119
-   star           10  0.15         0.114 [300]         0.114 [300]         0.086 [0.1]         0.144 [300]               0.376
-   star           10   0.3         0.928 [100]         0.928 [100]         0.344 [0.1]        0.628 [1000]               1.627
-   star           30   0.0          0.079 [30]          0.079 [30]         0.042 [0.1]         0.081 [100]               0.095
-   star           30  0.15          0.080 [30]          0.080 [30]         0.046 [0.1]         0.081 [300]               0.198
-   star           30   0.3          0.107 [30]          0.107 [30]         0.046 [0.1]         0.112 [200]               1.126
-   star          100   0.0          0.069 [10]          0.069 [10]         0.037 [0.1]          0.070 [30]               0.082
-   star          100  0.15          0.074 [30]          0.074 [30]         0.036 [0.1]         0.071 [100]               0.425
-   star          100   0.3           0.109 [1]           0.109 [1]         0.037 [0.1]         0.083 [300]               2.293
-   weak_star      10   0.0         0.119 [300]         0.058 [0.1]         0.119 [300]         0.114 [300]               0.141
-   weak_star      10  0.15         0.136 [650]           0.095 [1]         0.136 [650]         0.144 [650]               0.361
-   weak_star      10   0.3          0.495 [65]           0.116 [1]          0.495 [65]         0.484 [300]               2.133
-   weak_star      30   0.0         0.100 [200]           0.048 [1]         0.100 [200]          0.087 [65]               0.118
-   weak_star      30  0.15         0.109 [100]           0.045 [1]         0.109 [100]         0.098 [100]               0.218
-   weak_star      30   0.3          0.187 [10]           0.062 [1]          0.187 [10]         0.143 [300]               0.625
-   weak_star     100   0.0          0.089 [65]        0.040 [0.55]          0.089 [65]          0.085 [10]               0.111
-   weak_star     100  0.15          0.083 [30]        0.038 [0.55]          0.083 [30]          0.084 [30]               0.124
-   weak_star     100   0.3          0.136 [10]         0.038 [0.1]          0.136 [10]         0.094 [100]               0.148
-   chain          10   0.0         0.110 [650]        0.081 [1000]         0.065 [0.1]        0.109 [1000]               0.125
-   chain          10  0.15        0.128 [2000]          0.105 [20]         0.066 [0.1]        0.134 [1000]               0.519
-   chain          10   0.3         0.829 [100]          0.323 [10]         0.143 [0.1]        1.149 [1000]               2.085
-   chain          30   0.0         0.090 [650]        0.073 [3000]         0.043 [0.1]        0.083 [1000]               0.084
-   chain          30  0.15         0.109 [650]           0.063 [1]         0.046 [0.1]        0.092 [1000]               0.240
-   chain          30   0.3          0.235 [10]         0.067 [0.1]         0.050 [0.1]        0.193 [1000]               2.255
-   chain         100   0.0        0.097 [3000]       0.071 [10000]         0.036 [0.1]         0.075 [100]               0.069
-   chain         100  0.15         0.093 [300]           0.049 [1]         0.039 [0.1]         0.076 [200]               0.477
-   chain         100   0.3          0.094 [20]        0.050 [0.55]         0.039 [0.1]        0.101 [1000]               0.952
-   ring           10   0.0        0.106 [1000]        0.105 [0.55]         0.126 [0.1]         0.103 [650]               0.139
-   ring           10  0.15        0.111 [3000]           0.119 [1]           0.184 [1]        0.133 [1000]               0.410
-   ring           10   0.3         0.408 [300]          0.232 [10]         0.275 [5.5]         0.463 [300]               1.110
-   ring           30   0.0         0.089 [100]         0.057 [0.1]         0.082 [0.1]         0.085 [300]               0.083
-   ring           30  0.15        0.097 [1000]         0.063 [0.1]         0.093 [0.1]         0.090 [650]               0.157
-   ring           30   0.3         0.126 [300]         0.070 [0.1]           0.101 [1]        0.139 [1000]               0.789
-   ring          100   0.0          0.077 [30]         0.046 [0.1]         0.067 [0.1]         0.075 [100]               0.069
-   ring          100  0.15          0.077 [30]         0.048 [0.1]        0.071 [0.55]         0.077 [200]               0.084
-   ring          100   0.3          0.085 [65]         0.053 [0.1]         0.087 [0.1]        0.092 [1000]               0.099
-   density0.4     10   0.0        0.115 [2000]        0.093 [15.5]          0.096 [20]        0.103 [2000]               0.141
-   density0.4     10  0.15         0.141 [200]         0.134 [5.5]          0.109 [30]         0.145 [300]               0.840
-   density0.4     10   0.3         0.923 [100]         0.270 [5.5]          0.247 [10]        0.965 [3000]               2.086
-   density0.4     30   0.0         0.090 [100]        0.060 [0.55]         0.079 [5.5]         0.087 [200]               0.102
-   density0.4     30  0.15         0.096 [100]          0.071 [20]         0.072 [0.1]         0.094 [650]               0.193
-   density0.4     30   0.3         0.143 [300]         0.078 [5.5]          0.096 [20]         0.299 [300]               0.956
-   density0.4    100   0.0          0.080 [30]          0.052 [10]          0.078 [65]          0.076 [30]               0.087
-   density0.4    100  0.15          0.083 [65]           0.046 [1]          0.069 [30]          0.084 [30]               0.187
-   density0.4    100   0.3          0.106 [30]          0.067 [10]           0.054 [1]         0.103 [300]               0.793
+   complete       10   0.0         0.083 [200]         0.122 [300]         0.130 [300]         0.082 [300]               0.073
+   complete       10  0.15         0.082 [300]         0.123 [300]          0.157 [65]         0.092 [300]               0.144
+   complete       10   0.3         0.118 [100]          0.279 [20]          0.328 [65]         0.194 [200]               0.490
+   complete       30   0.0          0.063 [30]         0.088 [100]          0.086 [30]         0.063 [100]               0.048
+   complete       30  0.15          0.069 [30]         0.090 [100]          0.096 [65]         0.074 [300]               0.069
+   complete       30   0.3         0.090 [300]          0.160 [10]          0.192 [10]         0.100 [300]               0.130
+   complete      100   0.0          0.057 [10]          0.075 [65]          0.079 [10]          0.055 [30]               0.039
+   complete      100  0.15          0.063 [30]          0.076 [30]          0.084 [30]         0.062 [100]               0.042
+   complete      100   0.3         0.077 [100]           0.112 [1]         0.130 [5.5]         0.079 [300]               0.048
+   star           10   0.0        0.112 [1000]        0.112 [1000]         0.074 [0.1]         0.110 [300]               0.121
+   star           10  0.15         0.154 [300]         0.154 [300]         0.068 [0.1]        0.129 [1000]               0.365
+   star           10   0.3          0.547 [10]          0.547 [10]        0.098 [0.55]         0.771 [100]               2.169
+   star           30   0.0         0.086 [100]         0.086 [100]        0.047 [0.55]         0.088 [650]               0.091
+   star           30  0.15         0.097 [100]         0.097 [100]         0.049 [0.1]         0.097 [300]               0.167
+   star           30   0.3          0.152 [30]          0.152 [30]         0.049 [0.1]         0.153 [650]               0.796
+   star          100   0.0         0.079 [100]         0.079 [100]         0.039 [0.1]         0.073 [100]               0.072
+   star          100  0.15          0.076 [30]          0.076 [30]         0.040 [0.1]         0.085 [300]               0.104
+   star          100   0.3           0.092 [1]           0.092 [1]         0.040 [0.1]         0.102 [100]               0.123
+   weak_star      10   0.0         0.116 [300]         0.060 [0.1]         0.116 [300]        0.123 [1000]               0.141
+   weak_star      10  0.15        0.161 [1000]         0.067 [0.1]        0.161 [1000]        0.143 [2000]               0.430
+   weak_star      10   0.3         0.938 [300]          0.180 [10]         0.938 [300]        0.607 [1000]               2.148
+   weak_star      30   0.0         0.106 [300]         0.048 [0.1]         0.106 [300]         0.091 [100]               0.119
+   weak_star      30  0.15          0.105 [30]           0.049 [1]          0.105 [30]         0.102 [100]               0.179
+   weak_star      30   0.3          0.178 [10]           0.056 [1]          0.178 [10]        0.144 [1000]               0.671
+   weak_star     100   0.0         0.093 [100]         0.040 [0.1]         0.093 [100]          0.082 [30]               0.111
+   weak_star     100  0.15          0.083 [30]         0.040 [0.1]          0.083 [30]          0.082 [30]               0.123
+   weak_star     100   0.3          0.130 [10]         0.041 [0.1]          0.130 [10]         0.114 [100]               0.144
+   chain          10   0.0        0.120 [1000]        0.101 [1000]         0.065 [0.1]        0.112 [1000]               0.142
+   chain          10  0.15        0.149 [2000]         0.130 [650]         0.066 [0.1]        0.136 [1000]               0.398
+   chain          10   0.3          0.910 [30]          0.965 [30]         0.299 [0.1]        1.314 [1000]               2.152
+   chain          30   0.0        0.096 [3000]         0.072 [100]         0.043 [0.1]         0.084 [300]               0.094
+   chain          30  0.15         0.091 [300]         0.078 [300]         0.049 [0.1]        0.089 [1000]               0.350
+   chain          30   0.3          0.153 [10]          0.173 [65]         0.051 [0.1]        0.133 [1000]               1.683
+   chain         100   0.0        0.096 [3000]          0.060 [30]         0.037 [0.1]         0.073 [100]               0.073
+   chain         100  0.15          0.082 [65]         0.069 [100]         0.038 [0.1]         0.076 [100]               0.161
+   chain         100   0.3          0.082 [20]          0.071 [30]         0.037 [0.1]         0.095 [300]               1.111
+   ring           10   0.0        0.102 [1000]         0.087 [300]         0.130 [0.1]        0.103 [1000]               0.117
+   ring           10  0.15        0.117 [1650]          0.097 [20]           0.186 [1]         0.126 [300]               0.279
+   ring           10   0.3          0.579 [65]          0.707 [20]          0.218 [10]         0.492 [650]               1.727
+   ring           30   0.0         0.089 [200]         0.079 [650]         0.082 [0.1]         0.085 [300]               0.080
+   ring           30  0.15        0.100 [1000]          0.073 [20]         0.093 [0.1]         0.089 [650]               0.134
+   ring           30   0.3         0.138 [200]          0.110 [30]         0.101 [5.5]        0.143 [1000]               0.694
+   ring          100   0.0          0.078 [30]         0.070 [300]         0.067 [0.1]         0.074 [100]               0.072
+   ring          100  0.15          0.076 [30]          0.061 [10]        0.071 [0.55]         0.079 [300]               0.091
+   ring          100   0.3         0.087 [100]         0.094 [550]         0.088 [0.1]        0.102 [1000]               0.143
+   density0.4     10   0.0        0.118 [1000]         0.091 [5.5]          0.095 [10]        0.110 [1000]               0.141
+   density0.4     10  0.15        0.125 [1000]           0.112 [1]          0.113 [20]         0.146 [300]               0.548
+   density0.4     10   0.3          0.666 [65]          0.208 [30]         0.126 [5.5]        1.261 [2000]               2.216
+   density0.4     30   0.0         0.095 [300]          0.064 [30]          0.081 [20]         0.091 [300]               0.094
+   density0.4     30  0.15         0.092 [300]           0.071 [1]        0.070 [0.55]         0.093 [300]               0.235
+   density0.4     30   0.3          0.158 [30]          0.083 [10]         0.086 [5.5]         0.135 [650]               1.120
+   density0.4    100   0.0          0.075 [30]         0.050 [0.1]          0.063 [30]          0.077 [30]               0.085
+   density0.4    100  0.15          0.085 [30]           0.053 [1]          0.069 [30]          0.083 [30]               0.203
+   density0.4    100   0.3          0.116 [30]           0.055 [1]           0.045 [1]         0.096 [650]               0.866
 
 ============================================================================================================================
 3. Pairs without direct anchors: held-out anchor error (min)
    topology   budget     ε               Joint   Composed pairwise      Composed PCHIP
-   star           10   0.0               0.109               0.115               0.169
-   star           10  0.15               0.149               0.232               0.884
-   star           10   0.3               1.279               1.007               2.475
-   star           30   0.0               0.094               0.096               0.122
-   star           30  0.15               0.092               0.094               0.483
-   star           30   0.3               0.143               0.387               2.313
-   star          100   0.0               0.084               0.085               0.105
-   star          100  0.15               0.087               0.083               1.248
-   star          100   0.3               0.265               0.094               4.364
-   weak_star      10   0.0               0.137               0.144               0.194
-   weak_star      10  0.15               0.176               0.175               0.903
-   weak_star      10   0.3               1.410               1.153               2.940
-   weak_star      30   0.0               0.120               0.111               0.181
-   weak_star      30  0.15               0.135               0.120               0.436
-   weak_star      30   0.3               0.348               0.365               1.487
-   weak_star     100   0.0               0.106               0.107               0.169
-   weak_star     100  0.15               0.112               0.112               0.452
-   weak_star     100   0.3               0.174               0.122               2.158
-   chain          10   0.0               0.120               0.132               0.190
-   chain          10  0.15               0.165               0.193               1.083
-   chain          10   0.3               1.463               1.455               3.298
-   chain          30   0.0               0.108               0.098               0.116
-   chain          30  0.15               0.124               0.110               0.718
-   chain          30   0.3               0.306               0.220               4.041
-   chain         100   0.0               0.116               0.090               0.096
-   chain         100  0.15               0.105               0.091               2.869
-   chain         100   0.3               0.113               0.115               4.171
-   ring           10   0.0               0.124               0.126               0.177
-   ring           10  0.15               0.122               0.156               0.603
-   ring           10   0.3               0.455               0.712               2.709
-   ring           30   0.0               0.102               0.101               0.119
-   ring           30  0.15               0.113               0.108               0.613
-   ring           30   0.3               0.151               0.185               2.300
-   ring          100   0.0               0.089               0.101               0.108
-   ring          100  0.15               0.087               0.095               1.664
-   ring          100   0.3               0.095               0.106               4.062
-   density0.4     10   0.0               0.143               0.135               0.196
-   density0.4     10  0.15               0.202               0.189               1.843
-   density0.4     10   0.3               1.892               1.467               2.712
-   density0.4     30   0.0               0.102               0.106               0.136
-   density0.4     30  0.15               0.112               0.105               0.590
-   density0.4     30   0.3               0.176               0.646               2.192
-   density0.4    100   0.0               0.097               0.100               0.129
-   density0.4    100  0.15               0.102               0.102               2.044
-   density0.4    100   0.3               0.143               0.118               4.205
+   star           10   0.0               0.142               0.132               0.158
+   star           10  0.15               0.185               0.216               0.983
+   star           10   0.3               1.454               1.337               2.961
+   star           30   0.0               0.112               0.110               0.123
+   star           30  0.15               0.123               0.113               0.271
+   star           30   0.3               0.894               0.495               1.758
+   star          100   0.0               0.099               0.100               0.099
+   star          100  0.15               0.105               0.103               0.167
+   star          100   0.3               0.139               0.137               0.269
+   weak_star      10   0.0               0.142               0.138               0.183
+   weak_star      10  0.15               0.265               0.192               0.882
+   weak_star      10   0.3               1.829               1.126               3.046
+   weak_star      30   0.0               0.129               0.112               0.168
+   weak_star      30  0.15               0.133               0.122               0.373
+   weak_star      30   0.3               0.252               0.321               1.406
+   weak_star     100   0.0               0.109               0.103               0.167
+   weak_star     100  0.15               0.114               0.112               0.454
+   weak_star     100   0.3               0.187               0.128               2.036
+   chain          10   0.0               0.147               0.146               0.193
+   chain          10  0.15               0.194               0.200               1.090
+   chain          10   0.3               1.563               1.655               3.283
+   chain          30   0.0               0.118               0.106               0.128
+   chain          30  0.15               0.110               0.101               1.180
+   chain          30   0.3               0.205               0.484               4.020
+   chain         100   0.0               0.110               0.087               0.099
+   chain         100  0.15               0.104               0.091               1.835
+   chain         100   0.3               0.107               0.111               4.285
+   ring           10   0.0               0.114               0.123               0.162
+   ring           10  0.15               0.129               0.159               0.582
+   ring           10   0.3               0.575               0.875               2.884
+   ring           30   0.0               0.110               0.101               0.115
+   ring           30  0.15               0.115               0.113               0.312
+   ring           30   0.3               0.155               0.204               2.182
+   ring          100   0.0               0.093               0.100               0.106
+   ring          100  0.15               0.091               0.100               1.135
+   ring          100   0.3               0.099               0.116               3.892
+   density0.4     10   0.0               0.144               0.136               0.176
+   density0.4     10  0.15               0.163               0.283               1.316
+   density0.4     10   0.3               1.683               1.473               3.033
+   density0.4     30   0.0               0.112               0.103               0.120
+   density0.4     30  0.15               0.109               0.106               0.591
+   density0.4     30   0.3               0.356               0.334               2.566
+   density0.4    100   0.0               0.098               0.100               0.130
+   density0.4    100  0.15               0.100               0.102               1.929
+   density0.4    100   0.3               0.167               0.130               4.426
 
 ============================================================================================================================
-4. Well-connected data (RQ1a): complete graph, budget 100. Δ = joint − star through sep2015 per draw (min); median [95 % CI], two-sided Wilcoxon p over draws
+4. Well-connected data (RQ1a): complete graph, budget 100. Δ = joint − star through jan2016 per draw (min); median [95 % CI], two-sided Wilcoxon p over draws
        ε            median Δ [95% CI]       [min Δ, max Δ]       p
-     0.0   -0.0097 [-0.0145, -0.0071]   [-0.0210, -0.0010]  <0.001
-    0.15   -0.0079 [-0.0107, -0.0044]   [-0.0658, +0.0027]  <0.001
-     0.3   -0.0272 [-0.0390, -0.0105]   [-0.0582, +0.0094]  <0.001
+     0.0   -0.0182 [-0.0207, -0.0140]   [-0.0298, -0.0045]  <0.001
+    0.15   -0.0139 [-0.0172, -0.0088]   [-0.0314, -0.0025]  <0.001
+     0.3   -0.0336 [-0.0604, -0.0123]   [-0.4680, +0.0226]  <0.001
 
 ============================================================================================================================
 5. Weak hub, chain, ring, density0.4 (RQ1b). Δ = joint − competitor (min) per draw; two-sided Wilcoxon over draws, Holm over all 72 comparisons; wins = draws where joint is lower
    topology   budget     ε comparison                        median Δ   wins       p  Holm p
-   complete       10   0.0 vs Star (weak hub), its pairs      -0.0515  20/20  <0.001  <0.001  *
-   complete       10  0.15 vs Star (weak hub), its pairs      -0.0800  18/20  <0.001   0.002  *
-   complete       10   0.3 vs Star (weak hub), its pairs      -0.0849  17/20   0.003   0.177
-   complete       30   0.0 vs Star (weak hub), its pairs      -0.0219  20/20  <0.001  <0.001  *
-   complete       30  0.15 vs Star (weak hub), its pairs      -0.0252  20/20  <0.001  <0.001  *
-   complete       30   0.3 vs Star (weak hub), its pairs      -0.1629  19/20  <0.001  <0.001  *
-   complete      100   0.0 vs Star (weak hub), its pairs      -0.0169  20/20  <0.001  <0.001  *
-   complete      100  0.15 vs Star (weak hub), its pairs      -0.0206  20/20  <0.001  <0.001  *
-   complete      100   0.3 vs Star (weak hub), its pairs      -0.0513  19/20  <0.001  <0.001  *
-   weak_star      10   0.0 vs composed pairwise, indirect     +0.0025   9/20   0.622   1.000
-   weak_star      10  0.15 vs composed pairwise, indirect     +0.0155   9/20   0.622   1.000
-   weak_star      10   0.3 vs composed pairwise, indirect     +0.0051  10/20   0.956   1.000
-   weak_star      30   0.0 vs composed pairwise, indirect     +0.0072   7/20   0.105   1.000
-   weak_star      30  0.15 vs composed pairwise, indirect     +0.0145   6/20   0.019   0.904
-   weak_star      30   0.3 vs composed pairwise, indirect     +0.0430   9/20   0.812   1.000
-   weak_star     100   0.0 vs composed pairwise, indirect     -0.0007  11/20   0.596   1.000
-   weak_star     100  0.15 vs composed pairwise, indirect     -0.0014  11/20   0.475   1.000
-   weak_star     100   0.3 vs composed pairwise, indirect     +0.0519   2/20  <0.001   0.020  *
-   chain          10   0.0 vs Star, indirect pairs            -0.0017  11/20   0.430   1.000
-   chain          10   0.0 vs composed pairwise, indirect     +0.0027   9/20   0.596   1.000
-   chain          10  0.15 vs Star, indirect pairs            -0.0177  12/20   0.090   1.000
-   chain          10  0.15 vs composed pairwise, indirect     -0.0057  11/20   0.596   1.000
-   chain          10   0.3 vs Star, indirect pairs            +0.0144  10/20   0.546   1.000
-   chain          10   0.3 vs composed pairwise, indirect     +0.3507   9/20   0.475   1.000
-   chain          30   0.0 vs Star, indirect pairs            +0.0051   5/20   0.006   0.319
-   chain          30   0.0 vs composed pairwise, indirect     +0.0082   8/20   0.040   1.000
-   chain          30  0.15 vs Star, indirect pairs            -0.0005  10/20   0.312   1.000
-   chain          30  0.15 vs composed pairwise, indirect     +0.0128   1/20  <0.001   0.042  *
-   chain          30   0.3 vs Star, indirect pairs            +0.0052   9/20   0.177   1.000
-   chain          30   0.3 vs composed pairwise, indirect     +0.0285   9/20   0.349   1.000
-   chain         100   0.0 vs Star, indirect pairs            +0.0039   8/20   0.165   1.000
-   chain         100   0.0 vs composed pairwise, indirect     +0.0217   2/20  <0.001  <0.001  *
-   chain         100  0.15 vs Star, indirect pairs            -0.0203  19/20  <0.001   0.005  *
-   chain         100  0.15 vs composed pairwise, indirect     +0.0103   6/20   0.006   0.296
-   chain         100   0.3 vs Star, indirect pairs            -0.0116  16/20   0.097   1.000
-   chain         100   0.3 vs composed pairwise, indirect     -0.0095  12/20   0.674   1.000
-   ring           10   0.0 vs Star, indirect pairs            -0.0475  16/20   0.004   0.232
-   ring           10   0.0 vs composed pairwise, indirect     -0.0034  13/20   0.294   1.000
-   ring           10  0.15 vs Star, indirect pairs            -0.0611  16/20   0.006   0.296
-   ring           10  0.15 vs composed pairwise, indirect     -0.0321  16/20   0.001   0.083
-   ring           10   0.3 vs Star, indirect pairs            +0.0146  10/20   0.812   1.000
-   ring           10   0.3 vs composed pairwise, indirect     -0.1813  14/20   0.498   1.000
-   ring           30   0.0 vs Star, indirect pairs            -0.0169  15/20   0.008   0.399
-   ring           30   0.0 vs composed pairwise, indirect     +0.0033   9/20   1.000   1.000
-   ring           30  0.15 vs Star, indirect pairs            -0.0109  16/20   0.007   0.357
-   ring           30  0.15 vs composed pairwise, indirect     +0.0040   9/20   0.927   1.000
-   ring           30   0.3 vs Star, indirect pairs            +0.0237   8/20   0.114   1.000
-   ring           30   0.3 vs composed pairwise, indirect     -0.0055  10/20   0.648   1.000
-   ring          100   0.0 vs Star, indirect pairs            -0.0171  17/20  <0.001   0.024  *
-   ring          100   0.0 vs composed pairwise, indirect     -0.0050  14/20   0.058   1.000
-   ring          100  0.15 vs Star, indirect pairs            -0.0139  17/20   0.002   0.113
-   ring          100  0.15 vs composed pairwise, indirect     -0.0106  17/20   0.005   0.262
-   ring          100   0.3 vs Star, indirect pairs            -0.0198  17/20  <0.001   0.005  *
-   ring          100   0.3 vs composed pairwise, indirect     -0.0078  15/20   0.006   0.296
-   density0.4     10   0.0 vs Star, indirect pairs            +0.0036   3/9    0.734   1.000
-   density0.4     10   0.0 vs composed pairwise, indirect     +0.0094   7/20   0.083   1.000
-   density0.4     10  0.15 vs Star, indirect pairs            -0.0090   7/11   0.465   1.000
-   density0.4     10  0.15 vs composed pairwise, indirect     -0.0307  13/20   0.133   1.000
-   density0.4     10   0.3 vs Star, indirect pairs            +0.5644   2/9    0.203   1.000
-   density0.4     10   0.3 vs composed pairwise, indirect     +0.1580   9/20   0.841   1.000
-   density0.4     30   0.0 vs Star, indirect pairs            +0.0018   2/5    1.000   1.000
-   density0.4     30   0.0 vs composed pairwise, indirect     -0.0008  11/20   0.927   1.000
-   density0.4     30  0.15 vs Star, indirect pairs            +0.0078   5/13   0.497   1.000
-   density0.4     30  0.15 vs composed pairwise, indirect     +0.0078   6/20   0.070   1.000
-   density0.4     30   0.3 vs Star, indirect pairs            +0.0357   4/9    0.250   1.000
-   density0.4     30   0.3 vs composed pairwise, indirect     -0.0693  11/20   0.784   1.000
-   density0.4    100   0.0 vs Star, indirect pairs            +0.0021   3/9    0.652   1.000
-   density0.4    100   0.0 vs composed pairwise, indirect     +0.0002  10/20   0.784   1.000
-   density0.4    100  0.15 vs Star, indirect pairs            +0.0011   5/12   0.910   1.000
-   density0.4    100  0.15 vs composed pairwise, indirect     +0.0021   9/20   0.522   1.000
-   density0.4    100   0.3 vs Star, indirect pairs            +0.0446   4/10   0.193   1.000
-   density0.4    100   0.3 vs composed pairwise, indirect     -0.0025  11/20   0.927   1.000
+   complete       10   0.0 vs Star (weak hub), its pairs      -0.0433  20/20  <0.001  <0.001  *
+   complete       10  0.15 vs Star (weak hub), its pairs      -0.0766  19/20  <0.001  <0.001  *
+   complete       10   0.3 vs Star (weak hub), its pairs      -0.0888  16/20   0.021   1.000
+   complete       30   0.0 vs Star (weak hub), its pairs      -0.0231  20/20  <0.001  <0.001  *
+   complete       30  0.15 vs Star (weak hub), its pairs      -0.0278  18/20  <0.001  <0.001  *
+   complete       30   0.3 vs Star (weak hub), its pairs      -0.1107  18/20  <0.001  <0.001  *
+   complete      100   0.0 vs Star (weak hub), its pairs      -0.0228  20/20  <0.001  <0.001  *
+   complete      100  0.15 vs Star (weak hub), its pairs      -0.0208  20/20  <0.001  <0.001  *
+   complete      100   0.3 vs Star (weak hub), its pairs      -0.0578  18/20  <0.001  <0.001  *
+   weak_star      10   0.0 vs composed pairwise, indirect     +0.0021   9/20   0.622   1.000
+   weak_star      10  0.15 vs composed pairwise, indirect     +0.0508   7/20   0.177   1.000
+   weak_star      10   0.3 vs composed pairwise, indirect     -0.0018  10/20   0.294   1.000
+   weak_star      30   0.0 vs composed pairwise, indirect     +0.0115   5/20   0.024   1.000
+   weak_star      30  0.15 vs composed pairwise, indirect     +0.0133   7/20   0.048   1.000
+   weak_star      30   0.3 vs composed pairwise, indirect     +0.0136   8/20   0.648   1.000
+   weak_star     100   0.0 vs composed pairwise, indirect     +0.0029   9/20   0.245   1.000
+   weak_star     100  0.15 vs composed pairwise, indirect     +0.0016   7/20   0.277   1.000
+   weak_star     100   0.3 vs composed pairwise, indirect     +0.0514   7/20   0.036   1.000
+   chain          10   0.0 vs Star, indirect pairs            +0.0046   7/20   0.349   1.000
+   chain          10   0.0 vs composed pairwise, indirect     +0.0073   6/20   0.040   1.000
+   chain          10  0.15 vs Star, indirect pairs            +0.0077   6/20   0.216   1.000
+   chain          10  0.15 vs composed pairwise, indirect     +0.0171   9/20   0.368   1.000
+   chain          10   0.3 vs Star, indirect pairs            +0.0521   8/20   0.522   1.000
+   chain          10   0.3 vs composed pairwise, indirect     +0.0471  10/20   0.368   1.000
+   chain          30   0.0 vs Star, indirect pairs            +0.0171   6/20   0.017   0.997
+   chain          30   0.0 vs composed pairwise, indirect     +0.0090   4/20   0.006   0.335
+   chain          30  0.15 vs Star, indirect pairs            +0.0079   5/20   0.024   1.000
+   chain          30  0.15 vs composed pairwise, indirect     +0.0057   9/20   0.216   1.000
+   chain          30   0.3 vs Star, indirect pairs            +0.0159   9/20   0.756   1.000
+   chain          30   0.3 vs composed pairwise, indirect     +0.0460   9/20   0.898   1.000
+   chain         100   0.0 vs Star, indirect pairs            +0.0386   1/20  <0.001  <0.001  *
+   chain         100   0.0 vs composed pairwise, indirect     +0.0201   1/20  <0.001  <0.001  *
+   chain         100  0.15 vs Star, indirect pairs            -0.0004  10/20   0.869   1.000
+   chain         100  0.15 vs composed pairwise, indirect     +0.0092   4/20   0.001   0.089
+   chain         100   0.3 vs Star, indirect pairs            +0.0023   9/20   0.571   1.000
+   chain         100   0.3 vs composed pairwise, indirect     -0.0079  13/20   0.277   1.000
+   ring           10   0.0 vs Star, indirect pairs            -0.0043  14/20   0.261   1.000
+   ring           10   0.0 vs composed pairwise, indirect     -0.0057  13/20   0.202   1.000
+   ring           10  0.15 vs Star, indirect pairs            -0.0060  12/20   0.123   1.000
+   ring           10  0.15 vs composed pairwise, indirect     -0.0185  12/20   0.070   1.000
+   ring           10   0.3 vs Star, indirect pairs            -0.0467  11/20   0.349   1.000
+   ring           10   0.3 vs composed pairwise, indirect     +0.0333   9/20   0.648   1.000
+   ring           30   0.0 vs Star, indirect pairs            +0.0048   9/20   0.202   1.000
+   ring           30   0.0 vs composed pairwise, indirect     +0.0028   9/20   0.475   1.000
+   ring           30  0.15 vs Star, indirect pairs            +0.0174   6/20   0.027   1.000
+   ring           30  0.15 vs composed pairwise, indirect     -0.0004  10/20   0.648   1.000
+   ring           30   0.3 vs Star, indirect pairs            +0.0197   7/20   0.105   1.000
+   ring           30   0.3 vs composed pairwise, indirect     -0.0283  12/20   0.277   1.000
+   ring          100   0.0 vs Star, indirect pairs            -0.0030  11/20   0.368   1.000
+   ring          100   0.0 vs composed pairwise, indirect     -0.0088  15/20   0.003   0.165
+   ring          100  0.15 vs Star, indirect pairs            -0.0008  10/20   0.622   1.000
+   ring          100  0.15 vs composed pairwise, indirect     -0.0070  12/20   0.030   1.000
+   ring          100   0.3 vs Star, indirect pairs            -0.0344  14/20   0.017   0.997
+   ring          100   0.3 vs composed pairwise, indirect     -0.0159  16/20   0.008   0.490
+   density0.4     10   0.0 vs Star, indirect pairs            +0.0048   5/12   0.677   1.000
+   density0.4     10   0.0 vs composed pairwise, indirect     -0.0007  11/20   0.956   1.000
+   density0.4     10  0.15 vs Star, indirect pairs            -0.0311   7/10   0.039   1.000
+   density0.4     10  0.15 vs composed pairwise, indirect     -0.0304  11/20   0.105   1.000
+   density0.4     10   0.3 vs Star, indirect pairs            -0.0014   7/14   0.480   1.000
+   density0.4     10   0.3 vs composed pairwise, indirect     -0.0957  10/20   0.784   1.000
+   density0.4     30   0.0 vs Star, indirect pairs            +0.0006   5/11   0.898   1.000
+   density0.4     30   0.0 vs composed pairwise, indirect     +0.0043   6/20   0.083   1.000
+   density0.4     30  0.15 vs Star, indirect pairs            -0.0008   5/9    0.426   1.000
+   density0.4     30  0.15 vs composed pairwise, indirect     +0.0036   6/20   0.040   1.000
+   density0.4     30   0.3 vs Star, indirect pairs            +0.0691   2/11   0.054   1.000
+   density0.4     30   0.3 vs composed pairwise, indirect     +0.0166  10/20   0.177   1.000
+   density0.4    100   0.0 vs Star, indirect pairs            -0.0039   5/8    0.547   1.000
+   density0.4    100   0.0 vs composed pairwise, indirect     -0.0014  11/20   0.729   1.000
+   density0.4    100  0.15 vs Star, indirect pairs            -0.0033   4/5    0.312   1.000
+   density0.4    100  0.15 vs composed pairwise, indirect     -0.0044  12/20   0.216   1.000
+   density0.4    100   0.3 vs Star, indirect pairs            +0.0465   3/10   0.084   1.000
+   density0.4    100   0.3 vs composed pairwise, indirect     +0.0009  10/20   0.784   1.000
 
    Summary (Holm-significant): joint better / joint worse / not significant
    complete   vs Star (weak hub), its pairs      8 /   0 /   1
-   weak_star  vs composed pairwise, indirect     0 /   1 /   8
-   chain      vs Star, indirect pairs            1 /   0 /   8
-   chain      vs composed pairwise, indirect     0 /   2 /   7
-   ring       vs Star, indirect pairs            2 /   0 /   7
+   weak_star  vs composed pairwise, indirect     0 /   0 /   9
+   chain      vs Star, indirect pairs            0 /   1 /   8
+   chain      vs composed pairwise, indirect     0 /   1 /   8
+   ring       vs Star, indirect pairs            0 /   0 /   9
    ring       vs composed pairwise, indirect     0 /   0 /   9
    density0.4 vs Star, indirect pairs            0 /   0 /   9
    density0.4 vs composed pairwise, indirect     0 /   0 /   9
@@ -214,100 +214,100 @@ environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.
 6. Broken draws (held-out error > 0.3 min) [Wilson 95 % CI], ε > 0
    topology   budget     ε              Joint  Composed pairwise
    complete       10  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   complete       10   0.3  0.25 [0.11, 0.47]  0.45 [0.26, 0.66]
+   complete       10   0.3  0.20 [0.08, 0.42]  0.30 [0.15, 0.52]
    complete       30  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   complete       30   0.3  0.00 [0.00, 0.16]  0.05 [0.01, 0.24]
+   complete       30   0.3  0.00 [0.00, 0.16]  0.10 [0.03, 0.30]
    complete      100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
    complete      100   0.3  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   star           10  0.15  0.05 [0.01, 0.24]  0.10 [0.03, 0.30]
-   star           10   0.3  0.80 [0.58, 0.92]  0.80 [0.58, 0.92]
+   star           10  0.15  0.10 [0.03, 0.30]  0.00 [0.00, 0.16]
+   star           10   0.3  0.60 [0.39, 0.78]  0.75 [0.53, 0.89]
    star           30  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   star           30   0.3  0.10 [0.03, 0.30]  0.00 [0.00, 0.16]
+   star           30   0.3  0.25 [0.11, 0.47]  0.25 [0.11, 0.47]
    star          100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   star          100   0.3  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   weak_star      10  0.15  0.10 [0.03, 0.30]  0.00 [0.00, 0.16]
-   weak_star      10   0.3  0.55 [0.34, 0.74]  0.75 [0.53, 0.89]
+   star          100   0.3  0.00 [0.00, 0.16]  0.05 [0.01, 0.24]
+   weak_star      10  0.15  0.15 [0.05, 0.36]  0.00 [0.00, 0.16]
+   weak_star      10   0.3  0.90 [0.70, 0.97]  0.80 [0.58, 0.92]
    weak_star      30  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   weak_star      30   0.3  0.35 [0.18, 0.57]  0.25 [0.11, 0.47]
+   weak_star      30   0.3  0.25 [0.11, 0.47]  0.25 [0.11, 0.47]
    weak_star     100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
    weak_star     100   0.3  0.05 [0.01, 0.24]  0.00 [0.00, 0.16]
-   chain          10  0.15  0.15 [0.05, 0.36]  0.25 [0.11, 0.47]
-   chain          10   0.3  0.75 [0.53, 0.89]  0.80 [0.58, 0.92]
+   chain          10  0.15  0.30 [0.15, 0.52]  0.25 [0.11, 0.47]
+   chain          10   0.3  0.75 [0.53, 0.89]  0.85 [0.64, 0.95]
    chain          30  0.15  0.00 [0.00, 0.16]  0.05 [0.01, 0.24]
-   chain          30   0.3  0.40 [0.22, 0.61]  0.45 [0.26, 0.66]
+   chain          30   0.3  0.30 [0.15, 0.52]  0.45 [0.26, 0.66]
    chain         100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   chain         100   0.3  0.15 [0.05, 0.36]  0.25 [0.11, 0.47]
+   chain         100   0.3  0.00 [0.00, 0.16]  0.10 [0.03, 0.30]
    ring           10  0.15  0.00 [0.00, 0.16]  0.10 [0.03, 0.30]
-   ring           10   0.3  0.60 [0.39, 0.78]  0.80 [0.58, 0.92]
+   ring           10   0.3  0.70 [0.48, 0.85]  0.75 [0.53, 0.89]
    ring           30  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   ring           30   0.3  0.40 [0.22, 0.61]  0.25 [0.11, 0.47]
+   ring           30   0.3  0.25 [0.11, 0.47]  0.35 [0.18, 0.57]
    ring          100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
    ring          100   0.3  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   density0.4     10  0.15  0.05 [0.01, 0.24]  0.25 [0.11, 0.47]
+   density0.4     10  0.15  0.00 [0.00, 0.16]  0.20 [0.08, 0.42]
    density0.4     10   0.3  0.70 [0.48, 0.85]  0.90 [0.70, 0.97]
    density0.4     30  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   density0.4     30   0.3  0.35 [0.18, 0.57]  0.50 [0.30, 0.70]
+   density0.4     30   0.3  0.35 [0.18, 0.57]  0.15 [0.05, 0.36]
    density0.4    100  0.15  0.00 [0.00, 0.16]  0.00 [0.00, 0.16]
-   density0.4    100   0.3  0.15 [0.05, 0.36]  0.10 [0.03, 0.30]
+   density0.4    100   0.3  0.15 [0.05, 0.36]  0.15 [0.05, 0.36]
 
 ============================================================================================================================
-7. TIC correlation (secondary; paper one's metric), mean over draws of the mean over pairs, drifted pairs / near-aligned pairs. Unaligned: 0.066 / 0.755
+7. TIC correlation (secondary; paper one's metric), mean over draws of the mean over pairs, drifted pairs / near-aligned pairs. Unaligned: 0.061 / 0.763
    topology   budget     ε               Joint   Composed pairwise      Composed PCHIP
-   complete       10   0.0       0.571 / 0.752       0.543 / 0.745       0.543 / 0.698
-   complete       10  0.15       0.565 / 0.758       0.491 / 0.678       0.442 / 0.533
-   complete       10   0.3       0.436 / 0.582       0.372 / 0.504       0.340 / 0.385
-   complete       30   0.0       0.580 / 0.773       0.561 / 0.760       0.573 / 0.715
-   complete       30  0.15       0.577 / 0.773       0.556 / 0.756       0.495 / 0.610
-   complete       30   0.3       0.566 / 0.752       0.455 / 0.621       0.433 / 0.518
-   complete      100   0.0       0.580 / 0.778       0.571 / 0.763       0.569 / 0.720
-   complete      100  0.15       0.580 / 0.777       0.566 / 0.761       0.549 / 0.687
-   complete      100   0.3       0.573 / 0.770       0.518 / 0.727       0.534 / 0.660
-   star           10   0.0       0.554 / 0.726       0.560 / 0.692       0.523 / 0.618
-   star           10  0.15       0.464 / 0.639       0.454 / 0.550       0.364 / 0.425
-   star           10   0.3       0.270 / 0.379       0.299 / 0.394       0.241 / 0.328
-   star           30   0.0       0.573 / 0.742       0.579 / 0.714       0.541 / 0.655
-   star           30  0.15       0.560 / 0.737       0.568 / 0.703       0.364 / 0.490
-   star           30   0.3       0.467 / 0.622       0.461 / 0.580       0.244 / 0.302
-   star          100   0.0       0.584 / 0.755       0.587 / 0.713       0.531 / 0.638
-   star          100  0.15       0.580 / 0.760       0.587 / 0.721       0.282 / 0.444
-   star          100   0.3       0.447 / 0.633       0.562 / 0.682       0.231 / 0.322
-   weak_star      10   0.0       0.494 / 0.692       0.503 / 0.665       0.478 / 0.632
-   weak_star      10  0.15       0.425 / 0.640       0.469 / 0.596       0.347 / 0.424
-   weak_star      10   0.3       0.246 / 0.374       0.270 / 0.378       0.220 / 0.312
-   weak_star      30   0.0       0.522 / 0.727       0.516 / 0.690       0.490 / 0.644
-   weak_star      30  0.15       0.494 / 0.706       0.527 / 0.689       0.354 / 0.501
-   weak_star      30   0.3       0.337 / 0.513       0.424 / 0.537       0.291 / 0.369
-   weak_star     100   0.0       0.525 / 0.731       0.515 / 0.681       0.497 / 0.628
-   weak_star     100  0.15       0.476 / 0.710       0.522 / 0.684       0.404 / 0.515
-   weak_star     100   0.3       0.406 / 0.603       0.512 / 0.658       0.350 / 0.474
-   chain          10   0.0       0.512 / 0.733       0.504 / 0.735       0.477 / 0.686
-   chain          10  0.15       0.447 / 0.715       0.423 / 0.695       0.287 / 0.459
-   chain          10   0.3       0.222 / 0.484       0.229 / 0.475       0.183 / 0.350
-   chain          30   0.0       0.560 / 0.762       0.562 / 0.763       0.528 / 0.695
-   chain          30  0.15       0.515 / 0.758       0.532 / 0.763       0.335 / 0.538
-   chain          30   0.3       0.321 / 0.642       0.417 / 0.691       0.189 / 0.409
-   chain         100   0.0       0.568 / 0.776       0.566 / 0.768       0.523 / 0.685
-   chain         100  0.15       0.565 / 0.771       0.565 / 0.763       0.274 / 0.558
-   chain         100   0.3       0.459 / 0.705       0.477 / 0.730       0.196 / 0.510
-   ring           10   0.0       0.521 / 0.724       0.519 / 0.725       0.487 / 0.648
-   ring           10  0.15       0.514 / 0.716       0.445 / 0.659       0.328 / 0.478
-   ring           10   0.3       0.320 / 0.451       0.290 / 0.492       0.246 / 0.345
-   ring           30   0.0       0.552 / 0.756       0.546 / 0.760       0.516 / 0.687
-   ring           30  0.15       0.549 / 0.757       0.543 / 0.762       0.384 / 0.543
-   ring           30   0.3       0.424 / 0.577       0.419 / 0.606       0.265 / 0.422
-   ring          100   0.0       0.555 / 0.764       0.548 / 0.765       0.532 / 0.682
-   ring          100  0.15       0.559 / 0.765       0.561 / 0.764       0.356 / 0.593
-   ring          100   0.3       0.558 / 0.756       0.520 / 0.710       0.290 / 0.494
-   density0.4     10   0.0       0.500 / 0.707       0.517 / 0.697       0.488 / 0.617
-   density0.4     10  0.15       0.462 / 0.603       0.429 / 0.501       0.288 / 0.332
-   density0.4     10   0.3       0.265 / 0.375       0.262 / 0.310       0.263 / 0.260
-   density0.4     30   0.0       0.560 / 0.741       0.559 / 0.724       0.512 / 0.661
-   density0.4     30  0.15       0.540 / 0.713       0.553 / 0.697       0.363 / 0.467
-   density0.4     30   0.3       0.408 / 0.548       0.400 / 0.479       0.308 / 0.337
-   density0.4    100   0.0       0.564 / 0.743       0.560 / 0.714       0.516 / 0.633
-   density0.4    100  0.15       0.559 / 0.743       0.558 / 0.713       0.314 / 0.393
-   density0.4    100   0.3       0.482 / 0.625       0.501 / 0.641       0.282 / 0.336
+   complete       10   0.0       0.572 / 0.756       0.543 / 0.746       0.531 / 0.696
+   complete       10  0.15       0.567 / 0.760       0.491 / 0.659       0.432 / 0.544
+   complete       10   0.3       0.449 / 0.574       0.373 / 0.528       0.358 / 0.391
+   complete       30   0.0       0.575 / 0.771       0.563 / 0.756       0.570 / 0.713
+   complete       30  0.15       0.575 / 0.770       0.558 / 0.756       0.505 / 0.612
+   complete       30   0.3       0.565 / 0.748       0.452 / 0.617       0.426 / 0.505
+   complete      100   0.0       0.577 / 0.779       0.567 / 0.755       0.565 / 0.710
+   complete      100  0.15       0.576 / 0.778       0.565 / 0.760       0.550 / 0.688
+   complete      100   0.3       0.575 / 0.776       0.523 / 0.737       0.532 / 0.653
+   star           10   0.0       0.523 / 0.690       0.531 / 0.665       0.522 / 0.647
+   star           10  0.15       0.426 / 0.638       0.459 / 0.605       0.342 / 0.466
+   star           10   0.3       0.278 / 0.388       0.298 / 0.396       0.249 / 0.303
+   star           30   0.0       0.559 / 0.716       0.559 / 0.687       0.547 / 0.660
+   star           30  0.15       0.529 / 0.694       0.539 / 0.666       0.399 / 0.541
+   star           30   0.3       0.372 / 0.535       0.403 / 0.515       0.270 / 0.416
+   star          100   0.0       0.575 / 0.738       0.571 / 0.691       0.561 / 0.671
+   star          100  0.15       0.560 / 0.717       0.568 / 0.698       0.396 / 0.626
+   star          100   0.3       0.471 / 0.628       0.501 / 0.624       0.344 / 0.591
+   weak_star      10   0.0       0.498 / 0.702       0.504 / 0.663       0.473 / 0.631
+   weak_star      10  0.15       0.386 / 0.577       0.460 / 0.584       0.347 / 0.429
+   weak_star      10   0.3       0.213 / 0.297       0.260 / 0.371       0.212 / 0.283
+   weak_star      30   0.0       0.517 / 0.720       0.513 / 0.687       0.486 / 0.638
+   weak_star      30  0.15       0.472 / 0.682       0.521 / 0.682       0.350 / 0.498
+   weak_star      30   0.3       0.359 / 0.526       0.431 / 0.542       0.292 / 0.372
+   weak_star     100   0.0       0.523 / 0.728       0.511 / 0.684       0.492 / 0.638
+   weak_star     100  0.15       0.486 / 0.712       0.516 / 0.675       0.405 / 0.506
+   weak_star     100   0.3       0.409 / 0.605       0.498 / 0.619       0.355 / 0.477
+   chain          10   0.0       0.515 / 0.730       0.514 / 0.732       0.482 / 0.672
+   chain          10  0.15       0.378 / 0.687       0.420 / 0.687       0.291 / 0.505
+   chain          10   0.3       0.238 / 0.439       0.220 / 0.441       0.195 / 0.353
+   chain          30   0.0       0.555 / 0.766       0.551 / 0.763       0.512 / 0.691
+   chain          30  0.15       0.549 / 0.757       0.534 / 0.756       0.313 / 0.528
+   chain          30   0.3       0.403 / 0.640       0.382 / 0.713       0.208 / 0.430
+   chain         100   0.0       0.562 / 0.778       0.554 / 0.768       0.518 / 0.687
+   chain         100  0.15       0.555 / 0.764       0.558 / 0.760       0.268 / 0.551
+   chain         100   0.3       0.527 / 0.747       0.531 / 0.766       0.192 / 0.515
+   ring           10   0.0       0.529 / 0.729       0.522 / 0.735       0.479 / 0.661
+   ring           10  0.15       0.510 / 0.724       0.431 / 0.655       0.325 / 0.473
+   ring           10   0.3       0.306 / 0.428       0.293 / 0.507       0.228 / 0.343
+   ring           30   0.0       0.556 / 0.763       0.548 / 0.757       0.508 / 0.691
+   ring           30  0.15       0.558 / 0.764       0.545 / 0.761       0.378 / 0.553
+   ring           30   0.3       0.457 / 0.636       0.400 / 0.633       0.286 / 0.452
+   ring          100   0.0       0.552 / 0.765       0.546 / 0.766       0.517 / 0.688
+   ring          100  0.15       0.553 / 0.763       0.556 / 0.763       0.350 / 0.580
+   ring          100   0.3       0.537 / 0.755       0.494 / 0.730       0.288 / 0.503
+   density0.4     10   0.0       0.506 / 0.712       0.512 / 0.686       0.502 / 0.615
+   density0.4     10  0.15       0.469 / 0.629       0.413 / 0.509       0.295 / 0.338
+   density0.4     10   0.3       0.267 / 0.381       0.248 / 0.274       0.244 / 0.247
+   density0.4     30   0.0       0.546 / 0.730       0.545 / 0.709       0.515 / 0.649
+   density0.4     30  0.15       0.530 / 0.707       0.554 / 0.697       0.366 / 0.472
+   density0.4     30   0.3       0.395 / 0.504       0.452 / 0.543       0.294 / 0.298
+   density0.4    100   0.0       0.562 / 0.742       0.558 / 0.713       0.512 / 0.625
+   density0.4    100  0.15       0.555 / 0.742       0.558 / 0.715       0.323 / 0.402
+   density0.4    100   0.3       0.452 / 0.604       0.501 / 0.631       0.273 / 0.344
 
 ============================================================================================================================
-8. Run time: 4.6 s per cell (mean); 6 workers; wall time 0 s (of this invocation; checkpointed tasks are reused)
+8. Run time: 4.6 s per cell (mean); 3 workers; wall time 1689 s (of this invocation; checkpointed tasks are reused)
 
