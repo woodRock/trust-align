@@ -2,8 +2,8 @@
 # and code whose change makes earlier results suspect. The paper is ~/overleaf/trust-align (by name).
 
 [data.fish-oil]
-path = "data/fish_oil"     # 90 GC-MS runs, five batches (a git-ignored symlink to the private data)
-label = "fish-oil-90"
+path = "data/fish_oil"     # 103 GC-MS runs, five batches (a git-ignored symlink to the private data); 13 carry
+label = "fish-oil-103"     # BLANK run names but are fish samples (warp-align step 03 --keep-blank-headers)
 
 [settings.grid]            # script 02: thresholds, fixed λ, tuning seeds, bootstrap resamples
 path = "scripts/02_full_sparsity.py"

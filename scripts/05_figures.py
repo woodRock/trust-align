@@ -2,7 +2,7 @@
 05_figures.py — the five figures of Experiment 1 (IEEE TAI format), from the per-world checkpoints behind
 the committed reports, with a verification table against the reports and the manuscript.
 
-  fig1_data                 (a) one real fish oil chromatogram (sep2015, the strong hub): 2-D log
+  fig1_data                 (a) one real fish oil chromatogram (sep2015, the run agreed for release): 2-D log
                             intensity (RT × m/z) under its TIC, with the mass spectrum at the tallest
                             apex; (b) four batch TICs of one Experiment 1 test world (K = 10, test seed
                             3) with one compound's anchor chain and one real corrupted anchor of that
@@ -98,7 +98,8 @@ WORLD_K, WORLD_SEED = 10, 6
 SHOW = (0, 3, 6, 9)                          # batches drawn in fig 1 (b)
 CORRUPT_CELL = (10, 'complete', 30, 0.30)    # fig 1 (b): the cell whose corrupted anchor is shown
 DENSITY_CELL = (10, 'density0.4', 30, 0.15)  # fig 2: the cell whose density-0.4 graph is drawn
-FISH_BATCH = 'batch_sep2015'                 # fig 1 (a): the strong hub of the fish arm
+FISH_BATCH = 'batch_sep2015'   # fig 1 (a) and the website's one real run: the sample agreed with the data owner
+                               # for release (README). Keep it even though the strong hub is now jan2016.
 FISH_WINDOW = (10.0, 30.0)                   # min
 MZ_RANGE = (40, 400)                         # m/z shown in fig 1 (a)
 
@@ -156,12 +157,13 @@ MANUSCRIPT = {
     'λ diag broken, CV λ': '175/960',
     'λ diag broken, λ = 10': '160/960',
     'λ diag broken, per-world oracle λ': '80/960',
-    'Table II B=10  ε=0.3 Joint': '0.133',
-    'Table II B=10  ε=0.3 Star': '0.410',
-    'Table II B=10  ε=0.3 Pairwise': '0.284',
-    'Table II B=100 ε=0   Joint': '0.059',
-    'Table II B=100 ε=0   Star': '0.069',
-    'Table II B=100 ε=0   Pairwise': '0.056',
+    # Table II: the 103-run fish data (warp-align step 03 --keep-blank-headers), script 04 of 2026-10-20
+    'Table II B=10  ε=0.3 Joint': '0.118',
+    'Table II B=10  ε=0.3 Star': '0.279',
+    'Table II B=10  ε=0.3 Pairwise': '0.194',
+    'Table II B=100 ε=0   Joint': '0.057',
+    'Table II B=100 ε=0   Star': '0.075',
+    'Table II B=100 ε=0   Pairwise': '0.055',
 }
 
 

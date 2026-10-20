@@ -1,19 +1,21 @@
 """
 04_fish_sparsity.py — Experiment 1, fish arm: do the synthetic findings hold on real anchors?
 
-The full grid (scripts/02_full_sparsity.py) on paper one's fish oil data: the 25,011 spectral anchors
+The full grid (scripts/02_full_sparsity.py) on paper one's fish oil data: the spectral anchors
 harvested from every cross-batch sample pair of the five batches (jointalign.harvest_anchors, as in
 paper one) are thinned and corrupted like a synthetic world, and the same methods are compared.
 
 There is no ground truth, so each method is scored on real anchors it never saw: every anchor that
 the thinning removed (all anchors of dropped batch pairs, and those subsampled away in kept pairs).
 Held-out anchors are never corrupted. Error = |ĝ_a→b(t_a) − t_b| in minutes; per draw, the median over
-batch pairs of each pair's median (pairs weighted equally; jan2016 × sep2015 alone has 10,227 anchors).
+batch pairs of each pair's median (pairs weighted equally; jan2016 × sep2015 alone has 15,085 anchors
+on the 103-run data).
 The few spectral mismatches among held-out anchors inflate every method alike, and medians resist
 them. TIC correlation (paper one's metric, bins ≥ EVAL_START_BIN) is reported as a secondary measure.
 
 Settings (K = 5 batches):
-  topology  complete; star through sep2015 (most anchors); weak_star through aug2015 (2 samples);
+  topology  complete; star through the batch with most anchors (jan2016 on the 103-run data);
+            weak_star through aug2015 (2 samples);
             chain and ring in acquisition order aug2015–sep2015–jan2016–apr2016–jul2016 (the ring adds
             jul2016–aug2015); density0.4 (4 of the 10 batch pairs, a random connected subset per draw)
   budget    10, 30, 100 anchors per kept batch pair (a pair with fewer keeps all it has)
@@ -38,6 +40,7 @@ for _v in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'VECLIB
 
 import argparse
 import importlib.util
+import json
 import pickle
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -89,14 +92,25 @@ def s02():
 
 # ── data ──────────────────────────────────────────────────────────────────────
 
+def data_sizes(data: Path) -> dict[str, int] | None:
+    """Samples per batch in the data folder, or None when the private data is absent (CI)."""
+    batches = sorted(p for p in Path(data).glob('batch_*') if p.is_dir()) if Path(data).exists() else []
+    return {b.name: len(list((b / 'chroma').glob('*.npz'))) for b in batches} or None
+
+
 def load_fish(data: Path, cache: Path) -> dict:
-    """Batch names and sizes, normalised TICs and every cross-batch anchor (harvested once, cached)."""
+    """Batch names and sizes, normalised TICs and every cross-batch anchor (harvested once, cached).
+    A cache built from other data (other batches or batch sizes) is rebuilt; without the data, the
+    cache is used as it is."""
     if cache.exists():
         z = np.load(cache, allow_pickle=False)
         names = [str(n) for n in z['names']]
         tics = [z[f'tic_{k}'] for k in range(len(names))]
-        anc = Anchors(*(z[k] for k in ('ba', 'bb', 'sa', 'sb', 'ta', 'tb')))
-        return {'names': names, 'sizes': [len(t) for t in tics], 'tics': tics, 'anchors': anc}
+        current = data_sizes(data)
+        if current is None or current == {n: len(t) for n, t in zip(names, tics)}:
+            anc = Anchors(*(z[k] for k in ('ba', 'bb', 'sa', 'sb', 'ta', 'tb')))
+            return {'names': names, 'sizes': [len(t) for t in tics], 'tics': tics, 'anchors': anc}
+        print(f'{cache} is for other data: harvesting the anchors again', flush=True)
     from alignbench.datasets.fish_oil import load_batch
     names = sorted(p.name for p in Path(data).glob('batch_*') if p.is_dir())
     batches = [load_batch(b, data) for b in names]
@@ -106,6 +120,20 @@ def load_fish(data: Path, cache: Path) -> dict:
     np.savez(cache, names=np.array(names), ba=anc.ba, bb=anc.bb, sa=anc.sa, sb=anc.sb, ta=anc.ta, tb=anc.tb,
              **{f'tic_{k}': t for k, t in enumerate(tics)})
     return {'names': names, 'sizes': [len(t) for t in tics], 'tics': tics, 'anchors': anc}
+
+
+def check_stamp(cache: Path, fish: dict) -> None:
+    """The task checkpoints record the data they were computed from; refuse to mix them with other data."""
+    stamp = {'names': fish['names'], 'sizes': fish['sizes'], 'anchors': len(fish['anchors'].ba)}
+    f = cache / 'data_stamp.json'
+    if f.exists():
+        old = json.loads(f.read_text())
+        if old != stamp:
+            raise SystemExit(f'{cache} holds tasks computed on other data ({old}); move it aside to rerun on '
+                             f'the current data ({stamp})')
+    elif any(cache.glob('fish_*.pkl')):
+        raise SystemExit(f'{cache} holds tasks without a data stamp; move it aside to rerun on the current data')
+    f.write_text(json.dumps(stamp))
 
 
 def pair_counts(anc: Anchors, K: int) -> dict[tuple[int, int], int]:
@@ -258,6 +286,7 @@ def main(settings: list[tuple] | None = None, draws=DRAWS, workers: int = 6, res
     cache_npz = results / 'fish_anchors.npz'
     t0 = time.perf_counter()
     fish = load_fish(data, cache_npz)                         # harvest once, before the workers start
+    check_stamp(cache, fish)
     cells = run_all(settings, draws, workers, cache, lambdas, cache_npz, data)
     wall = time.perf_counter() - t0
     lines = report(fish, settings, sorted(draws), cells, wall, workers, n_boot)

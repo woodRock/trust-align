@@ -2586,6 +2586,17 @@ by = "claude"
 decided = "2026-10-20T01:05:35+13:00"
 result_hash = "sha256:2442e86ba1d0d8da718ddc0bdc24eda1dcbd38a7a92b865146e752e93e8755f5"
 
+[decisions.ac891b0651]
+file = "TAI_template.tex"
+literal = "15\\%"
+context = "} and Fig.~\\ref{fig:fish}b), whereas at 15\\% added corruption joint fitting matched"
+verdict = "not-a-result"
+key = ""
+reason = "A corruption rate of the fish design (epsilon in {0, 15, 30}%), a setting of the experiment, not a result."
+by = "claude"
+decided = "2026-10-20T18:20:47+13:00"
+result_hash = ""
+
 [decisions.ac97875c23]
 file = "TAI_template.tex"
 literal = "0"
@@ -3013,6 +3024,17 @@ key = ""
 reason = "\"10-batch rings\" describes the graph size, not a result."
 by = "claude"
 decided = "2026-10-20T01:08:14+13:00"
+result_hash = ""
+
+[decisions.cbdd31d6e9]
+file = "TAI_template.tex"
+literal = "0\\%"
+context = "\\text{ min}$ at $B = 100, \\varepsilon = 0\\%$; Table~\\ref{tab:fish} and Fig.~\\ref{fi"
+verdict = "not-a-result"
+key = ""
+reason = "A corruption rate of the fish design (epsilon in {0, 15, 30}%), a setting of the experiment, not a result."
+by = "claude"
+decided = "2026-10-20T18:20:46+13:00"
 result_hash = ""
 
 [decisions.cbe04dfde6]

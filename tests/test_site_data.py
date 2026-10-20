@@ -92,13 +92,13 @@ def test_report_parsers(s06, reports):
     lt = s06.parse_lambda_totals(diag)
     assert lt['n'] == 960 and lt['Joint']['tuned'] == '175' and lt['Joint']['per world'] == '80'
     f2 = s06.parse_medians(fish, 2, with_K=False)
-    assert len(f2) == 54 and f2[('complete', 10, 0.3)][0] == ('0.133', '200')
-    assert s06.parse_rq1a(fish, 4, with_K=False)[0.3]['median_delta'] == '-0.0272'
+    assert len(f2) == 54 and f2[('complete', 10, 0.3)][0] == ('0.118', '100')
+    assert s06.parse_rq1a(fish, 4, with_K=False)[0.3]['median_delta'] == '-0.0336'
     assert sum(len(v) for v in s06.parse_rq1b(fish, 5, with_K=False).values()) == 72
-    assert s06.parse_breakdown(fish, 6, with_K=False)[('complete', 10, 0.3)]['Joint']['share'] == '0.25'
+    assert s06.parse_breakdown(fish, 6, with_K=False)[('complete', 10, 0.3)]['Joint']['share'] == '0.20'
     rt = s06.parse_runtime(full, diag, fish)
-    assert rt == {'02_cpu_h': '3.59', '03_s_per_cell': '2.7', '04_s_per_cell': '4.6'}
-    assert s06.provenance_of(RESULTS / 'full_sparsity.txt')[0].startswith('trustalign 0.2.1 @ 782257c')
+    assert rt == {'02_cpu_h': '2.63', '03_s_per_cell': '4.4', '04_s_per_cell': '4.6'}
+    assert s06.provenance_of(RESULTS / 'full_sparsity.txt')[0].startswith('trustalign 0.2.1 @ 6460280')
 
 
 def test_comparable_strips_header_and_runtime(s06, reports):
@@ -245,7 +245,7 @@ def test_fish_matches_the_report(s06, site, reports):
     fish, lines = site['fish.json'], reports['fish_sparsity']
     t2, bd = s06.parse_medians(lines, 2, with_K=False), s06.parse_breakdown(lines, 6, with_K=False)
     rq1a, rq1b = s06.parse_rq1a(lines, 4, with_K=False), s06.parse_rq1b(lines, 5, with_K=False)
-    assert len(fish['settings']) == 54 and fish['n_draws'] == 20 and fish['n_anchors'] == 25_011
+    assert len(fish['settings']) == 54 and fish['n_draws'] == 20 and fish['n_anchors'] == 32_325
     assert [b['name'] for b in fish['batches']] == ['apr2016', 'aug2015', 'jan2016', 'jul2016', 'sep2015']
     methods = site['meta.json']['methods']
     for key, e in fish['settings'].items():
@@ -257,7 +257,7 @@ def test_fish_matches_the_report(s06, site, reports):
         if s in bd:
             for m in ('Joint', 'Composed pairwise'):
                 assert e['breakdown'][m]['share'] == bd[s][m]['share'] == f'{e["broken"][m] / 20:.2f}'
-        expected = ([{'comparison': 'vs Star (sep2015), all pairs', **rq1a[s[2]]}]
+        expected = ([{'comparison': 'vs Star (jan2016), all pairs', **rq1a[s[2]]}]
                     if s[0] == 'complete' and s[1] == 100 else []) + rq1b.get(s, [])
         assert e['tests'] == expected
     # Aggregates only: nothing that looks like a per-sample or per-anchor retention time.

@@ -13,14 +13,14 @@
       "pairwise-broken": 0
     },
     "complete-b10-e30": {
-      "joint-share": 0.25,
-      "joint-ci-low": 0.11,
-      "joint-ci-high": 0.47,
-      "joint-broken": 5,
-      "pairwise-share": 0.45,
-      "pairwise-ci-low": 0.26,
-      "pairwise-ci-high": 0.66,
-      "pairwise-broken": 9
+      "joint-share": 0.2,
+      "joint-ci-low": 0.08,
+      "joint-ci-high": 0.42,
+      "joint-broken": 4,
+      "pairwise-share": 0.3,
+      "pairwise-ci-low": 0.15,
+      "pairwise-ci-high": 0.52,
+      "pairwise-broken": 6
     },
     "complete-b30-e15": {
       "joint-share": 0.0,
@@ -37,10 +37,10 @@
       "joint-ci-low": 0.0,
       "joint-ci-high": 0.16,
       "joint-broken": 0,
-      "pairwise-share": 0.05,
-      "pairwise-ci-low": 0.01,
-      "pairwise-ci-high": 0.24,
-      "pairwise-broken": 1
+      "pairwise-share": 0.1,
+      "pairwise-ci-low": 0.03,
+      "pairwise-ci-high": 0.3,
+      "pairwise-broken": 2
     },
     "complete-b100-e15": {
       "joint-share": 0.0,
@@ -63,24 +63,24 @@
       "pairwise-broken": 0
     },
     "star-b10-e15": {
-      "joint-share": 0.05,
-      "joint-ci-low": 0.01,
-      "joint-ci-high": 0.24,
-      "joint-broken": 1,
-      "pairwise-share": 0.1,
-      "pairwise-ci-low": 0.03,
-      "pairwise-ci-high": 0.3,
-      "pairwise-broken": 2
+      "joint-share": 0.1,
+      "joint-ci-low": 0.03,
+      "joint-ci-high": 0.3,
+      "joint-broken": 2,
+      "pairwise-share": 0.0,
+      "pairwise-ci-low": 0.0,
+      "pairwise-ci-high": 0.16,
+      "pairwise-broken": 0
     },
     "star-b10-e30": {
-      "joint-share": 0.8,
-      "joint-ci-low": 0.58,
-      "joint-ci-high": 0.92,
-      "joint-broken": 16,
-      "pairwise-share": 0.8,
-      "pairwise-ci-low": 0.58,
-      "pairwise-ci-high": 0.92,
-      "pairwise-broken": 16
+      "joint-share": 0.6,
+      "joint-ci-low": 0.39,
+      "joint-ci-high": 0.78,
+      "joint-broken": 12,
+      "pairwise-share": 0.75,
+      "pairwise-ci-low": 0.53,
+      "pairwise-ci-high": 0.89,
+      "pairwise-broken": 15
     },
     "star-b30-e15": {
       "joint-share": 0.0,
@@ -93,14 +93,14 @@
       "pairwise-broken": 0
     },
     "star-b30-e30": {
-      "joint-share": 0.1,
-      "joint-ci-low": 0.03,
-      "joint-ci-high": 0.3,
-      "joint-broken": 2,
-      "pairwise-share": 0.0,
-      "pairwise-ci-low": 0.0,
-      "pairwise-ci-high": 0.16,
-      "pairwise-broken": 0
+      "joint-share": 0.25,
+      "joint-ci-low": 0.11,
+      "joint-ci-high": 0.47,
+      "joint-broken": 5,
+      "pairwise-share": 0.25,
+      "pairwise-ci-low": 0.11,
+      "pairwise-ci-high": 0.47,
+      "pairwise-broken": 5
     },
     "star-b100-e15": {
       "joint-share": 0.0,
@@ -117,30 +117,30 @@
       "joint-ci-low": 0.0,
       "joint-ci-high": 0.16,
       "joint-broken": 0,
-      "pairwise-share": 0.0,
-      "pairwise-ci-low": 0.0,
-      "pairwise-ci-high": 0.16,
-      "pairwise-broken": 0
+      "pairwise-share": 0.05,
+      "pairwise-ci-low": 0.01,
+      "pairwise-ci-high": 0.24,
+      "pairwise-broken": 1
     },
     "weak-star-b10-e15": {
-      "joint-share": 0.1,
-      "joint-ci-low": 0.03,
-      "joint-ci-high": 0.3,
-      "joint-broken": 2,
+      "joint-share": 0.15,
+      "joint-ci-low": 0.05,
+      "joint-ci-high": 0.36,
+      "joint-broken": 3,
       "pairwise-share": 0.0,
       "pairwise-ci-low": 0.0,
       "pairwise-ci-high": 0.16,
       "pairwise-broken": 0
     },
     "weak-star-b10-e30": {
-      "joint-share": 0.55,
-      "joint-ci-low": 0.34,
-      "joint-ci-high": 0.74,
-      "joint-broken": 11,
-      "pairwise-share": 0.75,
-      "pairwise-ci-low": 0.53,
-      "pairwise-ci-high": 0.89,
-      "pairwise-broken": 15
+      "joint-share": 0.9,
+      "joint-ci-low": 0.7,
+      "joint-ci-high": 0.97,
+      "joint-broken": 18,
+      "pairwise-share": 0.8,
+      "pairwise-ci-low": 0.58,
+      "pairwise-ci-high": 0.92,
+      "pairwise-broken": 16
     },
     "weak-star-b30-e15": {
       "joint-share": 0.0,
@@ -153,10 +153,10 @@
       "pairwise-broken": 0
     },
     "weak-star-b30-e30": {
-      "joint-share": 0.35,
-      "joint-ci-low": 0.18,
-      "joint-ci-high": 0.57,
-      "joint-broken": 7,
+      "joint-share": 0.25,
+      "joint-ci-low": 0.11,
+      "joint-ci-high": 0.47,
+      "joint-broken": 5,
       "pairwise-share": 0.25,
       "pairwise-ci-low": 0.11,
       "pairwise-ci-high": 0.47,
@@ -183,10 +183,10 @@
       "pairwise-broken": 0
     },
     "chain-b10-e15": {
-      "joint-share": 0.15,
-      "joint-ci-low": 0.05,
-      "joint-ci-high": 0.36,
-      "joint-broken": 3,
+      "joint-share": 0.3,
+      "joint-ci-low": 0.15,
+      "joint-ci-high": 0.52,
+      "joint-broken": 6,
       "pairwise-share": 0.25,
       "pairwise-ci-low": 0.11,
       "pairwise-ci-high": 0.47,
@@ -197,10 +197,10 @@
       "joint-ci-low": 0.53,
       "joint-ci-high": 0.89,
       "joint-broken": 15,
-      "pairwise-share": 0.8,
-      "pairwise-ci-low": 0.58,
-      "pairwise-ci-high": 0.92,
-      "pairwise-broken": 16
+      "pairwise-share": 0.85,
+      "pairwise-ci-low": 0.64,
+      "pairwise-ci-high": 0.95,
+      "pairwise-broken": 17
     },
     "chain-b30-e15": {
       "joint-share": 0.0,
@@ -213,10 +213,10 @@
       "pairwise-broken": 1
     },
     "chain-b30-e30": {
-      "joint-share": 0.4,
-      "joint-ci-low": 0.22,
-      "joint-ci-high": 0.61,
-      "joint-broken": 8,
+      "joint-share": 0.3,
+      "joint-ci-low": 0.15,
+      "joint-ci-high": 0.52,
+      "joint-broken": 6,
       "pairwise-share": 0.45,
       "pairwise-ci-low": 0.26,
       "pairwise-ci-high": 0.66,
@@ -233,14 +233,14 @@
       "pairwise-broken": 0
     },
     "chain-b100-e30": {
-      "joint-share": 0.15,
-      "joint-ci-low": 0.05,
-      "joint-ci-high": 0.36,
-      "joint-broken": 3,
-      "pairwise-share": 0.25,
-      "pairwise-ci-low": 0.11,
-      "pairwise-ci-high": 0.47,
-      "pairwise-broken": 5
+      "joint-share": 0.0,
+      "joint-ci-low": 0.0,
+      "joint-ci-high": 0.16,
+      "joint-broken": 0,
+      "pairwise-share": 0.1,
+      "pairwise-ci-low": 0.03,
+      "pairwise-ci-high": 0.3,
+      "pairwise-broken": 2
     },
     "ring-b10-e15": {
       "joint-share": 0.0,
@@ -253,14 +253,14 @@
       "pairwise-broken": 2
     },
     "ring-b10-e30": {
-      "joint-share": 0.6,
-      "joint-ci-low": 0.39,
-      "joint-ci-high": 0.78,
-      "joint-broken": 12,
-      "pairwise-share": 0.8,
-      "pairwise-ci-low": 0.58,
-      "pairwise-ci-high": 0.92,
-      "pairwise-broken": 16
+      "joint-share": 0.7,
+      "joint-ci-low": 0.48,
+      "joint-ci-high": 0.85,
+      "joint-broken": 14,
+      "pairwise-share": 0.75,
+      "pairwise-ci-low": 0.53,
+      "pairwise-ci-high": 0.89,
+      "pairwise-broken": 15
     },
     "ring-b30-e15": {
       "joint-share": 0.0,
@@ -273,14 +273,14 @@
       "pairwise-broken": 0
     },
     "ring-b30-e30": {
-      "joint-share": 0.4,
-      "joint-ci-low": 0.22,
-      "joint-ci-high": 0.61,
-      "joint-broken": 8,
-      "pairwise-share": 0.25,
-      "pairwise-ci-low": 0.11,
-      "pairwise-ci-high": 0.47,
-      "pairwise-broken": 5
+      "joint-share": 0.25,
+      "joint-ci-low": 0.11,
+      "joint-ci-high": 0.47,
+      "joint-broken": 5,
+      "pairwise-share": 0.35,
+      "pairwise-ci-low": 0.18,
+      "pairwise-ci-high": 0.57,
+      "pairwise-broken": 7
     },
     "ring-b100-e15": {
       "joint-share": 0.0,
@@ -303,14 +303,14 @@
       "pairwise-broken": 0
     },
     "density0.4-b10-e15": {
-      "joint-share": 0.05,
-      "joint-ci-low": 0.01,
-      "joint-ci-high": 0.24,
-      "joint-broken": 1,
-      "pairwise-share": 0.25,
-      "pairwise-ci-low": 0.11,
-      "pairwise-ci-high": 0.47,
-      "pairwise-broken": 5
+      "joint-share": 0.0,
+      "joint-ci-low": 0.0,
+      "joint-ci-high": 0.16,
+      "joint-broken": 0,
+      "pairwise-share": 0.2,
+      "pairwise-ci-low": 0.08,
+      "pairwise-ci-high": 0.42,
+      "pairwise-broken": 4
     },
     "density0.4-b10-e30": {
       "joint-share": 0.7,
@@ -337,10 +337,10 @@
       "joint-ci-low": 0.18,
       "joint-ci-high": 0.57,
       "joint-broken": 7,
-      "pairwise-share": 0.5,
-      "pairwise-ci-low": 0.3,
-      "pairwise-ci-high": 0.7,
-      "pairwise-broken": 10
+      "pairwise-share": 0.15,
+      "pairwise-ci-low": 0.05,
+      "pairwise-ci-high": 0.36,
+      "pairwise-broken": 3
     },
     "density0.4-b100-e15": {
       "joint-share": 0.0,
@@ -357,22 +357,22 @@
       "joint-ci-low": 0.05,
       "joint-ci-high": 0.36,
       "joint-broken": 3,
-      "pairwise-share": 0.1,
-      "pairwise-ci-low": 0.03,
-      "pairwise-ci-high": 0.3,
-      "pairwise-broken": 2
+      "pairwise-share": 0.15,
+      "pairwise-ci-low": 0.05,
+      "pairwise-ci-high": 0.36,
+      "pairwise-broken": 3
     }
   },
   "runs": [],
   "produced_by": "scripts/export_ledger.py",
   "source": {
     "path": "results/fish_sparsity.txt",
-    "hash": "sha256:4322b352fbeae1ac73176cca4a6b6eeec59fc71081d2f7e5b4dcf3e5b251c8f9",
+    "hash": "sha256:5018c8b5cd7ab388376f30b63d92be4bc8ecd7fb092f3b5b7399d8db88933a30",
     "provenance": [
-      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "trustalign 0.2.1 @ 4aa259b (src clean) from ~/Desktop/trust-align",
       "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
-      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
-      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align",
       "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
     ]
   }

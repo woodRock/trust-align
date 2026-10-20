@@ -1,9 +1,9 @@
 02_full_sparsity.py — Experiment 1 full grid: when does the joint model beat a star fit and composed
 
-trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align
+trustalign 0.2.1 @ 6460280 (src clean) from ~/Desktop/trust-align
 alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench
-joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align
-warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align
+joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align
+warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align
 environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0
 
 114 settings; tuning worlds [0, 1, 2], test worlds 3–22 (20); drift family (i): shift ±3.0 min, ramp ±3.0 min, wiggle 0.0–0.3 min; samples per batch 2–8.
@@ -763,8 +763,8 @@ Map error = |ĝ − g*| (min) over every RT bin where compounds exist in both ba
 
 ============================================================================================================================
 11. Run time
-   K= 5: world + harvest 1.4 s; tuning cell 5.6 s; test cell 0.2 s (means)
-   K=10: world + harvest 5.2 s; tuning cell 22.3 s; test cell 0.8 s (means)
-   K=20: world + harvest 22.3 s; tuning cell 224.0 s; test cell 6.9 s (means)
-   6 workers; peak worker memory 861 MB; compute 3.59 CPU h (sum over tasks); wall time of this invocation 0 s, 345 of 345 tasks reused from checkpoints
+   K= 5: world + harvest 1.1 s; tuning cell 3.3 s; test cell 0.2 s (means)
+   K=10: world + harvest 5.0 s; tuning cell 16.5 s; test cell 0.8 s (means)
+   K=20: world + harvest 21.6 s; tuning cell 111.4 s; test cell 7.1 s (means)
+   5 workers; peak worker memory 867 MB; compute 2.63 CPU h (sum over tasks); wall time of this invocation 1877 s, 0 of 345 tasks reused from checkpoints
 
