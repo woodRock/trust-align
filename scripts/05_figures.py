@@ -156,12 +156,13 @@ MANUSCRIPT = {
     'λ diag broken, CV λ': '175/960',
     'λ diag broken, λ = 10': '160/960',
     'λ diag broken, per-world oracle λ': '80/960',
-    'Table II B=10  ε=0.3 Joint': '0.133',
-    'Table II B=10  ε=0.3 Star': '0.410',
-    'Table II B=10  ε=0.3 Pairwise': '0.284',
-    'Table II B=100 ε=0   Joint': '0.059',
-    'Table II B=100 ε=0   Star': '0.069',
-    'Table II B=100 ε=0   Pairwise': '0.056',
+    # Table II: the 103-run fish data (warp-align step 03 --keep-blank-headers), script 04 of 2026-10-20
+    'Table II B=10  ε=0.3 Joint': '0.118',
+    'Table II B=10  ε=0.3 Star': '0.279',
+    'Table II B=10  ε=0.3 Pairwise': '0.194',
+    'Table II B=100 ε=0   Joint': '0.057',
+    'Table II B=100 ε=0   Star': '0.075',
+    'Table II B=100 ε=0   Pairwise': '0.055',
 }
 
 
