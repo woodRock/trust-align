@@ -8,12 +8,14 @@ paper one) are thinned and corrupted like a synthetic world, and the same method
 There is no ground truth, so each method is scored on real anchors it never saw: every anchor that
 the thinning removed (all anchors of dropped batch pairs, and those subsampled away in kept pairs).
 Held-out anchors are never corrupted. Error = |ĝ_a→b(t_a) − t_b| in minutes; per draw, the median over
-batch pairs of each pair's median (pairs weighted equally; jan2016 × sep2015 alone has 10,227 anchors).
+batch pairs of each pair's median (pairs weighted equally; jan2016 × sep2015 alone has 15,085 anchors
+on the 103-run data).
 The few spectral mismatches among held-out anchors inflate every method alike, and medians resist
 them. TIC correlation (paper one's metric, bins ≥ EVAL_START_BIN) is reported as a secondary measure.
 
 Settings (K = 5 batches):
-  topology  complete; star through sep2015 (most anchors); weak_star through aug2015 (2 samples);
+  topology  complete; star through the batch with most anchors (jan2016 on the 103-run data);
+            weak_star through aug2015 (2 samples);
             chain and ring in acquisition order aug2015–sep2015–jan2016–apr2016–jul2016 (the ring adds
             jul2016–aug2015); density0.4 (4 of the 10 batch pairs, a random connected subset per draw)
   budget    10, 30, 100 anchors per kept batch pair (a pair with fewer keeps all it has)

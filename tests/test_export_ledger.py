@@ -47,8 +47,8 @@ def test_the_numbers_script_05_checks_against_the_manuscript(out):
         'scaling/complete-e15/k10': -0.0105,
         'lambda-broken/all/joint-tuned': 175, 'lambda-broken/all/joint-lambda10': 160,
         'lambda-broken/all/joint-per-world': 80, 'lambda-broken/all/worlds': 960,
-        'fish-error/complete-b10-e30/joint': 0.133, 'fish-error/complete-b10-e30/star': 0.410,
-        'fish-error/complete-b100-e0/pairwise': 0.056,
+        'fish-error/complete-b10-e30/joint': 0.118, 'fish-error/complete-b10-e30/star': 0.279,
+        'fish-error/complete-b100-e0/pairwise': 0.055,
     }
     for key, value in keys.items():
         assert m(out, key) == value, key
@@ -66,9 +66,9 @@ def test_sections(out):
     assert (rules['joint-tuned-broken'], rules['joint-lambda10-broken']) == (14, 17)
     assert [m(out, f'lambda-broken/{t}/joint-per-world') for t in ('chain', 'ring', 'density0.4', 'weak-star')] \
         == [32, 29, 12, 7]
-    assert m(out, 'fish-data/anchors/all') == 25011 and m(out, 'fish-data/samples/all') == 90
+    assert m(out, 'fish-data/anchors/all') == 32325 and m(out, 'fish-data/samples/all') == 103
     assert m(out, 'fish-data/samples/aug2015') == 2 and m(out, 'fish-data/anchors/jul2016-sep2015') == 4396
-    assert m(out, 'fish-rq1a/e30/delta') == -0.0272 and m(out, 'fish-rq1a/e30/p') == 0.001
+    assert m(out, 'fish-rq1a/e30/delta') == -0.0336 and m(out, 'fish-rq1a/e30/p') == 0.001
     assert m(out, 'fish-broken/complete-b10-e30/joint-broken') == 5
     assert m(out, 'fig4a/world-error/joint-cv') == 1.538 and m(out, 'fig1/apex-minutes') == 14.4
     assert (m(out, 'fig4a/anchors/clean'), m(out, 'fig4a/anchors/corrupted')) == (21, 9)

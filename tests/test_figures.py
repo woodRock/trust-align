@@ -38,7 +38,7 @@ def test_figures_parsers(s_tai):
     assert lt['Joint']['per world'] == '80'
     t2 = s_tai.parse_fish_table2(RESULTS / 'fish_sparsity.txt')
     assert ('complete', 10, 0.3) in t2
-    assert t2[('complete', 10, 0.3)][0] == '0.133'
+    assert t2[('complete', 10, 0.3)][0] == '0.118'
 
 
 def _has_paper_figure_inputs() -> bool:

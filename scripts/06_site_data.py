@@ -474,6 +474,7 @@ def build_fish(fish_cells, fish, s02, s04, lines: list[str]) -> dict:
                       parse_breakdown(lines, 6, with_K=False))
     draws = list(s04.DRAWS)
     settings = {}
+    strong_hub = fish['names'][s04.hubs_of(fish)['Star']].replace('batch_', '')   # most anchors
     for s in product(s04.TOPOLOGIES, s04.BUDGETS, s04.EPSILONS):
         topo, budget, eps = s
         entry: dict = {'topology': topo, 'budget': budget, 'eps': eps, 'draws': {}, 'median': {}, 'lam': {},
@@ -492,7 +493,7 @@ def build_fish(fish_cells, fish, s02, s04, lines: list[str]) -> dict:
             entry['median_indirect'] = dict(zip(('Joint', 'Composed pairwise', 'Composed PCHIP'),
                                                 [v for v, _ in indirect[s]]))
         if topo == 'complete' and budget == 100:
-            entry['tests'].append({'comparison': 'vs Star (sep2015), all pairs', **rq1a[eps]})
+            entry['tests'].append({'comparison': f'vs Star ({strong_hub}), all pairs', **rq1a[eps]})
         entry['tests'] += rq1b.get(s, [])
         if s in bd:
             for m in ('Joint', 'Composed pairwise'):
