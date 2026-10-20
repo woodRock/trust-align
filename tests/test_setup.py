@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 from pathlib import Path
 
@@ -176,3 +177,14 @@ def test_fish_sparsity_on_the_synthetic_stand_in(tmp_path):
     # A rerun reuses every checkpointed task: identical report apart from the run-time line.
     again = s04.main(**kw)
     assert again[:-3] == lines[:-3]
+    # Caches remember their data: a batch that changes size rebuilds the anchor cache, and the task
+    # checkpoints refuse to be mixed with results on other data.
+    stamp = json.loads((tmp_path / 'results' / 'fish_sparsity_cache' / 'data_stamp.json').read_text())
+    assert stamp['names'] == fish['names'] and stamp['sizes'] == fish['sizes']
+    first = sorted((data / 'batch_jan2016' / 'chroma').glob('*.npz'))[0]
+    first.rename(first.with_name('zz_' + first.name).with_suffix('.bak'))      # one sample fewer
+    smaller = s04.load_fish(data, tmp_path / 'results' / 'fish_anchors.npz')
+    assert sum(smaller['sizes']) == sum(fish['sizes']) - 1
+    with pytest.raises(SystemExit, match='other data'):
+        s04.main(**kw)
+    assert s04.data_sizes(tmp_path / 'nowhere') is None
