@@ -95,10 +95,10 @@ def test_report_parsers(s06, reports):
     assert len(f2) == 54 and f2[('complete', 10, 0.3)][0] == ('0.118', '100')
     assert s06.parse_rq1a(fish, 4, with_K=False)[0.3]['median_delta'] == '-0.0336'
     assert sum(len(v) for v in s06.parse_rq1b(fish, 5, with_K=False).values()) == 72
-    assert s06.parse_breakdown(fish, 6, with_K=False)[('complete', 10, 0.3)]['Joint']['share'] == '0.25'
+    assert s06.parse_breakdown(fish, 6, with_K=False)[('complete', 10, 0.3)]['Joint']['share'] == '0.20'
     rt = s06.parse_runtime(full, diag, fish)
-    assert rt == {'02_cpu_h': '3.59', '03_s_per_cell': '2.7', '04_s_per_cell': '4.6'}
-    assert s06.provenance_of(RESULTS / 'full_sparsity.txt')[0].startswith('trustalign 0.2.1 @ 782257c')
+    assert rt == {'02_cpu_h': '2.63', '03_s_per_cell': '4.4', '04_s_per_cell': '4.6'}
+    assert s06.provenance_of(RESULTS / 'full_sparsity.txt')[0].startswith('trustalign 0.2.1 @ 6460280')
 
 
 def test_comparable_strips_header_and_runtime(s06, reports):

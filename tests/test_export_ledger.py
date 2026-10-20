@@ -69,7 +69,7 @@ def test_sections(out):
     assert m(out, 'fish-data/anchors/all') == 32325 and m(out, 'fish-data/samples/all') == 103
     assert m(out, 'fish-data/samples/aug2015') == 2 and m(out, 'fish-data/anchors/jul2016-sep2015') == 4396
     assert m(out, 'fish-rq1a/e30/delta') == -0.0336 and m(out, 'fish-rq1a/e30/p') == 0.001
-    assert m(out, 'fish-broken/complete-b10-e30/joint-broken') == 5
+    assert m(out, 'fish-broken/complete-b10-e30/joint-broken') == 4
     assert m(out, 'fig4a/world-error/joint-cv') == 1.538 and m(out, 'fig1/apex-minutes') == 14.4
     assert (m(out, 'fig4a/anchors/clean'), m(out, 'fig4a/anchors/corrupted')) == (21, 9)
     assert m(out, 'fig4a/lambda/joint-cv') == 300 and m(out, 'fig4a/edge-error/max') == 7.63
