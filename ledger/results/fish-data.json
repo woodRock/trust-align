@@ -5,23 +5,23 @@
     "samples": {
       "apr2016": 10,
       "aug2015": 2,
-      "jan2016": 26,
+      "jan2016": 39,
       "jul2016": 16,
       "sep2015": 36,
-      "all": 90
+      "all": 103
     },
     "batches": 5,
     "anchors": {
-      "all": 25011,
+      "all": 32325,
       "apr2016-aug2015": 138,
-      "apr2016-jan2016": 1891,
+      "apr2016-jan2016": 2718,
       "apr2016-jul2016": 1463,
       "apr2016-sep2015": 2475,
-      "aug2015-jan2016": 322,
+      "aug2015-jan2016": 477,
       "aug2015-jul2016": 228,
       "aug2015-sep2015": 497,
-      "jan2016-jul2016": 3374,
-      "jan2016-sep2015": 10227,
+      "jan2016-jul2016": 4848,
+      "jan2016-sep2015": 15085,
       "jul2016-sep2015": 4396
     },
     "draws": 20
@@ -30,12 +30,12 @@
   "produced_by": "scripts/export_ledger.py",
   "source": {
     "path": "results/fish_sparsity.txt",
-    "hash": "sha256:4322b352fbeae1ac73176cca4a6b6eeec59fc71081d2f7e5b4dcf3e5b251c8f9",
+    "hash": "sha256:5018c8b5cd7ab388376f30b63d92be4bc8ecd7fb092f3b5b7399d8db88933a30",
     "provenance": [
-      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "trustalign 0.2.1 @ 4aa259b (src clean) from ~/Desktop/trust-align",
       "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
-      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
-      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align",
       "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
     ]
   }

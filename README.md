@@ -60,9 +60,9 @@ root; each step reads only what earlier steps wrote to `results/`):
 
 ```bash
 python scripts/01_check_setup.py       # versions, data access, joint model sanity check (seconds)
-python scripts/02_full_sparsity.py     # Experiment 1 full grid (3.6 CPU h; --workers 6 → ~40 min)
-python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~12 min)
-python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~15 min)
+python scripts/02_full_sparsity.py     # Experiment 1 full grid (2.6 CPU h; --workers 5 → ~31 min)
+python scripts/03_diagnose_lambda.py   # λ diagnosis on script 02's cells (~15 min)
+python scripts/04_fish_sparsity.py     # the fish oil arm (private data in data/fish_oil; ~28 min on 3 workers)
 python scripts/05_figures.py     # figures and captions from the caches above (~1 min)
 python scripts/06_site_data.py         # the website's data files (docs/data/*.json) from the same caches
 ```
@@ -74,9 +74,9 @@ generated locally and committed as text (`results/*.txt`, `docs/data/*.json`). A
 2026-10-17 after the alignbench refactor reproduced every committed report (map errors to within
 2e-10 min); the reports record the code that produced them in their first lines.
 
-`results/full_sparsity_timing.txt` is historical: the `--timing` sample run before the full grid, at
-trustalign 0.1.0 under the scripts' old numbering. It projected 3.5 CPU h; the grid took 3.59 CPU h
-(`full_sparsity.txt` §11). Rerun `scripts/02_full_sparsity.py --timing` (about 3 min) to refresh it.
+`results/full_sparsity_timing.txt` is the `--timing` sample (about 3 min), rerun on 2026-10-20 alongside
+the full grid: it projected 2.4 CPU h, and the grid took 2.63 CPU h (`full_sparsity.txt` §11). The
+earlier full grid took 3.59 CPU h on the same machine under more load; the results are identical.
 
 ## How the repositories fit together
 

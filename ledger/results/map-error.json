@@ -1261,12 +1261,12 @@
   "produced_by": "scripts/export_ledger.py",
   "source": {
     "path": "results/full_sparsity.txt",
-    "hash": "sha256:1c271a4a4c7e13f1ad5fb7b49df790c57bb3c4651dd79f56de5b224977443ea4",
+    "hash": "sha256:f43ccced65b92187da4d6ca6ef73e297d882a00c1d6d708a3134b79a33f75d39",
     "provenance": [
-      "trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align",
+      "trustalign 0.2.1 @ 6460280 (src clean) from ~/Desktop/trust-align",
       "alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench",
-      "joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align",
-      "warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align",
+      "joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align",
+      "warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align",
       "environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0"
     ]
   }
