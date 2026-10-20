@@ -1,15 +1,15 @@
 03_diagnose_lambda.py — How much of Experiment 1's breakdown comes from choosing λ?
 
-trustalign 0.2.1 @ 782257c (src clean) from ~/Desktop/trust-align
+trustalign 0.2.1 @ 31fced4 (src clean) from ~/Desktop/trust-align
 alignbench 0.1.0.dev0 @ 40c6fdb (src clean) from ~/Desktop/align-bench
-joint-align 2.0.2 @ b730f08 (src clean) from ~/Desktop/joint-align
-warpalign 3.0.1 @ 156cfe2 (src clean) from ~/Desktop/warp-align
+joint-align 2.0.2 @ 5d39dfd (src clean) from ~/Desktop/joint-align
+warpalign 3.0.1 @ 05b36f0 (src clean) from ~/Desktop/warp-align
 environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.1 scikit-learn=1.8.0
 
 72 settings × 20 test worlds of scripts/02_full_sparsity.py (same worlds and anchors); λ grid ['0.1', '1', '10', '30', '100', '300', '1000', '3000', '10000']. Map error: median over pairs and times per test world (min); tables give the median over test worlds and, in brackets, the test worlds broken down (> 0.3 min). The "best λ" and "per world" columns use the truth: bounds, not rules.
 
 ======================================================================================================================
-0. Check: the refits reproduce script 02's map errors at its tuned and fixed λ: max |difference| 1.67e-10 min over 5760 fits
+0. Check: the refits reproduce script 02's map errors at its tuned and fixed λ: max |difference| 2.40e-12 min over 5760 fits
 
 ======================================================================================================================
 1. Joint model: tuned λ vs λ = 10 (median error [broken]), and the tuning worlds' CV curves: the λ each tuning world prefers, and the curve's relative range (max − min) / min of the median held-out error
@@ -327,5 +327,5 @@ environment: Darwin-arm64 blas=accelerate python=3.11.15 numpy=2.4.6 scipy=1.17.
      K=10 density0.4 budget  10 ε 0.3: joint 5/20 broken, composed pairwise (its best λ per world) 13/20
 
 ======================================================================================================================
-4. Run time: 2.7 s per test cell (mean); 6 workers; wall time 0 s
+4. Run time: 4.4 s per test cell (mean); 7 workers; wall time 1025 s
 
